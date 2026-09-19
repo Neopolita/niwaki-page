@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Technical paper · Niwaki</title>
+  <meta name="description" content="A paper with Niwaki's full method and measurements is coming soon.">
+  <link rel="canonical" href="https://niwakiai.com/paper/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Technical paper · Niwaki">
+  <meta property="og:description" content="A paper with Niwaki's full method and measurements is coming soon.">
+  <meta property="og:url" content="https://niwakiai.com/paper/">
+  <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7EEE3">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <ul>
+      <li><a href="../#flash-next">Flash-Next</a></li>
+      <li><a href="../#qwen36">Qwen3.6</a></li>
+      <li><a href="../saikei/">Saikei</a></li>
+      <li><a href="./" aria-current="page">Paper</a></li>
+      <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
+    </ul>
+  </nav>
+  </div>
+</header>
+
+<main class="wrap paper">
+  <p class="eyebrow">Technical paper</p>
+  <h1>Coming soon.</h1>
+  <p class="big">A paper with the full method and measurements behind the Niwaki models is in preparation.</p>
+  <p>It will cover how the models are pruned and recovered, the evaluation protocol — perplexity, task suites, and the program-state behaviours that compression tends to break first — and how pruning compares with quantizing the unpruned model at the same size.</p>
+  <p>Until it is out, the model cards are the record: each one states its protocol and carries the full tables for its release.</p>
+  <ul>
+    <li><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-mlx">Qwen3.8-Flash-Next 119B-A5B · Niwaki v2.4 ↗</a></li>
+    <li><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-4bit-mlx">Qwen3.6 23B-A3B · Niwaki v2.3 ↗</a></li>
+  </ul>
+  <p><a href="../">← Back to the models</a></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Base models by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversions of the references by mlx-community. Pruning, recovery training and builds by the Niwaki project.</p>
+    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/Neopolita/neopolita-llama.cpp">llama.cpp fork</a></p>
+    <p class="made">Pruned and tended in Seville, Spain.</p>
+  </div>
+</footer>
+
+</body>
+</html>

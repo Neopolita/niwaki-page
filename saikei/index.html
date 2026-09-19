@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saikei · Niwaki</title>
+  <meta name="description" content="Saikei: Qwen3.6-35B-A3B with nothing pruned, refined in place by a short knowledge-distillation pass. Same size, same architecture, same speed; MLX and GGUF weights.">
+  <link rel="canonical" href="https://niwakiai.com/saikei/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Saikei · Niwaki">
+  <meta property="og:description" content="Qwen3.6-35B-A3B with nothing pruned, refined in place. Same size, same architecture, same speed.">
+  <meta property="og:url" content="https://niwakiai.com/saikei/">
+  <meta property="og:image" content="https://niwakiai.com/assets/og-saikei.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7EEE3">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <ul>
+      <li><a href="../#flash-next">Flash-Next</a></li>
+      <li><a href="../#qwen36">Qwen3.6</a></li>
+      <li><a href="./" aria-current="page">Saikei</a></li>
+      <li><a href="../paper/">Paper</a></li>
+      <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
+    </ul>
+  </nav>
+  </div>
+</header>
+
+<main>
+  <figure class="plate">
+    <picture>
+      <source srcset="../assets/saikei.webp" type="image/webp">
+      <img src="../assets/saikei.jpg" width="1774" height="887" alt="Engraving of a saikei, a planted tray landscape: pines, a rock peak, a stone lantern and a small waterfall over still water, under the word Saikei.">
+    </picture>
+  </figure>
+
+  <div class="wrap lead solo">
+    <p>Saikei (栽景) are Japan's planted landscapes — miniature living scenes grown whole on a tray, where nothing is cut away: the art is in the cultivation.</p>
+    <p>Where the Niwaki releases prune the tree, this model prunes nothing. It is the reference model, refined in place.</p>
+  </div>
+
+  <section class="first" aria-labelledby="h-saikei">
+    <div class="wrap">
+      <p class="eyebrow">Nothing pruned</p>
+      <h1 id="h-saikei"><span class="nb">Qwen3.6-35B-A3B</span> <span class="nb">Saikei</span> <span class="sub">8-bit</span></h1>
+      <p class="summary">Qwen3.6-35B-A3B, un-pruned and improved: the intact 8-bit model after a short knowledge-distillation pass from the 2.4-trillion-parameter <span class="nb">Qwen3.8-2.4T-A95B</span>. Same size, same architecture, same speed. It loads with stock <code>mlx_lm</code> and stock llama.cpp — no custom code, no fork.</p>
+
+      <ul class="figures three">
+        <li><span class="n">6.33</span><span class="c">WikiText-2 perplexity, from the reference's 6.61</span></li>
+        <li><span class="n">0.817</span><span class="c">task average over five tasks, from 0.790</span></li>
+        <li><span class="n">37.7 <small>GB</small></span><span class="c">on disk, unchanged; runs comfortably in 48 GB and up</span></li>
+      </ul>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>WikiText-2 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:6.61">
+            <li class="open" style="--v:6.61;--i:0"><span class="name">Reference, 8-bit</span><span class="track"><span class="bar"></span><span class="val">6.61</span></span></li>
+            <li class="solid" style="--v:6.33;--i:1"><span class="name">Saikei</span><span class="track"><span class="bar"></span><span class="val">6.33</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Task average, five tasks</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.817">
+            <li class="open" style="--v:0.790;--i:0"><span class="name">Reference, 8-bit</span><span class="track"><span class="bar"></span><span class="val">0.790</span></span></li>
+            <li class="solid" style="--v:0.817;--i:1"><span class="name">Saikei</span><span class="track"><span class="bar"></span><span class="val">0.817</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>C4 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:11.30">
+            <li class="open" style="--v:10.62;--i:0"><span class="name">Reference, 8-bit</span><span class="track"><span class="bar"></span><span class="val">10.62</span></span></li>
+            <li class="solid" style="--v:11.30;--i:1"><span class="name">Saikei</span><span class="track"><span class="bar"></span><span class="val">11.30</span></span></li>
+          </ol>
+        </figure>
+
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>this release</li>
+        <li><span class="open"></span>the reference model</li>
+      </ul>
+
+      <p class="note">The trade-off, stated honestly: WikiText-2 and the task suite improve; C4 drifts up toward the distillation corpus's mix. If your use leans on broad web-crawl-style text, the reference may serve you equally well. Perplexity over 64 × 2048-token windows, paired same-day against the reference; tasks are arc_easy, hellaswag, piqa, winogrande and boolq, 500 examples each. The Q8_0 GGUF reads 6.59 on WikiText-2 and 11.64 on a C4 slice under llama-perplexity, which is not comparable with the MLX protocol above.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Qwen3.6-35B-A3B-Saikei-8bit-mlx">MLX weights ↗<small>37.7 GB · stock mlx_lm</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.6-35B-A3B-Saikei-8bit-gguf">GGUF · Q8_0 ↗<small>36.9 GB · stock llama.cpp</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Base model by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversion of the reference by mlx-community. Distillation and builds by the Niwaki project.</p>
+    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="../">Niwaki models</a> · <a href="../paper/">Paper</a></p>
+    <p class="made">Pruned and tended in Seville, Spain.</p>
+  </div>
+</footer>
+
+</body>
+</html>

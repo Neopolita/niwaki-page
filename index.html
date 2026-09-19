@@ -2,11 +2,263 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>NiwakiAI</title>
-  <link href="style.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Niwaki · Model pruning</title>
+  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next at 119B parameters, 44.8 GB, with the unpruned model's task average and program-state behaviour.">
+  <link rel="canonical" href="https://niwakiai.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Niwaki · Model pruning">
+  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next at 119B parameters, 44.8 GB on disk.">
+  <meta property="og:url" content="https://niwakiai.com/">
+  <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7EEE3">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script>
-  </script>
+
+<header class="top">
+  <div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="mark" href="./"><img src="assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <ul>
+      <li><a href="#flash-next">Flash-Next</a></li>
+      <li><a href="#qwen36">Qwen3.6</a></li>
+      <li><a href="saikei/">Saikei</a></li>
+      <li><a href="paper/">Paper</a></li>
+      <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
+    </ul>
+  </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="lead">
+      <p>Niwaki (庭木) are Japan's garden trees, sculpted by meticulous pruning so that every branch serves the form of the whole.</p>
+      <p>This project applies that spirit to Mixture-of-Experts language models: open weights pruned to fit the memory you have, measured against the unpruned model, and released for MLX and llama.cpp.</p>
+    </div>
+    <figure class="tree">
+      <picture>
+        <source srcset="assets/niwaki_tree.webp" type="image/webp">
+        <img src="assets/niwaki_tree.jpg" width="1221" height="868" alt="Engraving of a niwaki: a Japanese garden pine with a twisted trunk and cloud-pruned foliage.">
+      </picture>
+    </figure>
+  </div>
+
+  <!-- ======================= Flash-Next v2.4 ======================= -->
+  <section id="flash-next" class="first" aria-labelledby="h-fn">
+    <div class="wrap">
+      <p class="eyebrow">Latest release</p>
+      <h2 id="h-fn"><span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">119B-A5B</span> <span class="sub">Niwaki v2.4 · 3-bit</span></h2>
+      <p class="summary">Qwen3.8-Flash-Next pruned from about 177B to 119B parameters and stored at 3-bit: 44.8&nbsp;GB on disk, for 64&nbsp;GB Macs. It keeps the unpruned model's task average, and the program-state behaviours we test — variable tracking, two-step arithmetic, multi-hop lookups — stay at the unpruned model's level.</p>
+
+      <ul class="figures">
+        <li><span class="n">44.8 <small>GB</small></span><span class="c">on disk, from 111.5 GB for the 4-bit reference</span></li>
+        <li><span class="n">119B <small>/ 5.6B</small></span><span class="c">total / active parameters, from ~177B / ~6.7B</span></li>
+        <li><span class="n">100<small>%</small></span><span class="c">of the unpruned model's task average (0.762 against 0.759)</span></li>
+        <li><span class="n">−4 <small>/</small> +7</span><span class="c">program-state items lost / gained against the unpruned model, of 1,928</span></li>
+      </ul>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>Size on disk, GB</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:111.5">
+            <li class="open" style="--v:111.5;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">111.5</span></span></li>
+            <li class="open" style="--v:55.3;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">55.3</span></span></li>
+            <li class="solid" style="--v:44.8;--i:2"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
+            <li class="hatch" style="--v:42.2;--i:3"><span class="name">First generation · 113B</span><span class="track"><span class="bar"></span><span class="val">42.2</span></span></li>
+            <li class="hatch" style="--v:36.7;--i:4"><span class="name">First generation · 99B</span><span class="track"><span class="bar"></span><span class="val">36.7</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>WikiText-2 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:7.88">
+            <li class="open" style="--v:5.06;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">5.06</span></span></li>
+            <li class="open" style="--v:6.35;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">6.35</span></span></li>
+            <li class="solid" style="--v:6.36;--i:2"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
+            <li class="hatch" style="--v:7.08;--i:3"><span class="name">First generation · 113B</span><span class="track"><span class="bar"></span><span class="val">7.08</span></span></li>
+            <li class="hatch" style="--v:7.88;--i:4"><span class="name">First generation · 99B</span><span class="track"><span class="bar"></span><span class="val">7.88</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Task average, five tasks</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.762">
+            <li class="open" style="--v:0.759;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">0.759</span></span></li>
+            <li class="open" style="--v:0.761;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">0.761</span></span></li>
+            <li class="solid" style="--v:0.762;--i:2"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
+            <li class="hatch" style="--v:0.757;--i:3"><span class="name">First generation · 113B</span><span class="track"><span class="bar"></span><span class="val">0.757</span></span></li>
+            <li class="hatch" style="--v:0.733;--i:4"><span class="name">First generation · 99B</span><span class="track"><span class="bar"></span><span class="val">0.733</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Variable tracking past distractor lines</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:1">
+            <li class="open" style="--v:0.96;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">0.96</span></span></li>
+            <li class="solid" style="--v:0.96;--i:1"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.96</span></span></li>
+            <li class="hatch" style="--v:0.92;--i:2"><span class="name">First generation · 113B (one seed)</span><span class="track"><span class="bar"></span><span class="val">0.92</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>this release</li>
+        <li><span class="hatch"></span>earlier Niwaki generations</li>
+        <li><span class="open"></span>the unpruned model</li>
+      </ul>
+
+      <p class="note">Perplexity over 64 × 2048-token windows; task average over arc_easy, hellaswag, piqa, winogrande and boolq, zero-shot, 500 examples each, paired against the reference on identical examples; program-state suite scored by forced choice on two held-out seeds. The best 2-bit cast of the unpruned model (routed experts and n-gram table at 2-bit) reads the same perplexity and task average at 10.5&nbsp;GB more. Protocols and the full tables are on the model cards.</p>
+
+      <h3>In llama.cpp</h3>
+      <div class="charts">
+        <figure class="chart wide">
+          <figcaption><b>GGUF builds · WikiText-2 perplexity, 512-token windows</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:8.79">
+            <li class="solid" style="--v:6.88;--i:0"><span class="name">Niwaki v2.4 · UD-Q4K · 64.3 GB</span><span class="track"><span class="bar"></span><span class="val">6.88</span></span></li>
+            <li class="solid" style="--v:7.04;--i:1"><span class="name">Niwaki v2.4 · UD-Q3K · 51.0 GB</span><span class="track"><span class="bar"></span><span class="val">7.04</span></span></li>
+            <li class="hatch" style="--v:7.70;--i:2"><span class="name">First generation 113B · UD-Q4K · 62.8 GB</span><span class="track"><span class="bar"></span><span class="val">7.70</span></span></li>
+            <li class="hatch" style="--v:7.90;--i:3"><span class="name">First generation 113B · UD-Q3K · 49.1 GB</span><span class="track"><span class="bar"></span><span class="val">7.90</span></span></li>
+            <li class="hatch" style="--v:8.79;--i:4"><span class="name">First generation 99B · UD-Q3K · 42.5 GB</span><span class="track"><span class="bar"></span><span class="val">8.79</span></span></li>
+          </ol>
+        </figure>
+      </div>
+      <p class="note">On an M4 Max with Metal the UD-Q3K file runs at 557 tokens/s on a 512-token prompt and 30 tokens/s in decode. The GGUF files need the <a href="https://github.com/Neopolita/neopolita-llama.cpp">neopolita-llama.cpp</a> fork: stock llama.cpp cannot represent this model's layout yet.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-mlx">MLX weights ↗<small>44.8 GB · Apple silicon, 64 GB</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-gguf">GGUF builds ↗<small>51.0 GB and 64.3 GB · llama.cpp</small></a></li>
+      </ul>
+
+      <h3>First generation</h3>
+      <ul class="releases">
+        <li>
+          <span class="what">Qwen3.8-Flash-Next 113B-A5B · 3-bit</span>
+          <span class="nums">42.2 GB · perplexity 7.08 · task average 0.757</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-113B-A5B-Niwaki-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-113B-A5B-Niwaki-3bit-gguf">GGUF ↗</a></span>
+        </li>
+        <li>
+          <span class="what">Qwen3.8-Flash-Next 99B-A5B · 3-bit</span>
+          <span class="nums">36.7 GB, fits a 48 GB Mac · perplexity 7.88 · task average 0.733</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-99B-A5B-Niwaki-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-99B-A5B-Niwaki-3bit-gguf">GGUF ↗</a></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Qwen3.6 v2.3 ======================= -->
+  <section id="qwen36" aria-labelledby="h-q36">
+    <div class="wrap">
+      <p class="eyebrow">From Qwen3.6-35B-A3B</p>
+      <h2 id="h-q36"><span class="nb">Qwen3.6</span> <span class="nb">23B-A3B</span> <span class="sub">Niwaki v2.3 · 4-bit and 2-bit</span></h2>
+      <p class="summary">Qwen3.6-35B-A3B pruned to 22.6B total and about 3.8B active parameters, with the model's program-state tracking and few-shot reasoning intact. Five generations so far, all measured under one protocol.</p>
+
+      <ul class="figures">
+        <li><span class="n">11.3 <small>GB</small></span><span class="c">of expert storage at 4-bit, 0.33× the 8-bit reference's 34.2 GB</span></li>
+        <li><span class="n">7.3 <small>GB</small></span><span class="c">of expert storage in the 2-bit release</span></li>
+        <li><span class="n">97.0<small>%</small></span><span class="c">of the reference's task average (0.772 against 0.796)</span></li>
+        <li><span class="n">82 <small>tok/s</small></span><span class="c">llama.cpp decode on an M4 Max, against 45 for the unpruned model at the same size</span></li>
+      </ul>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>The line so far · WikiText-2 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:9.89">
+            <li class="open" style="--v:6.76;--i:0"><span class="name">Reference, 8-bit · 34.2 GB of experts</span><span class="track"><span class="bar"></span><span class="val">6.76</span></span></li>
+            <li class="hatch" style="--v:9.89;--i:1"><span class="name">v1 · 7.5 GB</span><span class="track"><span class="bar"></span><span class="val">9.89</span></span></li>
+            <li class="hatch" style="--v:9.42;--i:2"><span class="name">v2 · 9.1 GB</span><span class="track"><span class="bar"></span><span class="val">9.42</span></span></li>
+            <li class="hatch" style="--v:8.62;--i:3"><span class="name">v2.1 · 11.3 GB</span><span class="track"><span class="bar"></span><span class="val">8.62</span></span></li>
+            <li class="hatch" style="--v:8.14;--i:4"><span class="name">v2.2 · 11.3 GB</span><span class="track"><span class="bar"></span><span class="val">8.14</span></span></li>
+            <li class="solid" style="--v:7.95;--i:5"><span class="name">v2.3 · 11.3 GB</span><span class="track"><span class="bar"></span><span class="val">7.95</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Two-step arithmetic, generated answers</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:1">
+            <li class="open range" style="--v:0.63;--v2:0.68;--i:0"><span class="name">Reference, 8-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.63–0.68</span></span></li>
+            <li class="open range" style="--v:0.37;--v2:0.52;--i:1"><span class="name">Unpruned, routed experts at 2-bit · 10.1 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.37–0.52</span></span></li>
+            <li class="solid range" style="--v:0.97;--v2:0.98;--i:2"><span class="name">v2.3 · 11.3 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–0.98</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart wide">
+          <figcaption><b>llama.cpp decode speed at matched file size, tokens/s</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:91">
+            <li class="solid" style="--v:82;--i:0"><span class="name">v2.3 · UD-Q3K · 11.2 GB</span><span class="track"><span class="bar"></span><span class="val">82</span></span></li>
+            <li class="open" style="--v:45;--i:1"><span class="name">Unpruned · UD-IQ2_M · 11.5 GB</span><span class="track"><span class="bar"></span><span class="val">45</span></span></li>
+            <li class="solid" style="--v:91;--i:2"><span class="name">v2.3 · Q4_K_M · 14.0 GB</span><span class="track"><span class="bar"></span><span class="val">91</span></span></li>
+            <li class="open" style="--v:43;--i:3"><span class="name">Unpruned · UD-IQ3_S · 13.7 GB</span><span class="track"><span class="bar"></span><span class="val">43</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>this release</li>
+        <li><span class="hatch"></span>earlier Niwaki generations</li>
+        <li><span class="open"></span>the unpruned model</li>
+      </ul>
+
+      <p class="note">Read it as a split, not a win. At equal size, the unpruned model's dynamic quants read 8–11% lower WikiText-2 perplexity than these builds; these builds run 1.7–2.1× faster on Metal and keep exact program-state behaviour, which 2-bit noise on every expert breaks. Pick by what you are short of. Arithmetic ranges are over two evaluation seeds; speeds are llama-bench on an M4 Max, 512-token prompt and 128 generated tokens, measured on the v2.2 builds, whose file layout and sizes v2.3 shares exactly.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-4bit-mlx">4-bit · MLX ↗<small>perplexity 7.95 · gsm8k 0.85</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-2bit-mlx">2-bit · MLX ↗<small>perplexity 9.02 · 7.3 GB of experts</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-4bit-gguf">4-bit · GGUF ↗<small>11.2 GB and 14.0 GB</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-2bit-gguf">2-bit · GGUF ↗<small>11.2 GB and 14.0 GB</small></a></li>
+      </ul>
+
+      <h3>Earlier generations</h3>
+      <ul class="releases">
+        <li>
+          <span class="what">v2.2 · Qwen3.6 23B-A3B</span>
+          <span class="nums">11.3 GB of experts · perplexity 8.14 · task average 0.770</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.2-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.2-4bit-gguf">GGUF ↗</a></span>
+        </li>
+        <li>
+          <span class="what">v2.1 · Qwen3.6 23B-A3B</span>
+          <span class="nums">11.3 GB of experts · perplexity 8.62 · task average 0.759</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.1-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.1-4bit-gguf">GGUF ↗</a></span>
+        </li>
+        <li>
+          <span class="what">v2 · Qwen3.6 19B-A3B</span>
+          <span class="nums">9.1 GB of experts · perplexity 9.42 · task average 0.742</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-19B-A3B-Niwaki-v2-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-19B-A3B-Niwaki-v2-4bit-gguf">GGUF ↗</a></span>
+        </li>
+        <li>
+          <span class="what">v1 · Qwen3.6 27B-A3B</span>
+          <span class="nums">7.5 GB of experts · perplexity 9.89 · task average 0.769</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-27B-A3B-Niwaki-2bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-27B-A3B-Niwaki-2bit-GGUF">GGUF ↗</a></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= paper ======================= -->
+  <section aria-labelledby="h-paper">
+    <div class="wrap">
+      <p class="eyebrow">Technical paper</p>
+      <h2 id="h-paper">A paper with the full method and measurements is coming soon.</h2>
+      <p class="summary">Until then, every number on this page comes from the model cards, which carry their evaluation protocols and the full tables. <a href="paper/">About the paper</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Base models by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversions of the references by mlx-community. Pruning, recovery training and builds by the Niwaki project.</p>
+    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/Neopolita/neopolita-llama.cpp">llama.cpp fork</a> · <a href="paper/">Paper</a></p>
+    <p class="made">Pruned and tended in Seville, Spain.</p>
+  </div>
+</footer>
+
 </body>
 </html>
