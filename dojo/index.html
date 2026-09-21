@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dojo · Niwaki</title>
+  <meta name="description" content="Dojo: the other research projects from the Niwaki bench. Model merging and cross-architecture transfer, documents folded into weights, a diffusion language model trained from scratch, Spanish legal models, and TinyLoRA in MLX.">
+  <link rel="canonical" href="https://niwakiai.com/dojo/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dojo · Niwaki">
+  <meta property="og:description" content="Model merging, Doc-to-LoRA in MLX, a diffusion language model trained from scratch, Spanish legal models, and TinyLoRA.">
+  <meta property="og:url" content="https://niwakiai.com/dojo/">
+  <meta property="og:image" content="https://niwakiai.com/assets/og-dojo.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7EEE3">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <ul>
+      <li><a href="../">Niwaki</a></li>
+      <li class="soon"><a href="../paper/" title="Coming soon">Paper</a></li>
+      <li><a href="../saikei/">Saikei</a></li>
+      <li><a href="./" aria-current="page">Dojo</a></li>
+      <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
+    </ul>
+  </nav>
+  </div>
+</header>
+
+<main>
+  <figure class="plate">
+    <picture>
+      <source srcset="../assets/dojo.webp" type="image/webp">
+      <img src="../assets/dojo.jpg" width="1774" height="887" alt="Engraving of a dojo: a wooden training hall with a tiled roof and paper screens, stepping stones leading to its veranda, flanked by garden pines and a stone lantern.">
+    </picture>
+  </figure>
+
+  <div class="wrap lead solo">
+    <h1>Dojo</h1>
+    <p>A dōjō (道場) is the place of the way: the hall where a craft is practised until it becomes one's own.</p>
+    <p>Niwaki is one long project. This page keeps the others from the same bench: model merging, documents folded into weights, a diffusion language model trained from scratch, Spanish legal models, and adapters of a few hundred kilobytes.</p>
+  </div>
+
+  <!-- ======================= Transfer learning & model merging ======================= -->
+  <section id="merging" class="first" aria-labelledby="h-merging">
+    <div class="wrap">
+      <p class="eyebrow">Active · paper in progress</p>
+      <h2 id="h-merging">Transfer Learning &amp; Model Merging</h2>
+      <p class="summary">Research on heterogeneous model merging and cross-architecture knowledge transfer: from merging instruction-tuned LLMs across model families to moving knowledge between fundamentally different architectures, autoregressive to diffusion.</p>
+
+      <ul class="figures two">
+        <li><span class="n">#1</span><span class="c">Neo-Falcon3-7B-Instruct on the Hugging Face Open LLM Leaderboard, under-7B category</span></li>
+        <li><span class="n">54.22%</span><span class="c">Winogrande after merging Qwen2.5-0.5B weights into the Blackice diffusion language model</span></li>
+      </ul>
+
+      <h3>Neo collection</h3>
+      <p class="summary">LLM merges built with heterogeneous merging techniques, combining models across different families and architectures.</p>
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>Neo-Falcon3-7B-Instruct</b><i>against Falcon3-7B-Instruct</i></figcaption>
+          <ol class="bars pairs" style="--max:83">
+            <li style="--i:0"><span class="name">MMLU</span><span class="track solid" style="--v:42.83"><span class="bar"></span><span class="val">42.83</span><span class="delta">+1.36</span></span><span class="track open" style="--v:41.47"><span class="bar"></span><span class="val">41.47</span></span></li>
+            <li style="--i:1"><span class="name">ARC-Challenge</span><span class="track solid" style="--v:55.18"><span class="bar"></span><span class="val">55.18</span><span class="delta">+3.01</span></span><span class="track open" style="--v:52.17"><span class="bar"></span><span class="val">52.17</span></span></li>
+            <li style="--i:2"><span class="name">Winogrande</span><span class="track solid" style="--v:70.32"><span class="bar"></span><span class="val">70.32</span><span class="delta">+4.26</span></span><span class="track open" style="--v:66.06"><span class="bar"></span><span class="val">66.06</span></span></li>
+            <li style="--i:3"><span class="name">Hellaswag</span><span class="track solid" style="--v:80.10"><span class="bar"></span><span class="val">80.10</span><span class="delta">+3.10</span></span><span class="track open" style="--v:77.00"><span class="bar"></span><span class="val">77.00</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Neo-Gemma-3-12B-Instruct</b><i>against gemma-3-12b-it</i></figcaption>
+          <ol class="bars pairs" style="--max:83">
+            <li style="--i:0"><span class="name">MMLU</span><span class="track solid" style="--v:42.76"><span class="bar"></span><span class="val">42.76</span><span class="delta">−0.84</span></span><span class="track open" style="--v:43.60"><span class="bar"></span><span class="val">43.60</span></span></li>
+            <li style="--i:1"><span class="name">ARC-Challenge</span><span class="track solid" style="--v:51.51"><span class="bar"></span><span class="val">51.51</span><span class="delta">+1.68</span></span><span class="track open" style="--v:49.83"><span class="bar"></span><span class="val">49.83</span></span></li>
+            <li style="--i:2"><span class="name">Winogrande</span><span class="track solid" style="--v:76.48"><span class="bar"></span><span class="val">76.48</span><span class="delta">+2.05</span></span><span class="track open" style="--v:74.43"><span class="bar"></span><span class="val">74.43</span></span></li>
+            <li style="--i:3"><span class="name">Hellaswag</span><span class="track solid" style="--v:83.00"><span class="bar"></span><span class="val">83.00</span><span class="delta">+1.50</span></span><span class="track open" style="--v:81.50"><span class="bar"></span><span class="val">81.50</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>the Neo merge, with its difference from the original</li>
+        <li><span class="open"></span>the original instruct model</li>
+      </ul>
+
+      <p class="note">Accuracy in percent, higher is better; Hellaswag on 1,000 examples. Bars start at zero and both charts share one scale, so the gains read small: the numbers carry them.</p>
+
+      <ul class="releases pair">
+        <li><span class="what">Neo-Falcon3-7B-Instruct</span><span class="nums">merge of Falcon3-7B and Qwen2.5-7B; reached #1 on the Open LLM Leaderboard, under 7B</span></li>
+        <li><span class="what">Neo-Gemma-3-12B-Instruct</span><span class="nums">heterogeneous merge of Gemma-3-12B</span></li>
+        <li><span class="what">Neo-Mistral-8B / 3B-Instruct</span><span class="nums">merges of Ministral instruction models</span></li>
+        <li><span class="what">Neo-Qwen-4B-Instruct</span><span class="nums">merge of Qwen3-4B</span></li>
+      </ul>
+
+      <h3>Autoregressive to diffusion</h3>
+      <dl class="facts">
+        <div><dt>Method</dt><dd>Procrustes-aligned weight merging, an SVD rotation followed by per-row SLERP, from Qwen2.5-0.5B into the Blackice diffusion language model.</dd></div>
+        <div><dt>Result</dt><dd>54.22% on Winogrande, closing in on native autoregressive models at the same scale.</dd></div>
+        <div><dt>Finding</dt><dd>Feed-forward layers transfer across attention architectures: bidirectional diffusion to and from causal autoregressive.</dd></div>
+      </dl>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/collections/neopolita/neo">Neo collection ↗<small>Hugging Face</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Thoth & mlx-D2L ======================= -->
+  <section id="thoth" aria-labelledby="h-thoth">
+    <div class="wrap">
+      <p class="eyebrow">Mistral AI Hackathon · Doc-to-LoRA · MLX</p>
+      <h2 id="h-thoth">Thoth &amp; mlx-D2L</h2>
+      <p class="summary">Compresses a document's knowledge directly into model weights instead of spending context-window tokens on it. Sakana AI's Doc-to-LoRA ported to Mistral's <span class="nb">Ministral-3B</span>, with the full inference pipeline reimplemented in MLX for native Apple Silicon support.</p>
+
+      <dl class="facts">
+        <div><dt>Hypernetwork</dt><dd>Trained from scratch on Ministral-3B: 0.744 loss over 4K steps on synthetic question-answer pairs.</dd></div>
+        <div><dt>Thoth agent</dt><dd>A DSPy-based reasoning system that converts documents into LoRA adapters on the fly.</dd></div>
+        <div><dt>Why</dt><dd>Knowledge in weights keeps the context window free for reasoning, in place of traditional retrieval-augmented generation.</dd></div>
+        <div><dt>Runtime</dt><dd>A full MLX inference pipeline. No CUDA required.</dd></div>
+      </dl>
+
+      <ul class="get">
+        <li><a class="primary" href="https://neopolita.github.io/mistral-ai-wh-2026/">Project page ↗<small>Mistral AI Hackathon 2026</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Blackice DLM ======================= -->
+  <section id="blackice-dlm" aria-labelledby="h-dlm">
+    <div class="wrap">
+      <p class="eyebrow">Masked discrete diffusion · trained from scratch</p>
+      <h2 id="h-dlm"><span class="nb">Blackice DLM</span> <span class="sub">Tiny · 448M</span></h2>
+      <p class="summary">A diffusion language model trained from scratch on a MacBook Pro M4 Max, with periodic cloud compute on Hugging Face Jobs. Absorbing-state discrete diffusion with a cosine noise schedule and bidirectional attention: generation starts from a fully masked sequence and unmasks positions in parallel, step by step, rather than left to right.</p>
+
+      <ul class="figures three">
+        <li><span class="n">448 <small>M</small></span><span class="c">parameters: 28 layers, 1,024 hidden, 16 heads</span></li>
+        <li><span class="n">24.87</span><span class="c">best ELBO perplexity, at a sequence length of 2,048</span></li>
+        <li><span class="n">2,048</span><span class="c">token context, grown 256 → 512 → 1,024 → 2,048 during training</span></li>
+      </ul>
+
+      <dl class="facts">
+        <div><dt>Architecture</dt><dd>28 transformer layers, SwiGLU feed-forward, gated bidirectional attention, RoPE, self-conditioning, EMA; ModernBERT tokenizer.</dd></div>
+        <div><dt>Depth</dt><dd>Block attention residuals, a learned depth-wise aggregation at block boundaries; U-Net mirrored skip connections between the two halves; looped middle blocks for extra compute depth without extra parameters.</dd></div>
+        <div><dt>Training</dt><dd>FineWeb-Edu-Dedup with cosine learning-rate decay and adaptive time warping, at progressively longer context.</dd></div>
+        <div><dt>Also explored</dt><dd>LoRA and DoRA fine-tuning, SFT and GRPO, including coupled-GRPO with antithetic variates for variance reduction; a Doc-to-LoRA hypernetwork; cross-architecture weight merging; an MLX inference port; mixed-data continual pretraining on FineWeb and Cosmopedia.</dd></div>
+      </dl>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Blackice-DLM-Tiny">Blackice-DLM-Tiny ↗<small>Hugging Face · Apache 2.0</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Temis ======================= -->
+  <section id="temis" aria-labelledby="h-temis">
+    <div class="wrap">
+      <p class="eyebrow">Spanish legal domain · open source</p>
+      <h2 id="h-temis">Temis</h2>
+      <p class="summary">A collection of language models fine-tuned on articles from the Spanish Official State Gazette (BOE), specialising in legal and administrative language. Named after Themis, the goddess of justice.</p>
+
+      <ul class="figures three">
+        <li><span class="n">8</span><span class="c">models, all trained on the BOE legal corpus</span></li>
+        <li><span class="n">357 <small>K</small></span><span class="c">articles from the Boletín Oficial del Estado</span></li>
+        <li><span class="n">360M–8B</span><span class="c">parameters, from SmolLM to Llama 3</span></li>
+      </ul>
+
+      <dl class="facts">
+        <div><dt>Base models</dt><dd>Gemma 2B and 7B · Llama 3.2-1B and 3-8B · Mistral 7B-v0.3 · Qwen 2.5-0.5B and 1.5B · SmolLM-360M</dd></div>
+      </dl>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/collections/neopolita/temis">Temis collection ↗<small>Hugging Face</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= TinyLoRA ======================= -->
+  <section id="tinylora" aria-labelledby="h-tinylora">
+    <div class="wrap">
+      <p class="eyebrow">MLX implementation · arXiv 2602.04118</p>
+      <h2 id="h-tinylora">TinyLoRA</h2>
+      <p class="summary">An MLX implementation of <a href="https://arxiv.org/abs/2602.04118">TinyLoRA</a> (“Learning to Reason in 13 Parameters”), a parameter-efficient fine-tuning method that reaches strong task performance with extremely small adapters. Validated on Texas Hold'em poker strategy with <span class="nb">Llama 3.2-1B</span>: the adapter is 470&nbsp;KB.</p>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>Preflop accuracy</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:100">
+            <li class="open" style="--v:7;--i:0"><span class="name">Llama 3.2-1B, untuned</span><span class="track"><span class="bar"></span><span class="val">7%</span></span></li>
+            <li class="hatch" style="--v:83;--i:1"><span class="name">Standard LoRA</span><span class="track"><span class="bar"></span><span class="val">83%</span></span></li>
+            <li class="solid" style="--v:36;--i:2"><span class="name">TinyLoRA</span><span class="track"><span class="bar"></span><span class="val">36%</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Postflop accuracy</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:100">
+            <li class="open" style="--v:13;--i:0"><span class="name">Llama 3.2-1B, untuned</span><span class="track"><span class="bar"></span><span class="val">13%</span></span></li>
+            <li class="hatch" style="--v:55;--i:1"><span class="name">Standard LoRA</span><span class="track"><span class="bar"></span><span class="val">55%</span></span></li>
+            <li class="solid" style="--v:60;--i:2"><span class="name">TinyLoRA</span><span class="track"><span class="bar"></span><span class="val">60%</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>TinyLoRA, 470 KB adapter</li>
+        <li><span class="hatch"></span>standard LoRA fine-tuning</li>
+        <li><span class="open"></span>the untuned model</li>
+      </ul>
+
+      <p class="note">Accuracy on PokerBench; both charts share a 0–100% scale. Standard fine-tuning is LoRA with unsloth-mlx. TinyLoRA matches full LoRA on postflop play with orders of magnitude fewer parameters; on preflop play it recovers less.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/TinyLoRA-TexasHoldEm-Llama-3.2-1B-Instruct">TinyLoRA model ↗<small>Hugging Face</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/TexasHoldEm-Llama-3.2-1B-Instruct">LoRA model ↗<small>Hugging Face</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Independent AI research. Models and collections are on Hugging Face; code is on GitHub.</p>
+    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/neopolita">GitHub</a> · <a href="../">Niwaki models</a></p>
+    <p class="made">Pruned and tended in Seville, Spain.</p>
+  </div>
+</footer>
+
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8cd674c9e00d4cffa8a037381ee5b2b9"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

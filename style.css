@@ -6,6 +6,7 @@
   --paper: #F7EEE3;
   --ink: #231F1A;
   --ink-soft: #5E564B;      /* secondary text, 6.3:1 on paper */
+  --ink-dim: #746B5D;       /* a dimmed link that still works, 4.6:1 on paper */
   --rule: #D9CDBB;          /* hairlines */
 
   /* bar washes — deliberately pale; identity never rests on them alone (texture, ink outline, labels, legend) */
@@ -64,6 +65,7 @@ a:hover { text-decoration-thickness: 2px; }
   border-bottom: 1px solid transparent; padding-bottom: 0.1em;
 }
 .nav li a:hover, .nav li a[aria-current="page"] { border-bottom-color: var(--ink); }
+.nav li.soon a { color: var(--ink-dim); }   /* not ready yet */
 
 /* ---------- a full-width plate (the Saikei page); its file is re-toned to the page's paper, the edges fade ---------- */
 .plate { margin: 0 auto; max-width: 75rem; }
@@ -77,6 +79,7 @@ a:hover { text-decoration-thickness: 2px; }
 .lead.solo { padding-block: clamp(1.25rem, 3vw, 2rem) clamp(2.5rem, 6vw, 3.75rem); }
 .lead.solo p { max-width: 40ch; }
 .lead.solo p + p { max-width: 58ch; }
+.lead h1 { margin-bottom: 0.9rem; }
 
 /* ---------- frontispiece: the lead beside the tree ---------- */
 .hero {
@@ -127,6 +130,7 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
   border-block: 1px solid var(--ink);
 }
 .figures.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.figures.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .figures li { padding: 1.05rem 1rem 1rem 0; }
 .figures li + li { border-left: 1px solid var(--rule); padding-left: 1rem; }
 .figures .n {
@@ -166,6 +170,14 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .hatch .bar, .key .hatch { background: repeating-linear-gradient(135deg, rgb(35 31 26 / 0.5) 0 1px, transparent 1px 3.6px), var(--tint-earlier); }
 .open .bar, .key .open { background: radial-gradient(circle at 1.5px 1.5px, rgb(35 31 26 / 0.4) 0.55px, transparent 0.75px) 0 0 / 4px 4px, var(--tint-unpruned); }
 
+/* paired bars: one benchmark, two models (the Dojo page) — the wash class sits on each track; the first track may carry
+   its difference from the second */
+.bars.pairs { gap: 0.9rem; }
+.bars.pairs li { gap: 0.22rem; }
+.bars.pairs .bar { width: calc(var(--v) / var(--max) * (100% - 13ch)); }
+.bars .track.solid .val { font-weight: 500; }
+.bars .delta { font-size: 0.92rem; color: var(--ink-soft); font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+
 /* a range (two evaluation seeds): the bar runs to the lower bound, a whisker to the upper */
 .bars .whisker {
   flex: none; height: 0.95rem; margin-left: -0.55rem;
@@ -201,6 +213,18 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .releases .what { font-weight: 500; }
 .releases .nums { color: var(--ink-soft); font-size: 1.02rem; font-variant-numeric: lining-nums tabular-nums; }
 .releases .links { white-space: nowrap; font-size: 1.02rem; }
+.releases.pair li { grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr); }
+
+/* facts: a labelled list under a project's summary (the Dojo page) */
+.facts { margin: 1.75rem 0 0; border-top: 1px solid var(--rule); }
+.facts > div {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3.4fr); gap: 0.15rem 1.5rem; align-items: baseline;
+  padding-block: 0.8rem; border-bottom: 1px solid var(--rule);
+}
+.facts dt { font-variant-caps: all-small-caps; letter-spacing: 0.09em; font-size: 1.02rem; color: var(--ink-soft); }
+.facts dd { margin: 0; max-width: 64ch; text-wrap: pretty; }
+h3 + .summary { margin-top: 0.6rem; }
+h3 + .facts { margin-top: 1.1rem; }
 
 /* ---------- paper page ---------- */
 .paper { padding-block: clamp(3rem, 10vw, 7rem) clamp(3rem, 8vw, 5rem); }
@@ -227,6 +251,7 @@ footer .made { flex-basis: 100%; max-width: none; margin-top: 0.4rem; font-famil
   .figures li:nth-child(n + 3) { border-top: 1px solid var(--rule); }
   .figures.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .releases li { grid-template-columns: minmax(0, 1fr); }
+  .releases.pair li, .facts > div { grid-template-columns: minmax(0, 1fr); }
   .hero { grid-template-columns: minmax(0, 1fr); }
   .tree { order: -1; justify-self: center; max-width: 24rem; }
   .nav { gap: 0.1rem 1rem; flex-wrap: wrap; padding-block: 0.5rem; }
