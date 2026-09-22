@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Saikei · Niwaki</title>
-  <meta name="description" content="Saikei: Qwen3.6-35B-A3B with nothing pruned, refined in place by a short knowledge-distillation pass. Same size, same architecture, same speed; MLX and GGUF weights.">
+  <meta name="description" content="Saikei: Qwen3.8-Flash-Next and Qwen3.6-35B-A3B with nothing pruned, refined in place by distillation from the 2.4-trillion-parameter Qwen3.8-2.4T-A95B. Same size, same architecture, same speed; MLX and GGUF weights.">
   <link rel="canonical" href="https://niwakiai.com/saikei/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Saikei · Niwaki">
-  <meta property="og:description" content="Qwen3.6-35B-A3B with nothing pruned, refined in place. Same size, same architecture, same speed.">
+  <meta property="og:description" content="Qwen3.8-Flash-Next and Qwen3.6-35B-A3B with nothing pruned, refined in place. Same size, same architecture, same speed.">
   <meta property="og:url" content="https://niwakiai.com/saikei/">
   <meta property="og:image" content="https://niwakiai.com/assets/og-saikei.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -48,13 +48,76 @@
 
   <div class="wrap lead solo">
     <p>Saikei (栽景) are Japan's planted landscapes — miniature living scenes grown whole on a tray, where nothing is cut away: the art is in the cultivation.</p>
-    <p>Where the Niwaki releases prune the tree, this model prunes nothing. It is the reference model, refined in place.</p>
+    <p>Where the Niwaki releases prune the tree, these models prune nothing. Each is its reference model, refined in place.</p>
   </div>
 
-  <section class="first" aria-labelledby="h-saikei">
+  <!-- ======================= Flash-Next Saikei v1.0 ======================= -->
+  <section id="flash-next" class="first" aria-labelledby="h-fn-saikei">
     <div class="wrap">
-      <p class="eyebrow">Nothing pruned</p>
-      <h1 id="h-saikei"><span class="nb">Qwen3.6-35B-A3B</span> <span class="nb">Saikei</span> <span class="sub">8-bit</span></h1>
+      <p class="eyebrow">Latest release</p>
+      <h2 id="h-fn-saikei"><span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">Saikei v1.0</span> <span class="sub">4-bit</span></h2>
+      <p class="summary">Qwen3.8-Flash-Next, un-pruned and improved: the intact 4-bit model distilled against the 2.4-trillion-parameter <span class="nb">Qwen3.8-2.4T-A95B</span>. Same size, same architecture, same speed — and every axis we measure improves or holds: both perplexities, the task average, and the program-state behaviours. It loads with stock <code>mlx-vlm</code> and stock llama.cpp — no custom code, no fork.</p>
+
+      <ul class="figures">
+        <li><span class="n">4.22</span><span class="c">WikiText-2 perplexity, from the reference's 5.06</span></li>
+        <li><span class="n">0.830</span><span class="c">task average over five tasks, from 0.759</span></li>
+        <li><span class="n">0 <small>/</small> +7</span><span class="c">program-state items lost / gained against the reference, of 1,928</span></li>
+        <li><span class="n">111.6 <small>GB</small></span><span class="c">on disk, unchanged; runs in 128 GB</span></li>
+      </ul>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>WikiText-2 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:5.06">
+            <li class="open" style="--v:5.06;--i:0"><span class="name">Reference, 4-bit</span><span class="track"><span class="bar"></span><span class="val">5.06</span></span></li>
+            <li class="solid" style="--v:4.22;--i:1"><span class="name">Saikei v1.0</span><span class="track"><span class="bar"></span><span class="val">4.22</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Task average, five tasks</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.830">
+            <li class="open" style="--v:0.759;--i:0"><span class="name">Reference, 4-bit</span><span class="track"><span class="bar"></span><span class="val">0.759</span></span></li>
+            <li class="solid" style="--v:0.830;--i:1"><span class="name">Saikei v1.0</span><span class="track"><span class="bar"></span><span class="val">0.830</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>C4 perplexity</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:10.97">
+            <li class="open" style="--v:10.97;--i:0"><span class="name">Reference, 4-bit</span><span class="track"><span class="bar"></span><span class="val">10.97</span></span></li>
+            <li class="solid" style="--v:10.29;--i:1"><span class="name">Saikei v1.0</span><span class="track"><span class="bar"></span><span class="val">10.29</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Two-step arithmetic</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:1">
+            <li class="open" style="--v:0.91;--i:0"><span class="name">Reference, 4-bit</span><span class="track"><span class="bar"></span><span class="val">0.91</span></span></li>
+            <li class="solid" style="--v:0.94;--i:1"><span class="name">Saikei v1.0</span><span class="track"><span class="bar"></span><span class="val">0.94</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>this release</li>
+        <li><span class="open"></span>the reference model</li>
+      </ul>
+
+      <p class="note">Unlike the first Saikei, nothing trades off here: C4 improves too. Perplexity over 64 × 2048-token windows, paired against the reference; tasks are arc_easy, hellaswag, piqa, winogrande and boolq, 500 examples each, with boolq (0.906 from 0.732) and winogrande (0.776 from 0.682) carrying most of the gain; the program-state suite is scored by forced choice on two held-out seeds. The Q4_K GGUF reads 4.52 on WikiText-2 under llama-perplexity, which is not comparable with the MLX protocol above.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-Saikei-v1.0-4bit-mlx">MLX weights ↗<small>111.6 GB · stock mlx-vlm</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-Saikei-v1.0-gguf">GGUF · Q4_K ↗<small>101.4 GB · stock llama.cpp</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Qwen3.6-35B-A3B Saikei ======================= -->
+  <section id="qwen36" aria-labelledby="h-saikei">
+    <div class="wrap">
+      <p class="eyebrow">The first Saikei</p>
+      <h2 id="h-saikei"><span class="nb">Qwen3.6-35B-A3B</span> <span class="nb">Saikei</span> <span class="sub">8-bit</span></h2>
       <p class="summary">Qwen3.6-35B-A3B, un-pruned and improved: the intact 8-bit model after a short knowledge-distillation pass from the 2.4-trillion-parameter <span class="nb">Qwen3.8-2.4T-A95B</span>. Same size, same architecture, same speed. It loads with stock <code>mlx_lm</code> and stock llama.cpp — no custom code, no fork.</p>
 
       <ul class="figures three">
@@ -108,7 +171,7 @@
 
 <footer>
   <div class="wrap">
-    <p>Base model by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversion of the reference by mlx-community. Distillation and builds by the Niwaki project.</p>
+    <p>Base models by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversions of the references by mlx-community. Distillation and builds by the Niwaki project.</p>
     <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="../">Niwaki models</a> · <a href="../paper/">Paper</a></p>
     <p class="made">Pruned and tended in Seville, Spain.</p>
   </div>
