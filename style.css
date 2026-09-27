@@ -203,6 +203,7 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .get a.primary { background: var(--ink); color: var(--paper); }
 .get a.primary:hover { background: transparent; color: var(--ink); }
 .get small { display: block; font-size: 0.86rem; opacity: 0.8; margin-top: 0.1rem; }
+.get + .get { margin-top: 0.6rem; }        /* a second row of downloads (MLX, then GGUF) */
 
 /* release list (earlier generations) */
 .releases { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--rule); }
