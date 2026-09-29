@@ -21,11 +21,16 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .comparison figcaption b { font-weight: 500; color: var(--ink); }
 .healing-chart { margin-top: 2.5rem; }
 .healing-chart img { width: 100%; height: auto; display: block; }
+.evidence-chart { margin-top: 2.5rem; }
+.evidence-chart img, .bridge-diagrams img { width: 100%; height: auto; display: block; }
+.bridge-diagrams { align-items: start; gap: 2.5rem 1.5rem; }
+.bridge-diagrams figcaption { min-height: 2.9rem; align-items: start; }
 .line-key { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; list-style: none; margin: .8rem 0 0; padding: 0; font-size: 1rem; color: var(--ink-soft); }
 .line-key li { display: inline-flex; align-items: center; gap: .5rem; }
 .line-key span { width: 1.7rem; border-top: 2px solid; }
 .high-line { color: #746B5D; border-top-style: dashed !important; }
 .low-line { color: #46643F; }
+.middle-line { color: #8B6330; border-top-style: dotted !important; }
 .base-line { color: #746B5D; border-top-style: dotted !important; }
 @media (max-width: 46rem) {
   .nav ul { flex-wrap: wrap; }

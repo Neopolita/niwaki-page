@@ -32,6 +32,8 @@ replay = read('data/phase6/verified_student_replay/summary.json')
 assessment = read('data/phase6/bridge_assessment.json')
 contract = read('data/phase6/replay_contract.json')
 healing = [read('data/phase6/' + folder + '/summary.json') for folder in ('healing_pilot', 'healing_pilot_lr_low')]
+activation = read('data/phase3/activations/full/summary.json')
+bypasses = [read(f'data/phase3/bypass/block_{layer:02d}_pilot/summary.json') for layer in (2,3,4,5)]
 assert all(r['status'] == 'passed' and r['optimizer_updates'] == 120 for r in healing)
 assert replay['exact_equal_controls'] == 90
 candidates = [a for a in replay['aggregates'] if a['stage'] == 'all']
@@ -43,6 +45,8 @@ public = {
     'baseline_efficiency': {k: efficiency[k] for k in ('gpu', 'num_denoising_steps', 'batch_size', 'per_aspect_ratio', 'overall')},
     'bridge_pretraining': [{'layer': r['layer'], 'updates': r['updates'], 'parameters': r['parameters'], 'selected_step': r['selected_step'], 'selected_validation_score': r['selected_validation_score']} for r in fits['results']],
     'student_comparisons': replay['aggregates'],
+    'activation_diagnostics': {k:activation[k] for k in ('n_prompts','n_measurements','dimension_counts','difficulty_counts','aggregates','percentile_scope','scope')},
+    'identity_bypass_diagnostics': [{k:r[k] for k in ('bypassed_layer','n_prompts','n_comparisons','stages','teacher_png_matches_activation_count','scope')} for r in bypasses],
     'fresh_bridge_fit': assessment['candidate_evidence'],
     'teacher_replay': {'exact_equal_controls': replay['exact_equal_controls'], 'state_tensor_count': 301, 'legacy_max_relative_l2': replay['legacy_max_relative_l2'], 'revision': '790c92633540aa0cb11d9abf19eb46d861714758', 'historical_discrepancy_cause': 'unresolved'},
     'healing': [{ 'learning_rate': lr, **{k:r[k] for k in ('status','optimizer_updates','teacher_calls','student_calls','trainable_parameters','adapter_modules','selected_step','selected_relative_error_reduction','frozen_parameter_audit_count','frozen_parameters_unchanged','peak_allocated_gib')}, 'evaluations': [{k:e[k] for k in ('step','comparisons','mean_relative_l2','max_relative_l2','mean_objective','stages')} for e in r['evaluations']]} for lr,r in zip((0.0001,0.00001),healing)],
@@ -65,6 +69,31 @@ baseline_chart = bars('Original model · overall judge score',[(k.replace('_',' 
 dataset_chart = bars('Pilot prompt capabilities',[(k.replace('_',' ').title(),v*100,'solid') for k,v in stats['dimension'].items()],30,hint='share of 20,000 prompts')
 baseline_rows = [[k.replace('_',' ').title(),v['n_images'],f"{v['metrics']['overall']['mean']:.2f}",f"{v['metrics']['prompt_adherence']['mean']:.2f}",f"{v['metrics']['text_rendering']['mean']:.2f}"] for k,v in scores.items()]
 healing_rows = [[e['step'],f"{100*e['mean_relative_l2']:.3f}%", f"{100*healing[1]['evaluations'][i]['mean_relative_l2']:.3f}%"] for i,e in enumerate(healing[0]['evaluations'])]
+activation_lookup = {(r['layer_index'],r['stage']):r for r in activation['aggregates']['overall']}
+activation_rows = [[layer]+[f"{activation_lookup[layer,stage]['means']['token_cosine_mean']:.6f}" for stage in ('early','middle','final')] for layer in (2,3,4,5)]
+change_rows = [[layer]+[f"{100*activation_lookup[layer,stage]['means']['relative_rms_change']:.3f}%" for stage in ('early','middle','final')] for layer in (2,3,4,5)]
+bypass_rows = [[r['bypassed_layer']]+[f"{100*s['mean_relative_l2_error']:.3f}%" for s in r['stages']]+[f"{100*max(s['max_relative_l2_error'] for s in r['stages']):.3f}%"] for r in bypasses]
+bypass_charts = ''.join(bars(stage.title()+' stage · identity bypass',[(f"Skip block {r['bypassed_layer']}",100*next(s['mean_relative_l2_error'] for s in r['stages'] if s['stage']==stage),'open') for r in bypasses],20) for stage in ('early','middle','final'))
+
+# Display the full measured layer range; candidate details retain their precision in tables.
+act_svg = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" role="img" aria-labelledby="title desc"><title id="title">Input/output activation similarity across all 32 blocks</title><desc id="desc">Mean image-token cosine across 64 prompts, at early, middle and final denoising stages. Blocks 2 through 5 are highlighted as the tested batch, not an exclusive ranking.</desc><rect width="820" height="390" fill="#F7EEE3"/><g font-family="Georgia,serif" font-size="16" fill="#231F1A">']
+act_svg.append('<text x="65" y="25">Input/output cosine · closer to 1 means less directional change</text>')
+act_svg.append(f'<rect x="{65+1.5/31*720:.3f}" y="50" width="{4/31*720:.3f}" height="240" fill="#A7C2A0" fill-opacity=".35"/><text x="{65+3.5/31*720:.3f}" y="365" text-anchor="middle">Tested batch: 2–5</text>')
+for value in (0,.25,.5,.75,1):
+    yy=290-value*240
+    act_svg.append(f'<path d="M65 {yy} H785" stroke="#D9CDBB"/><text x="52" y="{yy+5}" text-anchor="end">{value:g}</text>')
+for layer in (0,2,5,10,15,20,25,31):
+    xx=65+layer/31*720
+    act_svg.append(f'<text x="{xx}" y="316" text-anchor="middle">{layer}</text>')
+act_svg.append('<text x="425" y="342" text-anchor="middle">Original transformer block · zero-based index</text>')
+for stage,color,dash in [('early','#746B5D','7 4'),('middle','#8B6330','2 4'),('final','#46643F','none')]:
+    points=[(65+l/31*720,290-activation_lookup[l,stage]['means']['token_cosine_mean']*240) for l in range(32)]
+    act_svg.append('<polyline fill="none" stroke="'+color+'" stroke-width="2" stroke-dasharray="'+dash+'" points="'+' '.join(f'{x:.3f},{y:.3f}' for x,y in points)+'"/>')
+    for layer,(x,y) in enumerate(points):
+        value=activation_lookup[layer,stage]['means']['token_cosine_mean']
+        act_svg.append(f'<circle cx="{x:.3f}" cy="{y:.3f}" r="2.8" fill="{color}"><title>Block {layer}, {stage}: {value:.9f}</title></circle>')
+act_svg.append('</g></svg>')
+(out/'activation-similarity.svg').write_text(''.join(act_svg),encoding='utf-8')
 
 # Standalone vector figure: inspect exact point values in the accompanying table.
 svg = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" role="img" aria-labelledby="title desc"><title id="title">Healing did not beat the pretrained bridge</title><desc id="desc">Mean validation velocity error at 0, 30, 60, 90 and 120 updates. Both learning rates stay above the initial 5.518 percent. Exact values are in the page table.</desc><rect width="820" height="370" fill="#F7EEE3"/><g font-family="Georgia,serif" font-size="16" fill="#231F1A">']
@@ -106,7 +135,7 @@ head=head[:start]+'''  <meta name="description" content="Nihonga: a research log
   <meta property="og:title" content="Nihonga · Qwen Image compression research">
   <meta property="og:description" content="A measured research record: learned bridges improve fixed-input predictions; two architecture-healing pilots did not improve validation.">
   <meta property="og:url" content="https://niwakiai.com/nihonga/">
-  <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
+  <meta property="og:image" content="https://niwakiai.com/assets/nihonga.jpg">
 '''+head[end:]
 head=head.replace('<link rel="stylesheet" href="../style.css">','<link rel="stylesheet" href="../style.css">\n  <link rel="stylesheet" href="nihonga.css">')
 head=head.replace('<a href="./" aria-current="page">Saikei</a>','<a href="../saikei/">Saikei</a>')
@@ -114,6 +143,12 @@ head=head.replace('      <li><a href="../nihonga/">Nihonga</a></li>\n', '')
 head=head.replace('      <li><a href="../dojo/">Dojo</a></li>','      <li><a href="./" aria-current="page">Nihonga</a></li>\n      <li><a href="../dojo/">Dojo</a></li>')
 footer=template[template.index('<footer>'):]
 body=f'''<main id="main">
+  <figure class="plate">
+    <picture>
+      <source srcset="../assets/nihonga.webp" type="image/webp">
+      <img src="../assets/nihonga.jpg" width="1774" height="887" fetchpriority="high" alt="Engraving of a Japanese painter’s low worktable with an unfurled pine-and-mountain landscape, brushes, an inkstone and bowls of mineral pigment, under the word Nihonga.">
+    </picture>
+  </figure>
   <div class="wrap lead solo nihonga-lead">
     <p class="eyebrow">Research notebook · updated <time datetime="2026-09-29">29 September 2026</time></p>
     <h1>Nihonga <span lang="ja">日本画</span></h1>
@@ -131,7 +166,18 @@ body=f'''<main id="main">
     <dl class="facts"><div><dt>Baseline speed</dt><dd>{efficiency['overall']['latency']['mean_seconds']:.3f} seconds per image on an H100 80 GB, batch size 1, 40 denoising steps; 80 timed calls across eight aspect ratios after warm-up.</dd></div><div><dt>Baseline memory</dt><dd>{efficiency['overall']['peak_vram_allocated_bytes']/2**30:.2f} GiB peak allocated VRAM across those calls. Student inference has not yet been benchmarked under the same protocol.</dd></div></dl>
   </div></section>
   <section id="pruning" aria-labelledby="h-pruning"><div class="wrap"><p class="eyebrow">Phase 3 · measure the missing update</p><h2 id="h-pruning">Similarity is a clue; images decide what it misses</h2>
-    <p class="summary">Activation similarity and temporary identity bypasses nominate blocks 2, 3, 4 and 5 for independent learned replacements. An identity bypass simply passes its input through, discarding the block’s update. It tests the cost of removing the update, not whether a cheap learned bridge could recover it.</p>
+    <p class="summary">Activation similarity identified several blocks with small directional changes. We tested blocks 2, 3, 4 and 5 as the first independent learned-replacement batch, then used temporary identity bypasses to measure the effect of discarding their updates. This is a measured pilot batch, not proof that these are the only removable blocks.</p>
+    <h3>The activation measurements</h3><p class="summary">We measured all 32 blocks on <b>64 fixed internal prompts</b> at denoising steps <b>0, 19 and 39</b> of the 40-step teacher: <b>6,144 block/stage observations</b>. Hooks compare image-token states immediately before and after each block, excluding the text prefix. Each cosine is averaged over image tokens, then across prompts. The table shows the four tested candidates; the graph and downloadable record cover every block.</p>
+    <figure class="chart wide evidence-chart"><figcaption><b>Input/output activation similarity · all blocks</b><i>64 prompts · three stages</i></figcaption><a href="activation-similarity.svg"><img src="activation-similarity.svg" width="820" height="390" alt="Image-token cosine similarity across all 32 original blocks at early, middle and final denoising stages. The tested batch, blocks 2–5, is highlighted. Open for a larger view."></a></figure>
+    <ul class="line-key" aria-label="Activation graph legend"><li><span class="high-line"></span>early · dashed</li><li><span class="middle-line"></span>middle · dotted</li><li><span class="low-line"></span>final · solid</li></ul>
+    {table(['Original block','Early cosine','Middle cosine','Final cosine'],activation_rows,'Mean input/output image-token cosine · 1 means same direction')}
+    {table(['Original block','Early change','Middle change','Final change'],change_rows,'Relative hidden-state change · ‖h_out − h_in‖₂ / ‖h_in‖₂ · lower is smaller')}
+    <p class="note">For example, block 2’s early cosine is 0.998321, but the update still has a norm equal to 8.681% of its input’s norm. High cosine does not imply a negligible update or 99.8% image quality. Block 1 and some later blocks also have high similarity; blocks 2–5 are an initial comparison batch, not the complete top-four ranking. Prompt-level distributions and per-capability aggregates are in <a href="results.json">the measurements</a>.</p>
+    <h3>What happens when each update is removed?</h3><p class="summary">An identity bypass returns <code>h_out = h_in</code>, so the missing block contributes no update. We tested each candidate separately on the <b>same five pilot prompts × three stages</b>, using saved teacher-trajectory inputs and rebuilt student prefix caches. Each block has 15 velocity comparisons, with intact-teacher replay controls matching exactly within the diagnostic. These five-prompt Phase 3 probes are distinct from the later ten-prompt bridge-validation set.</p>
+    <div class="charts">{bypass_charts}</div>
+    {table(['Skipped block','Early error','Middle error','Final error','Worst case'],bypass_rows,'Phase 3 identity-bypass velocity error · five prompts · lower is better')}
+    <p class="summary">Block 2 has the strongest activation similarity of the tested candidates early and in the middle, yet its omission causes the largest mean velocity errors at all three stages. Block 4 has the lowest mean bypass error early and in the middle; block 5 is lowest at the final stage. Similarity helps nominate experiments, but bypass sensitivity and finished images change the ranking.</p>
+    <p class="note">The worst-case column is the largest error among that block’s 15 prompt/stage cases. Velocity error is a prediction difference, not a percentage of image-quality loss. These individual interventions do not establish that several blocks can be removed together, and no bridge is fitted in this diagnostic.</p>
     <h3>What the first image comparisons showed</h3><p class="summary">Five prompts, one per capability, were generated with block 4 or block 5 skipped: ten bypass images. In the astronaut example, skipping block 4 loses the spacesuit. Skipping block 5 retains it. That initially favors block 5 for closer study, while all four candidates remain eligible for learned bridges.</p>
     <p class="note">Each sheet reads <b>teacher / skip block 4 / skip block 5</b>, left to right. These are identity-bypass images from Phase 3, before bridge training or healing. Teacher images came from an earlier run; unresolved cross-run variation limits causal pixel comparisons. Observations are manual, not a blinded quality study. Open any sheet at full resolution.</p>
     <div class="gallery">{gallery}</div>
@@ -140,6 +186,11 @@ body=f'''<main id="main">
   <section id="bridges" aria-labelledby="h-bridges"><div class="wrap"><p class="eyebrow">Phases 4–5 · recover the missing update cheaply</p><h2 id="h-bridges">A small residual bridge in place of a full block</h2>
     <div class="architecture" role="img" aria-label="Teacher: 32 transformer blocks. Student: first five blocks, rank-256 residual bridge replacing original block 5, then the 26 remaining blocks. Original slot numbers are zero-based."><div><span>Teacher</span><b>32 transformer blocks</b><small>Frozen reference</small></div><div><span>Student</span><b>Blocks 0–4 → bridge → blocks 6–31</b><small>31 original blocks + one learned replacement</small></div></div>
     <p class="summary">The bridge projects 4,096 features down to 256, applies GELU, projects back up, and adds the input: <code>h′ = h + W_up GELU(W_down h)</code>. Each bridge has 2,097,152 parameters. We fit four independent candidates, replacing one original block at a time; the four bridges are not inserted together.</p>
+    <div class="charts bridge-diagrams">
+      <figure class="chart"><figcaption><b>Before · the original transformer block</b></figcaption><a href="block-before.svg"><img src="block-before.svg" width="420" height="720" alt="Original block: 4,096-feature input, normalization, attention with a gated residual, normalization, feed-forward network with a gated residual, then a 4,096-feature output."></a></figure>
+      <figure class="chart"><figcaption><b>After · a residual bottleneck bridge</b></figcaption><a href="bridge-after.svg"><img src="bridge-after.svg" width="420" height="720" alt="Replacement: preserve the input on a residual path; project 4,096 features down to 256, apply GELU, project back to a 4,096-feature correction, then add the original input."></a></figure>
+    </div>
+    <p class="note">The student keeps the <b>same 4,096-feature input and output interface</b>. Only the correction travels through the 256-feature bottleneck; the residual path keeps the original information. GELU is a nonlinear transformation of those 256 features. The bridge processes each token separately without attention and learns to approximate the removed block’s update. The diagrams show shapes and operations, not identical teacher and student values or measured speedups. Open either diagram for the standalone SVG.</p>
     <p class="summary">Bridge-only pretraining keeps the rest of the model frozen. Each candidate gets 500 updates using cached hidden states from 20 training prompts, with 10 validation prompts selecting checkpoints. The fitting objective balances prompt tokens and early, middle and late image tokens, combining normalized direction matching with a smaller relative squared-error term. Block 5’s selected checkpoint is update 300.</p>
     <h3>Does a better hidden-state fit improve the whole prediction?</h3><p class="summary">We replay each identity and trained student against the verified teacher, using the same saved inputs at three stages. Each candidate has 30 comparisons; there are 240 student forwards across four candidates and two variants.</p>
     <div class="charts">{bridge_charts}</div>
@@ -157,7 +208,9 @@ body=f'''<main id="main">
     <p class="note">The hidden-fit objective combines direction and relative squared errors; it has no direct percentage interpretation. Its 38–61% reductions cannot be compared as if they were the same metric as the 3.74–17.97% velocity-error reductions.</p>
   </div></section>
   <section id="healing" aria-labelledby="h-healing"><div class="wrap"><p class="eyebrow">Phase 6 · two completed parameter-efficient trials</p><h2 id="h-healing">Training works; this recipe does not improve validation</h2>
-    <p class="summary">We trained the selected bridge together with rank-8 LoRA adapters on the query, key, value and output projections of all 31 surviving attention blocks. That is 124 adapters and 10,223,616 trainable parameters. Surviving base weights stay frozen. This is a parameter-efficient implementation pilot; full-weight architecture healing is still incomplete.</p>
+    <p class="summary"><b>Healing is a second training stage, after bridge pretraining.</b> Phase 5 trains only the bridge to reproduce the removed block’s hidden-state update. Phase 6 starts from that pretrained bridge and trains the modified student to reproduce the teacher’s <b>final velocity prediction</b>, with hidden-state supervision as an auxiliary loss. “Before healing” already includes the trained Phase 5 bridge.</p>
+    <p class="summary">In these healing pilots, we trained the selected bridge together with rank-8 LoRA adapters on the query, key, value and output projections of all 31 surviving attention blocks. That is 124 adapters and 10,223,616 trainable parameters. Surviving base weights stay frozen. This is a parameter-efficient implementation pilot; full-weight architecture healing is still incomplete.</p>
+    <dl class="facts"><div><dt>Bridge pretraining</dt><dd>Trainable: the bridge alone. Target: the hidden states after the original removed block. Purpose: approximate that block’s local update.</dd></div><div><dt>Healing pilot</dt><dd>Trainable: the pretrained bridge plus LoRA adapters in surviving blocks. Target: teacher velocity output, with auxiliary hidden-state and bridge losses. Purpose: help the whole modified model recover.</dd></div><div><dt>What failed</dt><dd>The second stage increased held-out velocity error. This is a comparison of the same student before and after extra training, not two interchangeable names for bridge pretraining. “Healing” names the intended recovery procedure; it does not guarantee that recovery occurs.</dd></div></dl>
     <dl class="facts"><div><dt>Training</dt><dd>120 updates per run: two shuffled passes over 20 training prompts × three stages. Same initialization and sampling seeds, data, losses and validation rule; learning rates 0.0001 and 0.00001.</dd></div><div><dt>Supervision</dt><dd>Relative velocity MSE + 0.1 normalized hidden-state loss at selected surviving blocks + 0.1 bridge-output supervision. Validation prompts never contribute optimizer gradients.</dd></div><div><dt>Cache gradients</dt><dd>Early conditioning is rebuilt with current student parameters. Checkpoint recomputation uses private caches; cached-stage gradients reach prefix keys and values without changing the shared cache during backward.</dd></div><div><dt>Controls</dt><dd>Both fresh runs passed 90 exact teacher replays, reproduced all 30 baseline student predictions, passed cached-stage gradient checks, and verified 288 surviving base tensors unchanged. Checkpoints include optimizer and RNG state; results are reused on reruns.</dd></div></dl>
     <figure class="chart wide healing-chart"><figcaption><b>Healing validation trajectory</b><i>lower is better</i></figcaption><img src="healing.svg" width="820" height="370" alt="Both learning rates remain above the pretrained bridge’s 5.518% validation error across 120 updates; exact values follow."></figure>
     <ul class="line-key" aria-label="Healing graph legend"><li><span class="high-line"></span>0.0001 learning rate · dashed</li><li><span class="low-line"></span>0.00001 learning rate · solid</li><li><span class="base-line"></span>pretrained baseline · dotted</li></ul>

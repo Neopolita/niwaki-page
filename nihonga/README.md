@@ -17,3 +17,9 @@ and limitations visible, distinguish hidden-fit losses from velocity errors and 
 quality, and never infer a speedup from the number of removed blocks alone.
 
 The production site is deployed by GitHub Pages from `main`, at `/nihonga/`.
+
+The Nihonga hero is an original AI-generated illustration, not a student-model
+sample or an antique reproduction. The built-in image-generation tool created it
+to match the existing monochrome engraved plates. Its source is
+`assets/nihonga.png`; JPEG and WebP encodings are used on the page. The generation
+prompt is preserved in `assets/nihonga-prompt.txt`.
