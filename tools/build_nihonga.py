@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import html
 import json
+import math
 from pathlib import Path
 import shutil
 
@@ -24,6 +25,9 @@ def read(name):
     return json.loads(p.read_text(encoding='utf-8'))
 
 stats = read('data/phase1/stats.json')
+dataset_config = read('data/phase1/config.json')
+decontamination = read('data/phase1/decontamination_report.json')
+llm_benchmark_rejections = read('data/phase1/pilot_20k/llm_bench_rejections.json')
 all_scores = read('data/phase2/scores.json')['summary']
 scores = {k: all_scores[k] for k in ('bench_cn', 'bench_en', 'internal')}
 efficiency = read('data/phase2/efficiency.json')
@@ -41,6 +45,9 @@ public = {
     'updated': '2026-09-29',
     'scope': 'Development pilots; validation reused for selection; no healed-student image-quality or speed benchmark.',
     'dataset': stats,
+    'dataset_creation': {k:dataset_config[k] for k in ('GENERATOR_VERSION','MASTER_SEED','MASTER_POOL_SIZE','PILOT_SIZE','DIMENSION_WEIGHTS','SUBDIM_WEIGHT_OVERRIDES','LLM_MODEL','LLM_EN_REWRITE_FRACTION','LLM_ZH_TRANSLATE_FRACTION','DECON_WORD_NGRAM','DECON_CHAR_NGRAM','DECON_THRESHOLD')},
+    'dataset_benchmark_overlap_check': decontamination,
+    'final_llm_benchmark_rejections': len(llm_benchmark_rejections),
     'baseline': {k: {'n_images': v['n_images'], 'metrics': v['metrics']} for k,v in scores.items()},
     'baseline_efficiency': {k: efficiency[k] for k in ('gpu', 'num_denoising_steps', 'batch_size', 'per_aspect_ratio', 'overall')},
     'bridge_pretraining': [{'layer': r['layer'], 'updates': r['updates'], 'parameters': r['parameters'], 'selected_step': r['selected_step'], 'selected_validation_score': r['selected_validation_score']} for r in fits['results']],
@@ -55,8 +62,8 @@ public = {
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
 
 def esc(s): return html.escape(str(s), quote=True)
-def bars(title, rows, maximum, unit='%', hint='lower is better'):
-    items = ''.join(f'<li class="{kind}" style="--v:{value:.9f};--i:{i}"><span class="name">{esc(label)}</span><span class="track"><span class="bar"></span><span class="val">{value:.3f}{unit}</span></span></li>' for i,(label,value,kind) in enumerate(rows))
+def bars(title, rows, maximum, unit='%', hint='lower is better', decimals=3):
+    items = ''.join(f'<li class="{kind}" style="--v:{value:.9f};--i:{i}"><span class="name">{esc(label)}</span><span class="track"><span class="bar"></span><span class="val">{value:.{decimals}f}{unit}</span></span></li>' for i,(label,value,kind) in enumerate(rows))
     return f'<figure class="chart"><figcaption><b>{title}</b><i>{hint}</i></figcaption><ol class="bars" style="--max:{maximum}">{items}</ol></figure>'
 
 def table(headers, rows, caption):
@@ -67,6 +74,9 @@ bridge_rows = [[int(a['candidate_id'][-2:]), f"{100*a['identity_mean_relative_l2
 fit_rows = [[e['layer'],f"{e['fresh_validation_objective']:.6f}",f"{100*e['fresh_objective_reduction_from_identity']:.2f}%",f"{100*e['fresh_objective_relative_change']:+.4f}%"] for e in assessment['candidate_evidence']]
 baseline_chart = bars('Original model · overall judge score',[(k.replace('_',' ').title(),v['metrics']['overall']['mean'],'open') for k,v in scores.items()],100,unit='',hint='0–100 · higher is better')
 dataset_chart = bars('Pilot prompt capabilities',[(k.replace('_',' ').title(),v*100,'solid') for k,v in stats['dimension'].items()],30,hint='share of 20,000 prompts')
+split_chart = bars('Our dataset · split sizes',[(label,stats['by_split'][key],'solid' if key=='train' else 'open') for key,label in [('train','Train · fit parameters'),('validation','Validation · select checkpoints'),('internal_test','Internal test · held-out evaluation')]],20000,unit='',hint='number of prompts · 20,000 total',decimals=0)
+language_chart = bars('Pilot languages',[('English',stats['language']['en']*100,'solid'),('Chinese',stats['language']['zh']*100,'solid')],100,hint='share of final pilot prompts')
+source_chart = bars('How the final pilot is written',[(label,stats['source'][key]*100,'solid') for key,label in [('template','Retained template wording'),('llm_rewrite','LLM English rewrite'),('llm_translate','LLM Chinese translation')]],100,hint='share of final pilot prompts')
 baseline_rows = [[k.replace('_',' ').title(),v['n_images'],f"{v['metrics']['overall']['mean']:.2f}",f"{v['metrics']['prompt_adherence']['mean']:.2f}",f"{v['metrics']['text_rendering']['mean']:.2f}"] for k,v in scores.items()]
 healing_rows = [[e['step'],f"{100*e['mean_relative_l2']:.3f}%", f"{100*healing[1]['evaluations'][i]['mean_relative_l2']:.3f}%"] for i,e in enumerate(healing[0]['evaluations'])]
 activation_lookup = {(r['layer_index'],r['stage']):r for r in activation['aggregates']['overall']}
@@ -94,6 +104,40 @@ for stage,color,dash in [('early','#746B5D','7 4'),('middle','#8B6330','2 4'),('
         act_svg.append(f'<circle cx="{x:.3f}" cy="{y:.3f}" r="2.8" fill="{color}"><title>Block {layer}, {stage}: {value:.9f}</title></circle>')
 act_svg.append('</g></svg>')
 (out/'activation-similarity.svg').write_text(''.join(act_svg),encoding='utf-8')
+
+def activation_plot(filename, metric, layers, bounds, ticks, title, logarithmic=False, wide=False):
+    width, height = (820,390) if wide else (520,360)
+    left, right, top, bottom = 76, width-25, 60, height-90
+    low, high = bounds
+    transform = math.log10 if logarithmic else lambda v:v
+    def px(layer): return left+(layer-layers[0])/(layers[-1]-layers[0])*(right-left)
+    def py(value): return bottom-(transform(value)-transform(low))/(transform(high)-transform(low))*(bottom-top)
+    parts=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc"><title id="title">{esc(title)}</title><desc id="desc">Mean across 64 prompts, with early, middle and final stage curves. Blocks 2–5 are highlighted. Cosine describes direction; relative L2 measures the size of the hidden-state update. Exact candidate values are in the page tables.</desc><rect width="{width}" height="{height}" fill="#F7EEE3"/><g font-family="Georgia,serif" font-size="17" fill="#231F1A">']
+    parts.append(f'<text x="{left}" y="26" font-size="17">{esc(title)}</text>')
+    spacing=(right-left)/(layers[-1]-layers[0])
+    parts.append(f'<rect x="{px(2)-spacing/2:.3f}" y="{top}" width="{spacing*4:.3f}" height="{bottom-top}" fill="#A7C2A0" fill-opacity=".35"/>')
+    for tick in ticks:
+        yy=py(tick)
+        label=f'{tick:.3f}' if metric=='token_cosine_mean' else f'{tick:g}%'
+        parts.append(f'<path d="M{left} {yy:.3f} H{right}" stroke="#D9CDBB"/><text x="{left-12}" y="{yy+5:.3f}" text-anchor="end">{label}</text>')
+    xticks=layers if len(layers)<=6 else (0,2,5,10,15,20,25,31)
+    for layer in xticks:
+        parts.append(f'<text x="{px(layer):.3f}" y="{bottom+28}" text-anchor="middle">{layer}</text>')
+    parts.append(f'<text x="{(left+right)/2}" y="{bottom+55}" text-anchor="middle">Original block · zero-based index</text>')
+    for stage,color,dash in [('early','#746B5D','7 4'),('middle','#8B6330','2 4'),('final','#46643F','none')]:
+        values=[activation_lookup[layer,stage]['means'][metric]*(100 if metric=='relative_rms_change' else 1) for layer in layers]
+        assert all(low<=v<=high for v in values), (filename,stage,values)
+        points=[(px(layer),py(value)) for layer,value in zip(layers,values)]
+        parts.append('<polyline fill="none" stroke="'+color+'" stroke-width="2.3" stroke-dasharray="'+dash+'" points="'+' '.join(f'{x:.3f},{y:.3f}' for x,y in points)+'"/>')
+        for layer,value,(x,y) in zip(layers,values,points):
+            label=f'{value:.6f}'+('%' if metric=='relative_rms_change' else '')
+            parts.append(f'<circle cx="{x:.3f}" cy="{y:.3f}" r="{4 if len(layers)<=6 else 2.8}" fill="{color}"><title>Block {layer}, {stage}: {label}</title></circle>')
+    parts.append('</g></svg>')
+    (out/filename).write_text(''.join(parts),encoding='utf-8')
+
+activation_plot('activation-cosine-zoom.svg','token_cosine_mean',list(range(1,7)),(.994,1),(.994,.996,.998,1),'Cosine · zoomed axis 0.994–1.000')
+activation_plot('activation-l2-zoom.svg','relative_rms_change',list(range(1,7)),(0,18),(0,5,10,15,18),'Relative L2 change · linear axis')
+activation_plot('activation-l2-all.svg','relative_rms_change',list(range(32)),(5,1500),(5,10,50,100,500,1500),'Relative L2 change · all blocks · log axis',logarithmic=True,wide=True)
 
 # Standalone vector figure: inspect exact point values in the accompanying table.
 svg = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" role="img" aria-labelledby="title desc"><title id="title">Healing did not beat the pretrained bridge</title><desc id="desc">Mean validation velocity error at 0, 30, 60, 90 and 120 updates. Both learning rates stay above the initial 5.518 percent. Exact values are in the page table.</desc><rect width="820" height="370" fill="#F7EEE3"/><g font-family="Georgia,serif" font-size="16" fill="#231F1A">']
@@ -158,9 +202,22 @@ body=f'''<main id="main">
   </div>
   <section class="first" id="foundation" aria-labelledby="h-foundation"><div class="wrap"><p class="eyebrow">Phases 0–2 · establish the reference</p><h2 id="h-foundation">Understand the model before removing anything</h2>
     <p class="summary">The inspected transformer has 32 blocks, a hidden width of 4,096, and approximately 7.115 billion parameters. The 60-layer examples in the original plan are illustrative; our experiments use this actual 32-block architecture. The model predicts a velocity that updates the noisy latent at each denoising step; the VAE decodes the final latent into an image.</p>
-    <h3>A dataset we can grow without moving the splits</h3><p class="summary">A 100,000-prompt template pool supports a 20,000-prompt pilot, with natural-language rewrites and Chinese translations. The pilot contains {stats['by_split']['train']:,} training, {stats['by_split']['validation']:,} validation and {stats['by_split']['internal_test']:,} internal-test prompts. Counting, materials, spatial relations, text, aesthetics and other capabilities are represented. Benchmark prompts stay evaluation-only, with overlap checks before and after rewriting.</p>
-    <div class="charts">{dataset_chart}{baseline_chart}</div>
+    <h3>What “internal” means</h3><p class="summary"><b>Internal means our own synthetic prompt dataset</b>, built for this compression project. It is separate from Qwen-Image-Bench. The <b>“Internal” baseline row is specifically its 1,007-prompt held-out internal-test split</b>, not the training set and not all 20,000 pilot prompts. Qwen-Image-Bench supplies the other two rows, with the same 1,000 benchmark items evaluated in Chinese and English.</p>
+    <h3>Why build our own dataset?</h3><p class="summary">We need prompts to train the bridges and heal the student without training on benchmark questions. We also need validation prompts for choosing checkpoints and a separate test set for evaluating changes. A broad synthetic corpus lets us deliberately cover counting, spatial relations, text rendering, materials, scenes and visual styles instead of relying on whichever examples happen to be easy. For distillation, the original image model supplies hidden states and velocity targets; real-image training pairs are not required for this stage.</p>
+    <h3>How we created it</h3>
+    <dl class="facts"><div><dt>1 · structured prompts</dt><dd>Generate a 100,000-prompt template pool across five capability groups and {len(stats['subdimension'])} subdimensions. Combine objects, counts, colors, relations, materials and scenes with difficulty levels 1–5, styles, prompt formats and aspect ratios. Exact normalized duplicate prompts are removed. Counting and spatial relations receive extra weight, and text rendering receives twice its unadjusted subdimension weight.</dd></div><div><dt>2 · stable partitions</dt><dd>Assign deterministic IDs and seeds, stratify within capability/subdimension/difficulty, then select a 20,000-prompt prefix by a saved pool rank. The intended split is approximately 90% train, 5% validation and 5% internal test. The actual pilot sizes are 17,991 / 1,002 / 1,007. Split assignments remain fixed when growing the pool.</dd></div><div><dt>3 · natural language</dt><dd>Use Qwen3-8B through vLLM on Modal to rewrite selected English prompts and translate about 10% into Chinese. Pure templates can cover a narrow set of sentence shapes; natural wording and Chinese prompts broaden the conditioning the student sees. Automatic checks try to preserve quoted text and key constraints; failed rewrites fall back to the original template. Raw responses are retained.</dd></div><div><dt>4 · benchmark separation</dt><dd>Check normalized exact matches and English 6-word / Chinese 8-character n-gram overlap against a pinned Qwen-Image-Bench prompt snapshot, both before and after rewriting. At the configured 0.5 overlap threshold, the template-pool check removed zero prompts; no final rewrites were rejected for benchmark overlap. These checks reduce detectable contamination, but do not prove every prompt is semantically unrelated.</dd></div><div><dt>5 · serialize the record</dt><dd>Save each prompt’s capability, subdimension, facet, difficulty, style, aspect ratio, language, source, original template, ID, seed and split. Save the generation configuration, raw LLM outputs, overlap checks, distributions and artifact hashes. Rerunning reads the existing results rather than generating the corpus again.</dd></div></dl>
+    <div class="charts">{split_chart}{dataset_chart}{source_chart}{language_chart}</div>
+    <p class="note">The 100,000-prompt master pool is the template reservoir. Natural-language rewriting and translation were completed for the 20,000-prompt pilot; we have not trained on all 100,000 prompts. The bars show the actual pilot distributions from the saved Phase 1 statistics, not planned quotas. Wording checks are automatic rather than a guarantee of perfect constraint preservation.</p>
+    <h3>A saved internal-test example</h3><blockquote class="dataset-example"><p>Create a photorealistic café chalkboard displaying “Today’s special: tomato soup and grilled cheese” in legible chalk writing, soft shadows, mysterious atmosphere.</p></blockquote>
+    <p class="note">This held-out example tests long text rendering: creative generation, difficulty 5, photographic style, square aspect ratio, English LLM rewrite. Its seed and original template are saved. It is a test prompt, not a bridge-training example.</p>
+    {table(['Split / benchmark','Role','How used so far'],[
+      ['Train · 17,991 prompts','Fit model parameters','20 selected prompts in the bridge and healing pilots'],
+      ['Validation · 1,002 prompts','Choose candidates and checkpoints','10 selected prompts, reused across the small pilots'],
+      ['Internal test · 1,007 prompts','Our held-out evaluation set','All baseline images; subsets for Phase 3 diagnostics'],
+      ['Qwen-Image-Bench · 1,000 bilingual items','External benchmark · evaluation only','1,000 Chinese and 1,000 English baseline images']
+    ],'“Internal” in the baseline is the held-out test row; validation is a different split')}
     <h3>The original image model baseline</h3><p class="summary">We generated and judged 3,007 reference images: 1,000 Chinese benchmark prompts, 1,000 English benchmark prompts and 1,007 internal prompts. Another 301 paired regenerations measure generation-and-judge variation. Prompts, seeds, resolutions, scheduler settings, model revisions and judge outputs are saved.</p>
+    <div class="charts">{baseline_chart}</div>
     {table(['Evaluation set','Images','Overall','Prompt adherence','Text rendering'],baseline_rows,'Original model scores · frozen local Q-Judger protocol · 0–100')}
     <p class="note">These are our local judge scores, not a claim of an official leaderboard result. Text scores cover only applicable prompts; contributing counts are included in the downloadable data. Judge calibration found an approximately 2.5-point aesthetics offset; the judge remains frozen for paired comparisons.</p>
     <dl class="facts"><div><dt>Baseline speed</dt><dd>{efficiency['overall']['latency']['mean_seconds']:.3f} seconds per image on an H100 80 GB, batch size 1, 40 denoising steps; 80 timed calls across eight aspect ratios after warm-up.</dd></div><div><dt>Baseline memory</dt><dd>{efficiency['overall']['peak_vram_allocated_bytes']/2**30:.2f} GiB peak allocated VRAM across those calls. Student inference has not yet been benchmarked under the same protocol.</dd></div></dl>
@@ -168,8 +225,17 @@ body=f'''<main id="main">
   <section id="pruning" aria-labelledby="h-pruning"><div class="wrap"><p class="eyebrow">Phase 3 · measure the missing update</p><h2 id="h-pruning">Similarity is a clue; images decide what it misses</h2>
     <p class="summary">Activation similarity identified several blocks with small directional changes. We tested blocks 2, 3, 4 and 5 as the first independent learned-replacement batch, then used temporary identity bypasses to measure the effect of discarding their updates. This is a measured pilot batch, not proof that these are the only removable blocks.</p>
     <h3>The activation measurements</h3><p class="summary">We measured all 32 blocks on <b>64 fixed internal prompts</b> at denoising steps <b>0, 19 and 39</b> of the 40-step teacher: <b>6,144 block/stage observations</b>. Hooks compare image-token states immediately before and after each block, excluding the text prefix. Each cosine is averaged over image tokens, then across prompts. The table shows the four tested candidates; the graph and downloadable record cover every block.</p>
-    <figure class="chart wide evidence-chart"><figcaption><b>Input/output activation similarity · all blocks</b><i>64 prompts · three stages</i></figcaption><a href="activation-similarity.svg"><img src="activation-similarity.svg" width="820" height="390" alt="Image-token cosine similarity across all 32 original blocks at early, middle and final denoising stages. The tested batch, blocks 2–5, is highlighted. Open for a larger view."></a></figure>
+    <div class="charts activation-zoom">
+      <figure class="chart"><figcaption><b>Direction · cosine, zoomed</b><i>closer to 1 means less rotation</i></figcaption><a href="activation-cosine-zoom.svg"><img src="activation-cosine-zoom.svg" width="520" height="360" alt="Cosine for blocks 1–6, with a zoomed vertical axis from 0.994 to 1.000. Blocks 2–5 are highlighted. Open the SVG for a larger view."></a></figure>
+      <figure class="chart"><figcaption><b>Update size · relative L2</b><i>smaller means a smaller update</i></figcaption><a href="activation-l2-zoom.svg"><img src="activation-l2-zoom.svg" width="520" height="360" alt="Relative L2 hidden-state change for blocks 1–6, on a linear vertical axis from 0% to 18%. Blocks 2–5 are highlighted. Open the SVG for a larger view."></a></figure>
+    </div>
     <ul class="line-key" aria-label="Activation graph legend"><li><span class="high-line"></span>early · dashed</li><li><span class="middle-line"></span>middle · dotted</li><li><span class="low-line"></span>final · solid</li></ul>
+    <p class="note">These views zoom into <b>blocks 1–6</b>, including a neighbor on each side of the tested 2–5 batch. The cosine axis is deliberately narrowed to <b>0.994–1.000</b>; its larger-looking differences are still small absolute changes. Relative L2 is <b>‖h_out − h_in‖₂ / ‖h_in‖₂</b>, reported as a percentage on a separate linear axis. Cosine compares direction; L2 also responds to changes in magnitude. The green wash identifies the tested batch, not an acceptance region.</p>
+    <details class="activation-overview"><summary>Show all 32 blocks · full-range cosine and logarithmic relative L2</summary>
+      <figure class="chart wide evidence-chart"><figcaption><b>Cosine · full range</b><i>vertical axis 0–1</i></figcaption><a href="activation-similarity.svg"><img src="activation-similarity.svg" width="820" height="390" alt="Full-range cosine across all 32 blocks at three stages, retaining the large changes at the first and final blocks."></a></figure>
+      <figure class="chart wide evidence-chart"><figcaption><b>Relative L2 · all blocks</b><i>logarithmic axis · 5%–1,500%</i></figcaption><a href="activation-l2-all.svg"><img src="activation-l2-all.svg" width="820" height="390" alt="Relative L2 changes across all 32 blocks, on a logarithmic axis from 5% to 1,500%, so the large block-0 update does not flatten the remaining blocks."></a></figure>
+      <p class="note">The L2 overview uses a log scale: equal vertical distances represent equal ratios rather than equal percentage-point changes. It preserves block 0’s update, which exceeds 800% of its input norm at the early stage, while keeping other blocks visible. All plotted observations fit the stated axes; none are clipped. The stage legend above applies to both overviews.</p>
+    </details>
     {table(['Original block','Early cosine','Middle cosine','Final cosine'],activation_rows,'Mean input/output image-token cosine · 1 means same direction')}
     {table(['Original block','Early change','Middle change','Final change'],change_rows,'Relative hidden-state change · ‖h_out − h_in‖₂ / ‖h_in‖₂ · lower is smaller')}
     <p class="note">For example, block 2’s early cosine is 0.998321, but the update still has a norm equal to 8.681% of its input’s norm. High cosine does not imply a negligible update or 99.8% image quality. Block 1 and some later blocks also have high similarity; blocks 2–5 are an initial comparison batch, not the complete top-four ranking. Prompt-level distributions and per-capability aggregates are in <a href="results.json">the measurements</a>.</p>
@@ -210,6 +276,18 @@ body=f'''<main id="main">
   <section id="healing" aria-labelledby="h-healing"><div class="wrap"><p class="eyebrow">Phase 6 · two completed parameter-efficient trials</p><h2 id="h-healing">Training works; this recipe does not improve validation</h2>
     <p class="summary"><b>Healing is a second training stage, after bridge pretraining.</b> Phase 5 trains only the bridge to reproduce the removed block’s hidden-state update. Phase 6 starts from that pretrained bridge and trains the modified student to reproduce the teacher’s <b>final velocity prediction</b>, with hidden-state supervision as an auxiliary loss. “Before healing” already includes the trained Phase 5 bridge.</p>
     <p class="summary">In these healing pilots, we trained the selected bridge together with rank-8 LoRA adapters on the query, key, value and output projections of all 31 surviving attention blocks. That is 124 adapters and 10,223,616 trainable parameters. Surviving base weights stay frozen. This is a parameter-efficient implementation pilot; full-weight architecture healing is still incomplete.</p>
+    <h3>What is LoRA?</h3>
+    <p class="summary"><a href="https://arxiv.org/abs/2106.09685">LoRA means low-rank adaptation</a>. Instead of updating a large existing weight matrix <code>W</code>, we freeze it and learn a small correction through two much smaller matrices. A projection becomes <code>y = W x + (α/r) B A x</code>. The original computation stays; the added path learns how to adjust it. Here the rank <code>r</code> and scaling parameter <code>α</code> are both 8, so the scale is 1.</p>
+    <p class="summary">For one 4,096 → 4,096 attention projection, the original matrix has <b>16,777,216 weights</b>. The rank-8 correction uses <b>4,096 → 8 → 4,096</b>, with <b>65,536 trainable weights</b>: 256 times fewer trainable weights than updating that whole matrix. Unlike the rank-256 bridge, the LoRA correction has no GELU. It adjusts a surviving projection; it does not replace the missing transformer block.</p>
+    <p class="summary">We add four such corrections per surviving block: query, key, value and attention output. Across 31 blocks, that is <b>124 LoRA modules and 8,126,464 LoRA parameters</b>. Adding the bridge’s 2,097,152 gives <b>10,223,616 trainable parameters</b>. The up-projection of every LoRA starts at zero, so the initial correction is zero and the student initially behaves exactly like the pretrained-bridge student.</p>
+    <h3>How this healing differs from training only the bridge</h3>
+    {table(['Training stage','What can change','What we ask it to match'],[
+      ['Phase 5 · bridge pretraining','Bridge only · 2,097,152 parameters','Hidden state after the removed block'],
+      ['Phase 6 · this healing pilot','Bridge + LoRA · 10,223,616 parameters','Whole-model velocity + auxiliary hidden states'],
+      ['Bridge-only healing · not run','Bridge only; original surviving weights frozen','Whole-model velocity + the same auxiliary losses']
+    ],'Different training scopes and targets · bridge-only healing remains an untested ablation')}
+    <p class="summary">Phase 5 teaches the replacement to approximate a <b>local block update</b>. Healing gives the rest of the modified model a way to adjust to that imperfect replacement, while training against the teacher’s <b>whole-model velocity at each sampled denoising step</b>. The original surviving weights are frozen, but their attention computations can change through LoRA. The teacher remains frozen throughout; a velocity prediction is not a finished image.</p>
+    <p class="note">We have not run an otherwise-identical Phase 6 experiment with only the bridge trainable. Consequently, the observed regression does <b>not isolate LoRA as the cause</b>. It shows that these two bridge-plus-LoRA healing recipes fail to improve this validation set; bridge-only output healing is a separate comparison still to be tested.</p>
     <dl class="facts"><div><dt>Bridge pretraining</dt><dd>Trainable: the bridge alone. Target: the hidden states after the original removed block. Purpose: approximate that block’s local update.</dd></div><div><dt>Healing pilot</dt><dd>Trainable: the pretrained bridge plus LoRA adapters in surviving blocks. Target: teacher velocity output, with auxiliary hidden-state and bridge losses. Purpose: help the whole modified model recover.</dd></div><div><dt>What failed</dt><dd>The second stage increased held-out velocity error. This is a comparison of the same student before and after extra training, not two interchangeable names for bridge pretraining. “Healing” names the intended recovery procedure; it does not guarantee that recovery occurs.</dd></div></dl>
     <dl class="facts"><div><dt>Training</dt><dd>120 updates per run: two shuffled passes over 20 training prompts × three stages. Same initialization and sampling seeds, data, losses and validation rule; learning rates 0.0001 and 0.00001.</dd></div><div><dt>Supervision</dt><dd>Relative velocity MSE + 0.1 normalized hidden-state loss at selected surviving blocks + 0.1 bridge-output supervision. Validation prompts never contribute optimizer gradients.</dd></div><div><dt>Cache gradients</dt><dd>Early conditioning is rebuilt with current student parameters. Checkpoint recomputation uses private caches; cached-stage gradients reach prefix keys and values without changing the shared cache during backward.</dd></div><div><dt>Controls</dt><dd>Both fresh runs passed 90 exact teacher replays, reproduced all 30 baseline student predictions, passed cached-stage gradient checks, and verified 288 surviving base tensors unchanged. Checkpoints include optimizer and RNG state; results are reused on reruns.</dd></div></dl>
     <figure class="chart wide healing-chart"><figcaption><b>Healing validation trajectory</b><i>lower is better</i></figcaption><img src="healing.svg" width="820" height="370" alt="Both learning rates remain above the pretrained bridge’s 5.518% validation error across 120 updates; exact values follow."></figure>

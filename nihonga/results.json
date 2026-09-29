@@ -160,6 +160,53 @@
     },
     "mean_prompt_chars": 120.8
   },
+  "dataset_creation": {
+    "GENERATOR_VERSION": "phase1-v1",
+    "MASTER_SEED": 20260926,
+    "MASTER_POOL_SIZE": 100000,
+    "PILOT_SIZE": 20000,
+    "DIMENSION_WEIGHTS": {
+      "alignment": 0.26,
+      "visual_quality": 0.18,
+      "aesthetics": 0.18,
+      "real_world": 0.18,
+      "creative": 0.2
+    },
+    "SUBDIM_WEIGHT_OVERRIDES": {
+      "counting": 1.3,
+      "spatial_relation": 1.3,
+      "text_rendering": 2.0
+    },
+    "LLM_MODEL": "Qwen/Qwen3-8B",
+    "LLM_EN_REWRITE_FRACTION": 0.35,
+    "LLM_ZH_TRANSLATE_FRACTION": 0.1,
+    "DECON_WORD_NGRAM": 6,
+    "DECON_CHAR_NGRAM": 8,
+    "DECON_THRESHOLD": 0.5
+  },
+  "dataset_benchmark_overlap_check": {
+    "bench": {
+      "repo": "Qwen/Qwen-Image-Bench",
+      "revision": "d2493deb153b020cf169c7e3f57d15e4dd697038",
+      "file": "qwen_image_bench_hf_v0518.jsonl",
+      "n_prompts": 1000,
+      "sha256": "3def4dbb901bc75a13b755864e288a6e8f9a50010c1310129f57a7a84f44c005",
+      "downloaded_utc": "2026-09-26T10:10:26.505828+00:00",
+      "usage": "EVALUATION ONLY"
+    },
+    "threshold": 0.5,
+    "word_ngram": 6,
+    "char_ngram": 8,
+    "pool_before": 100000,
+    "removed": [],
+    "overlap_hist": {
+      "0.0": 99823,
+      "0.1": 162,
+      "0.2": 15
+    },
+    "pool_after": 100000
+  },
+  "final_llm_benchmark_rejections": 0,
   "baseline": {
     "bench_cn": {
       "n_images": 1000,
@@ -35103,6 +35150,9 @@
   ],
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
+    "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
+    "data/phase1/decontamination_report.json": "b1db8ede6248d3816a5b6d2f0e6b9181a6f55888362e02cd2485c10e133ea08c",
+    "data/phase1/pilot_20k/llm_bench_rejections.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "data/phase2/scores.json": "dbbd2ef8cdfe53e45bf44dd2e85713db49da4172a427629e4c6f114d49e11f7b",
     "data/phase2/efficiency.json": "0534d15660e6acb08f195219de859c022e9d85ba0c3ea4d13f43872b1bfa4caa",
     "data/phase5/bridge_fitting_pilot/summary.json": "ae4c6437bca204cc20a121f937bc62fdd220a1810d2fd24e9de22180f0669f06",

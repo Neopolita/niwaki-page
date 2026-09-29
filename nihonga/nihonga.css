@@ -9,12 +9,15 @@ caption { text-align: left; color: var(--ink-soft); margin-bottom: .65rem; }
 th, td { text-align: right; padding: .6rem .7rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }
 th { font-weight: 500; border-block: 1px solid var(--ink); }
 th:first-child, td:first-child { text-align: left; padding-left: 0; }
+table caption + thead th { vertical-align: top; }
 .architecture { margin-top: 2rem; border-block: 1px solid var(--ink); }
 .architecture > div { display: grid; grid-template-columns: 6rem 1fr; gap: .25rem 1rem; padding-block: 1rem; }
 .architecture > div + div { border-top: 1px solid var(--rule); }
 .architecture span { color: var(--ink-soft); }
 .architecture b { font-weight: 500; }
 .architecture small { grid-column: 2; color: var(--ink-soft); font-size: 1rem; }
+.dataset-example { margin: 1.3rem 0 0; padding: .5rem 1.2rem; border-left: 2px solid var(--rule); max-width: 64ch; font-style: italic; }
+.dataset-example p { margin: 0; }
 .comparison { margin: 2rem 0 0; }
 .comparison img { display: block; width: 100%; height: auto; }
 .comparison figcaption { margin-top: .65rem; font-size: 1.02rem; color: var(--ink-soft); max-width: 75ch; }
@@ -23,6 +26,10 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .healing-chart img { width: 100%; height: auto; display: block; }
 .evidence-chart { margin-top: 2.5rem; }
 .evidence-chart img, .bridge-diagrams img { width: 100%; height: auto; display: block; }
+.activation-zoom img { width: 100%; height: auto; display: block; }
+.activation-zoom figcaption { min-height: 3.3rem; align-content: start; }
+.activation-overview { margin-top: 1.5rem; }
+.activation-overview summary { cursor: pointer; text-decoration: underline; text-underline-offset: .18em; font-size: 1.05rem; }
 .bridge-diagrams { align-items: start; gap: 2.5rem 1.5rem; }
 .bridge-diagrams figcaption { min-height: 2.9rem; align-items: start; }
 .line-key { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; list-style: none; margin: .8rem 0 0; padding: 0; font-size: 1rem; color: var(--ink-soft); }
