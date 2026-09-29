@@ -1,0 +1,35 @@
+/* Nihonga keeps the shared paper, ink, fonts and engraved chart styles. */
+.nihonga-lead .eyebrow { font-family: var(--text); font-style: normal; font-size: 1.02rem; }
+.nihonga-lead h1 { margin-top: .5rem; }
+.nihonga-lead h1 + p { font-family: var(--display); font-style: italic; font-size: clamp(1.45rem, 2.9vw, 2rem); color: var(--ink); line-height: 1.32; }
+.contents { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; margin-top: 1.75rem; font-size: 1.02rem; }
+.table-scroll { overflow-x: auto; margin-top: 1.75rem; }
+table { border-collapse: collapse; width: 100%; font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+caption { text-align: left; color: var(--ink-soft); margin-bottom: .65rem; }
+th, td { text-align: right; padding: .6rem .7rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-weight: 500; border-block: 1px solid var(--ink); }
+th:first-child, td:first-child { text-align: left; padding-left: 0; }
+.architecture { margin-top: 2rem; border-block: 1px solid var(--ink); }
+.architecture > div { display: grid; grid-template-columns: 6rem 1fr; gap: .25rem 1rem; padding-block: 1rem; }
+.architecture > div + div { border-top: 1px solid var(--rule); }
+.architecture span { color: var(--ink-soft); }
+.architecture b { font-weight: 500; }
+.architecture small { grid-column: 2; color: var(--ink-soft); font-size: 1rem; }
+.comparison { margin: 2rem 0 0; }
+.comparison img { display: block; width: 100%; height: auto; }
+.comparison figcaption { margin-top: .65rem; font-size: 1.02rem; color: var(--ink-soft); max-width: 75ch; }
+.comparison figcaption b { font-weight: 500; color: var(--ink); }
+.healing-chart { margin-top: 2.5rem; }
+.healing-chart img { width: 100%; height: auto; display: block; }
+.line-key { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; list-style: none; margin: .8rem 0 0; padding: 0; font-size: 1rem; color: var(--ink-soft); }
+.line-key li { display: inline-flex; align-items: center; gap: .5rem; }
+.line-key span { width: 1.7rem; border-top: 2px solid; }
+.high-line { color: #746B5D; border-top-style: dashed !important; }
+.low-line { color: #46643F; }
+.base-line { color: #746B5D; border-top-style: dotted !important; }
+@media (max-width: 46rem) {
+  .nav ul { flex-wrap: wrap; }
+  section { scroll-margin-top: 7rem; }
+  .architecture > div { grid-template-columns: 1fr; }
+  .architecture small { grid-column: 1; }
+}

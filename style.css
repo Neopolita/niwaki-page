@@ -256,7 +256,7 @@ footer .made { flex-basis: 100%; max-width: none; margin-top: 0.4rem; font-famil
   .hero { grid-template-columns: minmax(0, 1fr); }
   .tree { order: -1; justify-self: center; max-width: 24rem; }
   .nav { gap: 0.1rem 1rem; flex-wrap: wrap; padding-block: 0.5rem; }
-  .nav ul { gap: 0.3rem 0.95rem; flex-wrap: nowrap; }
+  .nav ul { gap: 0.3rem 0.95rem; flex-wrap: wrap; }
   section { scroll-margin-top: 5rem; }
   .nav li a { font-size: 0.98rem; letter-spacing: 0.07em; }
   .nav li.ext { display: none; }            /* the bar stays one line; the link is in the footer too */
