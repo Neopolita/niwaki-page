@@ -35444,6 +35444,122 @@
       }
     ]
   },
+  "expanded_trained_validation": {
+    "status": "passed",
+    "student_forwards": 180,
+    "optimizer_updates": 0,
+    "control_mean_relative_l2": 0.05655132678026954,
+    "new_mean_relative_l2": 0.05251208227748672,
+    "by_stage": [
+      {
+        "stage": "early",
+        "mean_relative_l2": 0.09736346013844013,
+        "prompts": 50
+      },
+      {
+        "stage": "middle",
+        "mean_relative_l2": 0.025525629427284,
+        "prompts": 50
+      },
+      {
+        "stage": "late",
+        "mean_relative_l2": 0.034647157266736034,
+        "prompts": 50
+      }
+    ],
+    "by_dimension": [
+      {
+        "dimension": "alignment",
+        "mean_relative_l2": 0.05421749468271931,
+        "comparisons": 30
+      },
+      {
+        "dimension": "visual_quality",
+        "mean_relative_l2": 0.04781662253662944,
+        "comparisons": 30
+      },
+      {
+        "dimension": "aesthetics",
+        "mean_relative_l2": 0.054051533124099174,
+        "comparisons": 30
+      },
+      {
+        "dimension": "real_world",
+        "mean_relative_l2": 0.05050315012534459,
+        "comparisons": 30
+      },
+      {
+        "dimension": "creative",
+        "mean_relative_l2": 0.05597161091864109,
+        "comparisons": 30
+      }
+    ]
+  },
+  "expanded_trained_comparison": {
+    "pretrained_mean_percent": 5.393105652804176,
+    "trained_mean_percent": 5.2512082277486725,
+    "improved_comparisons": 121,
+    "worsened_comparisons": 29,
+    "by_stage": [
+      {
+        "stage": "early",
+        "pretrained_mean_percent": 10.051252365112305,
+        "trained_mean_percent": 9.736346013844013
+      },
+      {
+        "stage": "middle",
+        "pretrained_mean_percent": 2.571895921602845,
+        "trained_mean_percent": 2.5525629427284002
+      },
+      {
+        "stage": "late",
+        "pretrained_mean_percent": 3.556168671697378,
+        "trained_mean_percent": 3.4647157266736035
+      }
+    ],
+    "largest_regressions": [
+      {
+        "source_id": "p1-1461526cb2e1",
+        "stage": "early",
+        "dimension": "alignment",
+        "pretrained_relative_l2": 0.062382642179727554,
+        "trained_relative_l2": 0.07656686007976532,
+        "difference_percentage_points": 1.4184217900037766
+      },
+      {
+        "source_id": "p1-2a14a9aebaa7",
+        "stage": "early",
+        "dimension": "real_world",
+        "pretrained_relative_l2": 0.12573349475860596,
+        "trained_relative_l2": 0.13236844539642334,
+        "difference_percentage_points": 0.6634950637817383
+      },
+      {
+        "source_id": "p1-1984c1c3e761",
+        "stage": "early",
+        "dimension": "alignment",
+        "pretrained_relative_l2": 0.091291643679142,
+        "trained_relative_l2": 0.09745407104492188,
+        "difference_percentage_points": 0.6162427365779877
+      },
+      {
+        "source_id": "p1-93b1d5401c5b",
+        "stage": "early",
+        "dimension": "aesthetics",
+        "pretrained_relative_l2": 0.09381795674562454,
+        "trained_relative_l2": 0.09994678199291229,
+        "difference_percentage_points": 0.612882524728775
+      },
+      {
+        "source_id": "p1-48a4b5aa8377",
+        "stage": "early",
+        "dimension": "aesthetics",
+        "pretrained_relative_l2": 0.11572618782520294,
+        "trained_relative_l2": 0.1211007684469223,
+        "difference_percentage_points": 0.537458062171936
+      }
+    ]
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35463,6 +35579,8 @@
     "data/phase6/paired_images/summary.json": "36127efa5ee7b827cedde7bccea2bedd1a7a205b987eee43680fc57fc6757d43",
     "data/phase6/validation_diagnostic.json": "34a43290880ea3bd2acf71b536ce4fbf03b68374df7796d096d268b08d95b0d3",
     "data/phase6/expanded_validation/summary.json": "35db62667afb2a451db1b4537f4e8269ad04f6892cab05d7e53013fbdf8b39e0",
+    "data/phase6/expanded_trained_validation_v2/summary.json": "3fb64342698386a3c5a59fb6bb26c75d42c895e88c7646c8a17c882d0e404434",
+    "data/phase6/expanded_trained_validation_v2/comparison.json": "e8f3be29c33430e8deef7b8ddd8c7848644df9bea3b12bb0576e4aee39c3369a",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
