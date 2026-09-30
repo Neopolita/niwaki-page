@@ -35675,6 +35675,7 @@
     ],
     "matched_prompt_count": 11,
     "matched_image_count": 55,
+    "prompts_requesting_prominent_text": 2,
     "poster_source_id": "p1-81fc1d548f81",
     "poster_requested_title": "CRIMSON HARBOR",
     "poster_requested_tagline": "Visit Kyoto",
@@ -35690,6 +35691,7 @@
       "All student versions render the Northern Parade poster title legibly, but omit the teacher's foreground person."
     ],
     "interpretation": "Update 120 fixes the specific tracked poster-title failure and is the strongest checkpoint in this small comparison, while update 180 regresses on that case.",
+    "text_trend": "No monotonic text improvement is visible: Northern Parade is legible in every student checkpoint; CRIMSON HARBOR fails in the pretrained and update-60 outputs, works at update 120, and fails again at update 180. The two text prompts cannot estimate general text-rendering reliability.",
     "limitations": "This is an unblinded 11-prompt inspection, including one previously tracked poster. It does not establish general text-rendering reliability or an image-quality ranking across the prompt distribution."
   },
   "source_sha256": {
@@ -35720,7 +35722,7 @@
     "data/phase6/full_student_continuation/images_v1/summary.json": "cb17aa99fe148115a88a622d56afa9b408c7ce835cd5d5cf3c561ab0e55c75d0",
     "data/phase6/full_student_continuation/update120_images_v1/summary.json": "222eeed6884ec0b8afa38fcbb7d204842dd98e3e6c1e21606397571987efe845",
     "data/phase6/full_student_continuation/images_v1/five_way_sheets.json": "93c6943fd1a2fc6bed140aa4674d7a5198b715dde6c42579e5796542024d3d1f",
-    "data/phase6/full_student_continuation/visual_review.json": "6a9410498f359675c994d7affcc81055ca38e477d9682f398dfc24562b3bf0d1",
+    "data/phase6/full_student_continuation/visual_review.json": "9d89d18164f20d4bd558aa229309d34e225927dedd700fdfc6fe96e6c4ebb2d2",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
