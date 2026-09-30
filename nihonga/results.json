@@ -35560,6 +35560,27 @@
       }
     ]
   },
+  "trained_image_pilot": {
+    "prompts": 11,
+    "images": 33,
+    "calls": {
+      "teacher": 11,
+      "pretrained": 11,
+      "trained": 11
+    },
+    "manual_review": {
+      "version": "phase6-trained-image-manual-review-v1",
+      "scope": "Visual inspection of 11 matched teacher, pretrained-bridge, and low-rate update-60 image triples; not blinded or a numeric quality benchmark",
+      "source_id_poster": "p1-81fc1d548f81",
+      "poster_observation": "The teacher renders the requested CRIMSON HARBOR title. Both students replace HARBOR with unrelated letters. The update-60 checkpoint does not repair this text failure.",
+      "other_observations": [
+        "On the snail, cupcake, aurora, chrome sphere, tundra, Gothic house, and comic prompts, the two student versions retain broadly similar subjects and styles. Their differences are mostly in composition or detail and do not establish a consistent winner by visual inspection.",
+        "On the Songkran prompt, the teacher shows a standing person amid water spray; both student images instead center a seated person on the road.",
+        "On the robot gardener prompt, the teacher shows a full-body robot with a yellow backpack; both student images use a much tighter portrait and change the face and body design."
+      ],
+      "decision": "Retain the pretrained bridge as the current selected image model. Keep low-rate update 60 as a candidate for a controlled image-quality evaluation; teacher-velocity agreement alone does not justify promotion."
+    }
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35581,6 +35602,8 @@
     "data/phase6/expanded_validation/summary.json": "35db62667afb2a451db1b4537f4e8269ad04f6892cab05d7e53013fbdf8b39e0",
     "data/phase6/expanded_trained_validation_v2/summary.json": "3fb64342698386a3c5a59fb6bb26c75d42c895e88c7646c8a17c882d0e404434",
     "data/phase6/expanded_trained_validation_v2/comparison.json": "e8f3be29c33430e8deef7b8ddd8c7848644df9bea3b12bb0576e4aee39c3369a",
+    "data/phase6/trained_image_pairs/summary.json": "9848df82c39ae36d8b5c37a5cb148e1408b514af7a984b3dc50d813fbf705a6e",
+    "data/phase6/trained_image_pairs/visual_review.json": "20c9e010236a9c4b1f43148b8bdbe46413b2e008a79a6e72a9e90b311aaaad17",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
@@ -35591,7 +35614,8 @@
     "data/phase3/bypass/full_images_pilot/internal-p1-4a1cdb170e44-comparison.png": "4ac18fb629482d778a73bdecdde78cdcdb24c0a76b8fb3d7b02e46ac1ab259cb",
     "data/phase3/bypass/full_images_pilot/internal-p1-425ec4e55730-comparison.png": "be747c71131e871feb399724f30e43f32fa3c6d80ef312de7249af7960ca3923",
     "data/phase3/bypass/full_images_pilot/internal-p1-6177a6812fbc-comparison.png": "64e8680b7d2590cd477dedd8f4dbaa714893cb54f3b8e4bacc32700a953e29a1",
-    "data/phase6/paired_images/p1-81fc1d548f81-teacher.png": "48a8241e12341a8282b06a4836dd4c2403f57b321a76643d9463cd5c8a619cf0",
-    "data/phase6/paired_images/p1-81fc1d548f81-student.png": "b6fd0c11240aad2ed48fd1bc2ace96c132c31b24cecffbd03ffd2f911a1e70dd"
+    "data/phase6/trained_image_pairs/p1-81fc1d548f81-teacher.png": "dc24b699db16c0b0930324b4c475126724a300fb5865449c0382cb4814f94bd3",
+    "data/phase6/trained_image_pairs/p1-81fc1d548f81-pretrained.png": "badc7974ea8016db13ab4e8291449a5044a4f4659eb89711b9372a373957a10b",
+    "data/phase6/trained_image_pairs/p1-81fc1d548f81-trained.png": "6df506538c7547f46d7e100b3c7472249c958e4d020b4c9bdabd35aa4b1f5b96"
   }
 }
