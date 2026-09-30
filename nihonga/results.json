@@ -35392,6 +35392,58 @@
       }
     ]
   },
+  "expanded_validation": {
+    "status": "passed",
+    "teacher_capture_count": 50,
+    "student_forwards": 180,
+    "optimizer_updates": 0,
+    "control_mean_relative_l2": 0.055310022582610446,
+    "new_mean_relative_l2": 0.05393105652804176,
+    "by_stage": [
+      {
+        "stage": "early",
+        "mean_relative_l2": 0.10051252365112305,
+        "prompts": 50
+      },
+      {
+        "stage": "middle",
+        "mean_relative_l2": 0.02571895921602845,
+        "prompts": 50
+      },
+      {
+        "stage": "late",
+        "mean_relative_l2": 0.03556168671697378,
+        "prompts": 50
+      }
+    ],
+    "by_dimension": [
+      {
+        "dimension": "alignment",
+        "mean_relative_l2": 0.05491626638298233,
+        "comparisons": 30
+      },
+      {
+        "dimension": "visual_quality",
+        "mean_relative_l2": 0.0485993885435164,
+        "comparisons": 30
+      },
+      {
+        "dimension": "aesthetics",
+        "mean_relative_l2": 0.05614072727039456,
+        "comparisons": 30
+      },
+      {
+        "dimension": "real_world",
+        "mean_relative_l2": 0.050805586762726306,
+        "comparisons": 30
+      },
+      {
+        "dimension": "creative",
+        "mean_relative_l2": 0.0591933136805892,
+        "comparisons": 30
+      }
+    ]
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35410,6 +35462,7 @@
     "data/phase6/full_student_healing_lr_low_v2/summary.json": "f8d7931e8d6574c4845da51dffbda5ff00630ae05b6d40e83c5c9077445bfee1",
     "data/phase6/paired_images/summary.json": "36127efa5ee7b827cedde7bccea2bedd1a7a205b987eee43680fc57fc6757d43",
     "data/phase6/validation_diagnostic.json": "34a43290880ea3bd2acf71b536ce4fbf03b68374df7796d096d268b08d95b0d3",
+    "data/phase6/expanded_validation/summary.json": "35db62667afb2a451db1b4537f4e8269ad04f6892cab05d7e53013fbdf8b39e0",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",

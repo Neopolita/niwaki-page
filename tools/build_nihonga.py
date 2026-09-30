@@ -40,6 +40,7 @@ bridge_only = read('data/phase6/bridge_only_healing_v2/summary.json')
 full_healing = [read('data/phase6/' + folder + '/summary.json') for folder in ('full_student_healing', 'full_student_healing_lr_low_v2')]
 paired_images = read('data/phase6/paired_images/summary.json')
 validation_diagnostic = read('data/phase6/validation_diagnostic.json')
+expanded_validation = read('data/phase6/expanded_validation/summary.json')
 activation = read('data/phase3/activations/full/summary.json')
 bypasses = [read(f'data/phase3/bypass/block_{layer:02d}_pilot/summary.json') for layer in (2,3,4,5)]
 assert all(r['status'] == 'passed' and r['optimizer_updates'] == 120 for r in healing)
@@ -47,6 +48,8 @@ assert bridge_only['status'] == 'passed' and bridge_only['optimizer_updates'] ==
 assert all(r['status'] == 'passed' and r['optimizer_updates'] == 60 and r['all_student_parameters_trainable'] for r in full_healing)
 assert paired_images['status'] == 'passed' and len(paired_images['rows']) == 10
 assert validation_diagnostic['source_sha256'] == sources['data/phase6/full_student_healing_lr_low_v2/summary.json']
+assert expanded_validation['status'] == 'passed' and expanded_validation['teacher_capture_count'] == 50
+assert expanded_validation['student_forwards'] == 180 and expanded_validation['optimizer_updates'] == 0
 assert replay['exact_equal_controls'] == 90
 candidates = [a for a in replay['aggregates'] if a['stage'] == 'all']
 public = {
@@ -69,6 +72,7 @@ public = {
     'full_student_healing': [{'learning_rate': lr, **{k:r[k] for k in ('status','optimizer_updates','trainable_parameters','adapter_modules','selected_step','peak_allocated_gib','scope')}, 'evaluations': [{k:e[k] for k in ('step','comparisons','mean_relative_l2','max_relative_l2','mean_objective','stages')} for e in r['evaluations']]} for lr,r in zip((0.0001,0.000001),full_healing)],
     'paired_images': {'n_pairs':len(paired_images['rows']), 'dimensions':[r['dimension'] for r in paired_images['rows']], 'teacher_mean_seconds':sum(r['teacher']['seconds'] for r in paired_images['rows'])/len(paired_images['rows']), 'student_mean_seconds':sum(r['student']['seconds'] for r in paired_images['rows'])/len(paired_images['rows'])},
     'validation_diagnostic': validation_diagnostic,
+    'expanded_validation': {k:expanded_validation[k] for k in ('status','teacher_capture_count','student_forwards','optimizer_updates','control_mean_relative_l2','new_mean_relative_l2','by_stage','by_dimension')},
     'source_sha256': sources,
 }
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
@@ -317,6 +321,9 @@ body=f'''<main id="main">
     {table(['Updates','Rate 0.0001','Rate 0.000001'],[[e['step'],f"{100*e['mean_relative_l2']:.3f}%",f"{100*full_healing[1]['evaluations'][i]['mean_relative_l2']:.3f}%"] for i,e in enumerate(full_healing[0]['evaluations'])],'Full-student mean validation velocity relative L2; 10 prompts times three stages')}
     <p class="summary">At update 60 the 0.0001 run reached 54.387%, a severe regression. Reducing the rate 100-fold kept the run near baseline, but its 5.654% still exceeded 5.518%. These short runs therefore did not produce a better healed student. They do not establish whether broader data, different loss weights or another optimizer could help.</p>
     <p class="summary">A closer look at the lower-rate run shows why its mean can rise despite local gains: <b>{validation_diagnostic['improved_comparisons']} of 30</b> validation prompt/stage comparisons improved, but the early-noise average rose from <b>{validation_diagnostic['by_stage'][0]['baseline_mean_percent']:.3f}% to {validation_diagnostic['by_stage'][0]['final_mean_percent']:.3f}%</b>. The largest regressions were early-noise cases. This is a small, reused validation set; the pattern guides diagnosis but does not identify a cause.</p>
+    <h3>A broader check of the selected bridge</h3><p class="summary">We tested the unchanged pretrained-bridge student on 50 additional validation prompts, 10 from each prompt group, at early, middle and late noise stages. The original 10-prompt calibration measured <b>{100*expanded_validation['control_mean_relative_l2']:.3f}%</b> in this replay, close to the earlier 5.518%. The new 50-prompt mean was <b>{100*expanded_validation['new_mean_relative_l2']:.3f}%</b>. No student weight was updated.</p>
+    {table(['Noise stage','Mean teacher-student velocity error'],[[r['stage'].title(),f"{100*r['mean_relative_l2']:.3f}%"] for r in expanded_validation['by_stage']],'Selected pretrained bridge on 50 new validation prompts; lower is closer to the teacher')}
+    <p class="note">This extends the selected bridge's fixed-input validation check to 150 new prompt/stage comparisons. It does not measure the trained full-student checkpoints on these new prompts, and it is not an independent image-quality benchmark. Early noise remains the largest source of teacher-student disagreement.</p>
     <h3>What the generated images show</h3>
     <p class="summary">We generated 10 fixed-seed teacher/student image pairs with the selected pretrained bridge. Main subjects and styles are often similar. In the poster pair, the teacher renders the requested CRIMSON HARBOR title while the student changes part of it into unrelated letters. This is a concrete text-rendering regression. Other differences in composition and detail are mixed; this small visual pilot is not a benchmark-quality score.</p>
     <div class="paired-images"><figure class="comparison"><a href="images/phase6-poster-teacher.png"><img loading="lazy" src="images/phase6-poster-teacher.png" alt="Teacher image of a science fair poster with the requested CRIMSON HARBOR title"></a><figcaption><b>Original teacher</b> | requested poster title</figcaption></figure><figure class="comparison"><a href="images/phase6-poster-student.png"><img loading="lazy" src="images/phase6-poster-student.png" alt="Pretrained-bridge student image with an incorrect poster title"></a><figcaption><b>Selected student</b> | title text regresses</figcaption></figure></div>
