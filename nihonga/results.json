@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-30",
-  "scope": "Development pilots; validation reused for selection; 10 paired images but no independent image-quality benchmark.",
+  "scope": "Development pilots; a 20-prompt untouched fixed-input test is complete, but no independent image-quality benchmark.",
   "dataset": {
     "phase": "Phase 1 — Build the Prompt Dataset",
     "pilot_size": 20000,
@@ -35581,23 +35581,86 @@
       "decision": "Retain the pretrained bridge as the current selected image model. Keep low-rate update 60 as a candidate for a controlled image-quality evaluation; teacher-velocity agreement alone does not justify promotion."
     }
   },
-  "full_student_continuation_interim": {
-    "request_key": "d95114be1dc04239b3ca38b7478e28534c414e7d25bef9e2b19621f7bb598587",
-    "status": "interim",
-    "optimizer_updates_completed": 95,
+  "full_student_continuation": {
+    "status": "passed",
+    "optimizer_updates": 120,
+    "selected_step": 180,
+    "trainable_parameters": 6899117824,
+    "adapter_modules": [],
+    "scope": "Resume update 60 for 120 more full-student updates on 40 fresh TRAIN prompts; monitor 50 held-out validation prompts; one bridge, no LoRA or speed distillation",
     "evaluations": [
       {
         "step": 60,
         "comparisons": 150,
-        "mean_relative_l2": 0.052486323043704035
+        "mean_relative_l2": 0.052486323043704035,
+        "max_relative_l2": 0.18346506357192993,
+        "stages": [
+          {
+            "stage": "early",
+            "mean_relative_l2": 0.09728755347430706
+          },
+          {
+            "stage": "middle",
+            "mean_relative_l2": 0.025517767034471034
+          },
+          {
+            "stage": "late",
+            "mean_relative_l2": 0.034653648622334006
+          }
+        ]
       },
       {
         "step": 120,
         "comparisons": 150,
-        "mean_relative_l2": 0.05138695197800795
+        "mean_relative_l2": 0.05138695197800795,
+        "max_relative_l2": 0.1622398942708969,
+        "stages": [
+          {
+            "stage": "early",
+            "mean_relative_l2": 0.09573965080082417
+          },
+          {
+            "stage": "middle",
+            "mean_relative_l2": 0.02535490654408932
+          },
+          {
+            "stage": "late",
+            "mean_relative_l2": 0.03306629858911037
+          }
+        ]
+      },
+      {
+        "step": 180,
+        "comparisons": 150,
+        "mean_relative_l2": 0.051103099367270866,
+        "max_relative_l2": 0.15584996342658997,
+        "stages": [
+          {
+            "stage": "early",
+            "mean_relative_l2": 0.09561682388186454
+          },
+          {
+            "stage": "middle",
+            "mean_relative_l2": 0.025212393198162316
+          },
+          {
+            "stage": "late",
+            "mean_relative_l2": 0.032480081021785734
+          }
+        ]
       }
-    ],
-    "scope": "50 monitored validation prompts; not independent test or image score"
+    ]
+  },
+  "full_student_continuation_untouched_test": {
+    "prompts": 20,
+    "comparisons_per_model": 60,
+    "means": {
+      "pretrained": 0.05438572590549787,
+      "update60": 0.05427426053211093,
+      "update120": 0.053982949970910944,
+      "update180": 0.05405932301655412
+    },
+    "optimizer_updates": 0
   },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
@@ -35622,7 +35685,8 @@
     "data/phase6/expanded_trained_validation_v2/comparison.json": "e8f3be29c33430e8deef7b8ddd8c7848644df9bea3b12bb0576e4aee39c3369a",
     "data/phase6/trained_image_pairs/summary.json": "9848df82c39ae36d8b5c37a5cb148e1408b514af7a984b3dc50d813fbf705a6e",
     "data/phase6/trained_image_pairs/visual_review.json": "20c9e010236a9c4b1f43148b8bdbe46413b2e008a79a6e72a9e90b311aaaad17",
-    "data/phase6/full_student_continuation/interim_update120.json": "5eb3c293f3308903018174dd94d7ee4e41b4958e7919c529aa8380b9f388c601",
+    "data/phase6/full_student_continuation/run_v1/summary.json": "23b2b92d71554962dba3132ce750f5f1aed7a3bd113f8e7adf774fd39c553b35",
+    "data/phase6/full_student_continuation/test_v1/summary.json": "1214b86f8ed12b9782c36e26acc403eaf8145f156c754751f9e9b254148ef0a7",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
