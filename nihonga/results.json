@@ -35581,6 +35581,24 @@
       "decision": "Retain the pretrained bridge as the current selected image model. Keep low-rate update 60 as a candidate for a controlled image-quality evaluation; teacher-velocity agreement alone does not justify promotion."
     }
   },
+  "full_student_continuation_interim": {
+    "request_key": "d95114be1dc04239b3ca38b7478e28534c414e7d25bef9e2b19621f7bb598587",
+    "status": "interim",
+    "optimizer_updates_completed": 95,
+    "evaluations": [
+      {
+        "step": 60,
+        "comparisons": 150,
+        "mean_relative_l2": 0.052486323043704035
+      },
+      {
+        "step": 120,
+        "comparisons": 150,
+        "mean_relative_l2": 0.05138695197800795
+      }
+    ],
+    "scope": "50 monitored validation prompts; not independent test or image score"
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35604,6 +35622,7 @@
     "data/phase6/expanded_trained_validation_v2/comparison.json": "e8f3be29c33430e8deef7b8ddd8c7848644df9bea3b12bb0576e4aee39c3369a",
     "data/phase6/trained_image_pairs/summary.json": "9848df82c39ae36d8b5c37a5cb148e1408b514af7a984b3dc50d813fbf705a6e",
     "data/phase6/trained_image_pairs/visual_review.json": "20c9e010236a9c4b1f43148b8bdbe46413b2e008a79a6e72a9e90b311aaaad17",
+    "data/phase6/full_student_continuation/interim_update120.json": "5eb3c293f3308903018174dd94d7ee4e41b4958e7919c529aa8380b9f388c601",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",

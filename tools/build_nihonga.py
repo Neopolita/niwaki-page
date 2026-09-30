@@ -45,6 +45,7 @@ expanded_trained = read('data/phase6/expanded_trained_validation_v2/summary.json
 expanded_comparison = read('data/phase6/expanded_trained_validation_v2/comparison.json')
 trained_images = read('data/phase6/trained_image_pairs/summary.json')
 trained_visual_review = read('data/phase6/trained_image_pairs/visual_review.json')
+continuation_interim = read('data/phase6/full_student_continuation/interim_update120.json')
 activation = read('data/phase3/activations/full/summary.json')
 bypasses = [read(f'data/phase3/bypass/block_{layer:02d}_pilot/summary.json') for layer in (2,3,4,5)]
 assert all(r['status'] == 'passed' and r['optimizer_updates'] == 120 for r in healing)
@@ -61,6 +62,9 @@ assert expanded_comparison['trained_sha256'] == sources['data/phase6/expanded_tr
 assert trained_images['status'] == 'passed' and len(trained_images['rows']) == 11
 assert len(trained_images['artifacts']) == 33 and trained_images['optimizer_updates'] == 0
 assert trained_visual_review['source_id_poster'] in {r['source_id'] for r in trained_images['rows']}
+assert continuation_interim['status'] == 'interim'
+assert [e['step'] for e in continuation_interim['evaluations']] == [60, 120]
+assert all(e['comparisons'] == 150 for e in continuation_interim['evaluations'])
 assert replay['exact_equal_controls'] == 90
 candidates = [a for a in replay['aggregates'] if a['stage'] == 'all']
 public = {
@@ -88,6 +92,7 @@ public = {
     'expanded_trained_comparison': {k:expanded_comparison[k] for k in ('pretrained_mean_percent','trained_mean_percent','improved_comparisons','worsened_comparisons','by_stage','largest_regressions')},
     'trained_image_pilot': {'prompts':len(trained_images['rows']), 'images':len(trained_images['artifacts']),
                            'calls':trained_images['calls'], 'manual_review':trained_visual_review},
+    'full_student_continuation_interim': continuation_interim,
     'source_sha256': sources,
 }
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
@@ -342,6 +347,9 @@ body=f'''<main id="main">
     <h3>The trained checkpoint on the same new inputs</h3><p class="summary">The low-rate update-60 checkpoint still regresses on the original 10 prompts: its control mean was <b>{100*expanded_trained['control_mean_relative_l2']:.3f}%</b>. On the 50 new prompts, however, it improved mean teacher agreement from <b>{expanded_comparison['pretrained_mean_percent']:.3f}% to {expanded_comparison['trained_mean_percent']:.3f}%</b>; {expanded_comparison['improved_comparisons']} of 150 paired prompt/stage comparisons improved. The new prompt selection was fixed before this checkpoint comparison. The disagreement between samples makes the original 10-prompt selection uncertain.</p>
     {table(['Noise stage','Pretrained bridge','Low-rate update 60'],[[r['stage'].title(),f"{r['pretrained_mean_percent']:.3f}%",f"{r['trained_mean_percent']:.3f}%"] for r in expanded_comparison['by_stage']],'Same 50 new prompts and saved teacher inputs; lower means closer velocity predictions')}
     <p class="note">This is teacher-prediction agreement on saved noisy inputs, not an image-quality result. The separate matched-image pilot below examines what these numerical gains look like after full generation.</p>
+    <h3>Longer full-student healing: interim measurement</h3>
+    <p class="summary">We resumed the low-rate full-student checkpoint at update 60 with its saved optimizer state. Forty previously unused training prompts provide 120 new prompt/noise-stage updates; no validation prompt enters training. On the 50 monitored validation prompts, mean velocity relative L2 fell from <b>{100*continuation_interim['evaluations'][0]['mean_relative_l2']:.3f}% at update 60</b> to <b>{100*continuation_interim['evaluations'][1]['mean_relative_l2']:.3f}% at update 120</b>. Lower means the student's denoising predictions are closer to the teacher on those same saved inputs.</p>
+    <p class="note">This is an interim result. Training continues to update 180. The 50 prompts have already been inspected during checkpoint development, so a separate untouched 20-prompt check and generated-image comparison are needed before treating this as a quality gain.</p>
     <h3>What the generated images show</h3>
     <p class="summary">The first pilot generated 10 fixed-seed teacher/pretrained-bridge image pairs. A later pilot generated <b>11 matched triples</b> with teacher, pretrained bridge, and low-rate update 60. The two student versions usually retain similar subjects and styles; their composition and detail differences are mixed. In the poster below, the teacher renders the requested CRIMSON HARBOR title while both students replace HARBOR with unrelated letters. The trained checkpoint does not fix this known text failure.</p>
     <div class="paired-images"><figure class="comparison"><a href="images/phase6-poster-teacher.png"><img loading="lazy" src="images/phase6-poster-teacher.png" alt="Teacher poster with the requested CRIMSON HARBOR title"></a><figcaption><b>Original teacher</b> | requested title</figcaption></figure><figure class="comparison"><a href="images/phase6-poster-pretrained.png"><img loading="lazy" src="images/phase6-poster-pretrained.png" alt="Pretrained-bridge poster with the second title word incorrect"></a><figcaption><b>Pretrained bridge</b> | title error</figcaption></figure><figure class="comparison"><a href="images/phase6-poster-trained.png"><img loading="lazy" src="images/phase6-poster-trained.png" alt="Update-60 poster with the second title word still incorrect"></a><figcaption><b>Low-rate update 60</b> | title error remains</figcaption></figure></div>
