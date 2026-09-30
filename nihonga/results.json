@@ -35694,6 +35694,90 @@
     "text_trend": "No monotonic text improvement is visible: Northern Parade is legible in every student checkpoint; CRIMSON HARBOR fails in the pretrained and update-60 outputs, works at update 120, and fails again at update 180. The two text prompts cannot estimate general text-rendering reliability.",
     "limitations": "This is an unblinded 11-prompt inspection, including one previously tracked poster. It does not establish general text-rendering reliability or an image-quality ranking across the prompt distribution."
   },
+  "full_student_continuation_text_hypothesis": {
+    "version": "phase6-text-hypothesis-summary-v1",
+    "status": "passed",
+    "prompt_count": 16,
+    "image_count": 64,
+    "optimizer_updates": 0,
+    "counts": {
+      "teacher": {
+        "true": 15,
+        "uncertain": 1
+      },
+      "pretrained": {
+        "true": 13,
+        "false": 3
+      },
+      "update120": {
+        "true": 13,
+        "uncertain": 1,
+        "false": 2
+      },
+      "update180": {
+        "true": 12,
+        "false": 4
+      }
+    },
+    "groups": {
+      "posters": {
+        "teacher": {
+          "true": 8
+        },
+        "pretrained": {
+          "true": 7,
+          "false": 1
+        },
+        "update120": {
+          "true": 7,
+          "uncertain": 1
+        },
+        "update180": {
+          "true": 6,
+          "false": 2
+        }
+      },
+      "text_rendering": {
+        "teacher": {
+          "uncertain": 1,
+          "true": 7
+        },
+        "pretrained": {
+          "false": 2,
+          "true": 6
+        },
+        "update120": {
+          "false": 2,
+          "true": 6
+        },
+        "update180": {
+          "false": 2,
+          "true": 6
+        }
+      }
+    },
+    "paired_vs_pretrained": {
+      "update120_clear_win": 0,
+      "update120_clear_loss": 0,
+      "same_status": 15,
+      "uncertain_pair": 1
+    },
+    "paired_vs_update180": {
+      "update120_clear_win": 1,
+      "update120_clear_loss": 0,
+      "same_status": 14,
+      "uncertain_pair": 1
+    },
+    "source_sha256": {
+      "request.json": "c1cd1fea864607e44e751241b3aebbc10e256f7d088ed2ade068aba7d22ed1e5",
+      "summary.json": "eaad0383cc374ecec8bf4a8c0bc239209c98ef6f666fe2ded0bbb8f161082152",
+      "sheets.json": "94046d420b92236805dcef0c077ae9b07eaa42dfd89f7cd718990e6756c0ad1f",
+      "rubric.json": "00da0c0e78e15a01bc0089ef8a3da38137a85b6605e629159f3cfa4bb5395d48",
+      "manual_review.json": "3eaee55cd04b490b134b4488a46f815c4ef01ccb1e62a88e9fe3177b29e34618"
+    },
+    "scope": "One fixed seed per prompt, 8 posters and 8 other text scenes; unblinded manual exact-text review",
+    "interpretation": "Update 120 has 13 clearly correct full prompts of 16 and one borderline prompt; pretrained has 13, update 180 has 12. Update 120 restores one title and avoids one update-180 regression, but this pilot does not establish a general text-fidelity win over the pretrained bridge."
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35723,6 +35807,10 @@
     "data/phase6/full_student_continuation/update120_images_v1/summary.json": "222eeed6884ec0b8afa38fcbb7d204842dd98e3e6c1e21606397571987efe845",
     "data/phase6/full_student_continuation/images_v1/five_way_sheets.json": "93c6943fd1a2fc6bed140aa4674d7a5198b715dde6c42579e5796542024d3d1f",
     "data/phase6/full_student_continuation/visual_review.json": "9d89d18164f20d4bd558aa229309d34e225927dedd700fdfc6fe96e6c4ebb2d2",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/summary.json": "eaad0383cc374ecec8bf4a8c0bc239209c98ef6f666fe2ded0bbb8f161082152",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/review_summary.json": "ee98a59fae8b001a65d7717f112fb0e08dc4f81cee978261f4879fffbfd4ff2f",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/sheets.json": "94046d420b92236805dcef0c077ae9b07eaa42dfd89f7cd718990e6756c0ad1f",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/manual_review.json": "3eaee55cd04b490b134b4488a46f815c4ef01ccb1e62a88e9fe3177b29e34618",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
@@ -35743,6 +35831,22 @@
     "data/phase6/full_student_continuation/images_v1/p1-81fc1d548f81-update180.png": "f3dfc13644e5f47ea62684fbb34cbb8edec3a145c32e3bc9257b5d1622ea1420",
     "data/phase6/full_student_continuation/images_v1/five_way_sheet_1.png": "cf6dbf043c7cc5b2e78c24faf941091eba003e288102db12604fae837f86f674",
     "data/phase6/full_student_continuation/images_v1/five_way_sheet_2.png": "e8ffc6c6afd47f4bd215d376cc6b7307a875871bedcd89f60fab74d69e8d89be",
-    "data/phase6/full_student_continuation/images_v1/five_way_sheet_3.png": "20e18613d2640f057416c312624368de67849d0cb6f0ee40db4f75fcd2b04c97"
+    "data/phase6/full_student_continuation/images_v1/five_way_sheet_3.png": "20e18613d2640f057416c312624368de67849d0cb6f0ee40db4f75fcd2b04c97",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/text_sheet_1.png": "752a837d248a5fee0240211a0491d8a20f935f7f3058910114390d49c6a0cf63",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/text_sheet_2.png": "d1922fe1bed761297e831cb1d726021463029db373e2d90a69d2497324bead0c",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/text_sheet_3.png": "11ab88e2cca27b74f4fcbb43875b9286c3a926bbb7f99af0196b8c5c5f02b34f",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/text_sheet_4.png": "7df1019df8445b9581612575dbbb05b320b3f72759ae3227bcea32a6acc45e51",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-9225ba4ccf76-teacher.png": "7a61798a86e11c2b1c518197ff01836400f8f6e95a61ccb6cc0146e0430d4871",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-9225ba4ccf76-pretrained.png": "4991b8908a0d87b53862b9d4d3e4b3c43c6737cb68bc798a1859839eaf137c4a",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-9225ba4ccf76-update120.png": "4b8043ea663bb6789d084985d5bdddbe62c3555c6659813b9be97713530b69cc",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-9225ba4ccf76-update180.png": "8b64a5679967d5a9bb49ea18f97ab1a201ac70304944915fd97a4022949942da",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-5962716b5dc8-teacher.png": "c2d45658b4a3be921206093a182b12c68f3ec92830d3904d59180b09dbd03c8e",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-5962716b5dc8-pretrained.png": "3575438c3e210f83bb506c0f6741a04cb104ac9a8b8d6ababf21aa99a2d8b29f",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-5962716b5dc8-update120.png": "adf383ee899fed5f4cf8e317f0fe4d3221293a5957e845f1de4c3c48b7468575",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-5962716b5dc8-update180.png": "72d6ec0b37cb9113ecbc3f634a6bbb0a719022d687569816cdd78d3e5ea6ee59",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-teacher.png": "f3cf40952f2f245e9352c676bf492dabb4baf3b9b243a4e9e101120096bba18d",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-pretrained.png": "8b36a7f7677190c1d8f15bf02364872f2f59c94335d92d82edb24c89a30df6aa",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-update120.png": "ed14bf47442dad8161853707b1b9b5ac91b59a08181bbc2ffe2e04720b341f59",
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-update180.png": "e1bb0cd4dabca1f07e2755501467a34e1e58836dbaad20f32b9635e2c2483844"
   }
 }
