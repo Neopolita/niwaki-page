@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-29",
-  "scope": "Development pilots; validation reused for selection; no healed-student image-quality or speed benchmark.",
+  "updated": "2026-09-30",
+  "scope": "Development pilots; validation reused for selection; 10 paired images but no independent image-quality benchmark.",
   "dataset": {
     "phase": "Phase 1 — Build the Prompt Dataset",
     "pilot_size": 20000,
@@ -35148,6 +35148,183 @@
       ]
     }
   ],
+  "bridge_only_healing": {
+    "status": "passed",
+    "optimizer_updates": 120,
+    "trainable_parameters": 2097152,
+    "adapter_modules": [],
+    "selected_step": 0,
+    "scope": "120-update bridge-only block-5 healing pilot on 20 TRAIN/10 VALIDATION cached inputs; no LoRA, full-weight fine-tuning, images, trajectories, independent test or speed benchmark"
+  },
+  "full_student_healing": [
+    {
+      "learning_rate": 0.0001,
+      "status": "passed",
+      "optimizer_updates": 60,
+      "trainable_parameters": 6899117824,
+      "adapter_modules": [],
+      "selected_step": 0,
+      "peak_allocated_gib": 64.96892833709717,
+      "scope": "60-update full-student block-5 healing pilot on 20 TRAIN/10 VALIDATION cached inputs; one bridge, no LoRA or speed distillation",
+      "evaluations": [
+        {
+          "step": 0,
+          "comparisons": 30,
+          "mean_relative_l2": 0.055178944828609626,
+          "max_relative_l2": 0.15094755589962006,
+          "mean_objective": 0.005004367110086605,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.09947016127407551
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.025970355793833732
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.040096317417919636
+            }
+          ]
+        },
+        {
+          "step": 30,
+          "comparisons": 30,
+          "mean_relative_l2": 0.3818342454731464,
+          "max_relative_l2": 0.7398403286933899,
+          "mean_objective": 0.18156433273106815,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.5862519085407257
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.17575001046061517
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.38350081741809844
+            }
+          ]
+        },
+        {
+          "step": 60,
+          "comparisons": 30,
+          "mean_relative_l2": 0.543874736626943,
+          "max_relative_l2": 0.903847336769104,
+          "mean_objective": 0.3545875751723846,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.7572619259357453
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.22640616297721863
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.647956120967865
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "learning_rate": 1e-06,
+      "status": "passed",
+      "optimizer_updates": 60,
+      "trainable_parameters": 6899117824,
+      "adapter_modules": [],
+      "selected_step": 0,
+      "peak_allocated_gib": 64.96892833709717,
+      "scope": "60-update full-student block-5 healing pilot on 20 TRAIN/10 VALIDATION cached inputs; one bridge, no LoRA or speed distillation",
+      "evaluations": [
+        {
+          "step": 0,
+          "comparisons": 30,
+          "mean_relative_l2": 0.055178944828609626,
+          "max_relative_l2": 0.15094755589962006,
+          "mean_objective": 0.005004367110086605,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.09947016127407551
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.025970355793833732
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.040096317417919636
+            }
+          ]
+        },
+        {
+          "step": 30,
+          "comparisons": 30,
+          "mean_relative_l2": 0.05584612268333634,
+          "max_relative_l2": 0.1552925407886505,
+          "mean_objective": 0.00515796706895344,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.10134067386388779
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.02583805089816451
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.040359643287956715
+            }
+          ]
+        },
+        {
+          "step": 60,
+          "comparisons": 30,
+          "mean_relative_l2": 0.05653896580139796,
+          "max_relative_l2": 0.15925279259681702,
+          "mean_objective": 0.005359553029605498,
+          "stages": [
+            {
+              "stage": "early",
+              "mean_relative_l2": 0.10370872952044011
+            },
+            {
+              "stage": "middle",
+              "mean_relative_l2": 0.0257349856197834
+            },
+            {
+              "stage": "late",
+              "mean_relative_l2": 0.040173182263970375
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "paired_images": {
+    "n_pairs": 10,
+    "dimensions": [
+      "alignment",
+      "alignment",
+      "visual_quality",
+      "visual_quality",
+      "aesthetics",
+      "aesthetics",
+      "real_world",
+      "real_world",
+      "creative",
+      "creative"
+    ],
+    "teacher_mean_seconds": 7.032870572800002,
+    "student_mean_seconds": 5.9538310669999985
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -35161,6 +35338,10 @@
     "data/phase6/replay_contract.json": "9daa144b3a332a25ab3703679e9d2a13998916ed0c0ec3de38ac18b7fa15b75e",
     "data/phase6/healing_pilot/summary.json": "402f65883f1bfef661607e55fc71cca9670fc2a7aba9ba80797445a07d471454",
     "data/phase6/healing_pilot_lr_low/summary.json": "8d2972c45ad462ef1cfc36684ae0b4b3eec5b5554d08d8f90567ecd65947ff01",
+    "data/phase6/bridge_only_healing_v2/summary.json": "483f4b824fc089d4c5cced60a003589666ee71effe20c1781c0536059369593c",
+    "data/phase6/full_student_healing/summary.json": "454fd67374c75315d4f8e2999c532ef9184ace7a3437b0616cbba7263004d92d",
+    "data/phase6/full_student_healing_lr_low_v2/summary.json": "f8d7931e8d6574c4845da51dffbda5ff00630ae05b6d40e83c5c9077445bfee1",
+    "data/phase6/paired_images/summary.json": "36127efa5ee7b827cedde7bccea2bedd1a7a205b987eee43680fc57fc6757d43",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
@@ -35170,6 +35351,8 @@
     "data/phase3/bypass/full_images_pilot/internal-p1-e0d8dd3b84cd-comparison.png": "a02dcc5aa07f4d9d42e6d9e5e43fad95805ce555e2125543109bbb60fcb326df",
     "data/phase3/bypass/full_images_pilot/internal-p1-4a1cdb170e44-comparison.png": "4ac18fb629482d778a73bdecdde78cdcdb24c0a76b8fb3d7b02e46ac1ab259cb",
     "data/phase3/bypass/full_images_pilot/internal-p1-425ec4e55730-comparison.png": "be747c71131e871feb399724f30e43f32fa3c6d80ef312de7249af7960ca3923",
-    "data/phase3/bypass/full_images_pilot/internal-p1-6177a6812fbc-comparison.png": "64e8680b7d2590cd477dedd8f4dbaa714893cb54f3b8e4bacc32700a953e29a1"
+    "data/phase3/bypass/full_images_pilot/internal-p1-6177a6812fbc-comparison.png": "64e8680b7d2590cd477dedd8f4dbaa714893cb54f3b8e4bacc32700a953e29a1",
+    "data/phase6/paired_images/p1-81fc1d548f81-teacher.png": "48a8241e12341a8282b06a4836dd4c2403f57b321a76643d9463cd5c8a619cf0",
+    "data/phase6/paired_images/p1-81fc1d548f81-student.png": "b6fd0c11240aad2ed48fd1bc2ace96c132c31b24cecffbd03ffd2f911a1e70dd"
   }
 }
