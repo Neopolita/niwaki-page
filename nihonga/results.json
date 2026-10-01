@@ -36641,6 +36641,226 @@
     },
     "scope": "All 45 previously unused validation text prompts at one seed each; model-blind first-pass visual scoring; uncertain cases preserved"
   },
+  "phase7_four_blocks": {
+    "question": "Remove blocks 2-5 at once (32 -> 28 blocks): are bridges alone enough, or is healing needed?",
+    "velocity_relative_l2": [
+      {
+        "variant": "one_block_bridge",
+        "stage": "early",
+        "comparisons": 10,
+        "mean_relative_l2": 0.09947016127407551,
+        "max_relative_l2": 0.15094755589962006,
+        "mean_cosine": 0.9951678693294526
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "middle",
+        "comparisons": 10,
+        "mean_relative_l2": 0.025970355793833732,
+        "max_relative_l2": 0.04479234293103218,
+        "mean_cosine": 0.9995923578739166
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "late",
+        "comparisons": 10,
+        "mean_relative_l2": 0.040096317417919636,
+        "max_relative_l2": 0.05355198681354523,
+        "mean_cosine": 0.9991454958915711
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "all",
+        "comparisons": 30,
+        "mean_relative_l2": 0.055178944828609626,
+        "max_relative_l2": 0.15094755589962006,
+        "mean_cosine": 0.9979685743649801
+      },
+      {
+        "variant": "skip_blocks_2_5",
+        "stage": "early",
+        "comparisons": 10,
+        "mean_relative_l2": 0.32616361379623415,
+        "max_relative_l2": 0.5482334494590759,
+        "mean_cosine": 0.9386415243148803
+      },
+      {
+        "variant": "skip_blocks_2_5",
+        "stage": "middle",
+        "comparisons": 10,
+        "mean_relative_l2": 0.09668979719281197,
+        "max_relative_l2": 0.14381961524486542,
+        "mean_cosine": 0.9950822830200196
+      },
+      {
+        "variant": "skip_blocks_2_5",
+        "stage": "late",
+        "comparisons": 10,
+        "mean_relative_l2": 0.24179431796073914,
+        "max_relative_l2": 0.28912702202796936,
+        "mean_cosine": 0.9705850124359131
+      },
+      {
+        "variant": "skip_blocks_2_5",
+        "stage": "all",
+        "comparisons": 30,
+        "mean_relative_l2": 0.22154924298326176,
+        "max_relative_l2": 0.5482334494590759,
+        "mean_cosine": 0.9681029399236043
+      },
+      {
+        "variant": "stacked_bridges_2_5",
+        "stage": "early",
+        "comparisons": 10,
+        "mean_relative_l2": 0.28255481123924253,
+        "max_relative_l2": 0.5862888693809509,
+        "mean_cosine": 0.9508186399936676
+      },
+      {
+        "variant": "stacked_bridges_2_5",
+        "stage": "middle",
+        "comparisons": 10,
+        "mean_relative_l2": 0.0777586705982685,
+        "max_relative_l2": 0.10232327878475189,
+        "mean_cosine": 0.9969866037368774
+      },
+      {
+        "variant": "stacked_bridges_2_5",
+        "stage": "late",
+        "comparisons": 10,
+        "mean_relative_l2": 0.2289041295647621,
+        "max_relative_l2": 0.27728039026260376,
+        "mean_cosine": 0.9730825424194336
+      },
+      {
+        "variant": "stacked_bridges_2_5",
+        "stage": "all",
+        "comparisons": 30,
+        "mean_relative_l2": 0.1964058704674244,
+        "max_relative_l2": 0.5862888693809509,
+        "mean_cosine": 0.9736292620499929
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "early",
+        "comparisons": 10,
+        "mean_relative_l2": 0.2811068847775459,
+        "max_relative_l2": 0.5749210119247437,
+        "mean_cosine": 0.9519250273704529
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "middle",
+        "comparisons": 10,
+        "mean_relative_l2": 0.07876732908189296,
+        "max_relative_l2": 0.10342340916395187,
+        "mean_cosine": 0.996756374835968
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "late",
+        "comparisons": 10,
+        "mean_relative_l2": 0.20802993327379227,
+        "max_relative_l2": 0.2528790533542633,
+        "mean_cosine": 0.9776716232299805
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "all",
+        "comparisons": 30,
+        "mean_relative_l2": 0.18930138237774372,
+        "max_relative_l2": 0.5749210119247437,
+        "mean_cosine": 0.9754510084788005
+      },
+      {
+        "variant": "region_rank1024",
+        "stage": "early",
+        "comparisons": 10,
+        "mean_relative_l2": 0.2675115063786507,
+        "max_relative_l2": 0.4627437889575958,
+        "mean_cosine": 0.9595211803913116
+      },
+      {
+        "variant": "region_rank1024",
+        "stage": "middle",
+        "comparisons": 10,
+        "mean_relative_l2": 0.07247773893177509,
+        "max_relative_l2": 0.09870873391628265,
+        "mean_cosine": 0.9972948849201202
+      },
+      {
+        "variant": "region_rank1024",
+        "stage": "late",
+        "comparisons": 10,
+        "mean_relative_l2": 0.19194367229938508,
+        "max_relative_l2": 0.23541587591171265,
+        "mean_cosine": 0.980978661775589
+      },
+      {
+        "variant": "region_rank1024",
+        "stage": "all",
+        "comparisons": 30,
+        "mean_relative_l2": 0.1773109725366036,
+        "max_relative_l2": 0.4627437889575958,
+        "mean_cosine": 0.979264909029007
+      }
+    ],
+    "region_bridge_fit": [
+      {
+        "variant": "region_rank256",
+        "rank": 256,
+        "parameters": 2097152,
+        "updates": 1000,
+        "selected_step": 800,
+        "validation_relative_l2_by_group": {
+          "prompt_tokens": {
+            "skip": 0.5963032126426697,
+            "bridge": 0.038829088769853116
+          },
+          "early_image": {
+            "skip": 0.1934717819094658,
+            "bridge": 0.12540705651044845
+          },
+          "middle_image": {
+            "skip": 0.2679723650217056,
+            "bridge": 0.11841166988015175
+          },
+          "late_image": {
+            "skip": 0.3181972235441208,
+            "bridge": 0.1237824872136116
+          }
+        }
+      },
+      {
+        "variant": "region_rank1024",
+        "rank": 1024,
+        "parameters": 8388608,
+        "updates": 1000,
+        "selected_step": 800,
+        "validation_relative_l2_by_group": {
+          "prompt_tokens": {
+            "skip": 0.5963032126426697,
+            "bridge": 0.0374491399154067
+          },
+          "early_image": {
+            "skip": 0.1934717819094658,
+            "bridge": 0.12225960046052933
+          },
+          "middle_image": {
+            "skip": 0.2679723650217056,
+            "bridge": 0.11480924636125564
+          },
+          "late_image": {
+            "skip": 0.3181972235441208,
+            "bridge": 0.11637835353612899
+          }
+        }
+      }
+    ],
+    "teacher_exact_controls": 90,
+    "gate": "mean error at most 1.0 point above the one-block student and at least 50% of the skip penalty removed",
+    "conclusion": "No bridge-only variant passes; the 28-block student needs healing."
+  },
   "phase6_checkpoint_decision": {
     "prompt_count": 129,
     "image_count": 258,
@@ -38340,6 +38560,9 @@
     "data/phase6/full_student_continuation/alignment_qa_v1/review_summary.json": "301540f4198ccd4abb915cb2bc2e97057132730b1ffe912fdd3a10b88f15d7cb",
     "data/phase6/full_student_continuation/alignment_qa_v1/decision_evidence.json": "390f53036279f61b95bd9d8c853dcd3f95aa65c7f5fdc303f4f07161660e4ac7",
     "data/phase6/full_student_continuation/alignment_qa_v1/decision_evidence_images.json": "ae0cb6b41ff119424de1315e1bf7defe6584ff570851d977cfbee86437151e17",
+    "data/phase7/four_block_replay/summary.json": "d68322e348945a4d40724038529cd9b8c499cf7163c1290cf1341ab162873536",
+    "data/phase7/region_bridge_fit/summary.json": "7ca6e0d33bbdd5a6ccba8a0660771a522594fe926d1238a9cb48da90e8bb8f3a",
+    "data/phase7/region_replay/summary.json": "46de60292817548d42ad9ed22d1cc6a14dc58782ba99fbf205fbcf70b90929ed",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
