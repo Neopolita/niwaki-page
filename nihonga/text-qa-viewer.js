@@ -8,6 +8,7 @@ document.querySelectorAll('.sheet-viewer').forEach((viewer) => {
   const previous = viewer.querySelector('.sheet-prev');
   const next = viewer.querySelector('.sheet-next');
   const position = viewer.querySelector('.sheet-position');
+  const caption = viewer.querySelector('.sheet-caption');
   if (!select || !controls || !image || !full || !previous || !next || !position) return;
   const per = Number(viewer.dataset.perSheet || 3);
   const total = Number(viewer.dataset.total || select.length * per);
@@ -16,10 +17,12 @@ document.querySelectorAll('.sheet-viewer').forEach((viewer) => {
   const show = (index) => {
     select.selectedIndex = index;
     const path = select.value;
+    const option = select.options[index];
     const start = per * index + 1;
     const end = Math.min(per * index + per, total);
     image.src = path;
-    image.alt = altTemplate.replace('{start}', start).replace('{end}', end);
+    image.alt = option.dataset.alt || altTemplate.replace('{start}', start).replace('{end}', end);
+    if (caption && option.dataset.caption) caption.innerHTML = option.dataset.caption;
     full.href = path;
     position.textContent = `${index + 1} of ${select.length}`;
     previous.disabled = index === 0;
