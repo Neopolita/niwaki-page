@@ -58,6 +58,10 @@ text_manual = read('data/phase6/full_student_continuation/text_hypothesis_v1/man
 text_qa = read('data/phase6/full_student_continuation/text_qa_validation_v1/summary.json')
 text_qa_review = read('data/phase6/full_student_continuation/text_qa_validation_v1/review_summary.json')
 text_qa_sheets = read('data/phase6/full_student_continuation/text_qa_validation_v1/labeled_sheets.json')
+ALIGN = 'data/phase6/full_student_continuation/alignment_qa_v1/'
+alignment_review = read(ALIGN + 'review_summary.json')
+decision = read(ALIGN + 'decision_evidence.json')
+decision_images = read(ALIGN + 'decision_evidence_images.json')
 activation = read('data/phase3/activations/full/summary.json')
 bypasses = [read(f'data/phase3/bypass/block_{layer:02d}_pilot/summary.json') for layer in (2,3,4,5)]
 assert all(r['status'] == 'passed' and r['optimizer_updates'] == 120 for r in healing)
@@ -89,11 +93,16 @@ assert len(text_sheets['sheets']) == 4 and len(text_manual['scores']) == 16
 assert text_qa['status'] == text_qa_review['status'] == 'passed'
 assert text_qa_review['prompt_count'] == 45 and text_qa_review['image_count'] == 180
 assert len(text_qa_sheets['sheets']) == 15
+assert alignment_review['status'] == 'passed' and alignment_review['optimizer_updates'] == 0
+assert alignment_review['prompt_count'] == 129 and alignment_review['image_count'] == 258
+assert decision['source_sha256']['alignment_review'] == sources[ALIGN + 'review_summary.json']
+assert decision['source_sha256']['image_manifest'] == sources[ALIGN + 'decision_evidence_images.json']
+assert decision['decision']['selected_model'] == 'pretrained' and not decision['decision']['promote_update120']
 assert replay['exact_equal_controls'] == 90
 candidates = [a for a in replay['aggregates'] if a['stage'] == 'all']
 public = {
     'updated': '2026-10-01',
-    'scope': 'Development pilots; a 20-prompt untouched fixed-input test is complete, but no independent image-quality benchmark.',
+    'scope': 'Development pilots. Phase 6 closed with a blinded 129-prompt paired prompt-adherence test that kept the pretrained bridge; no independent image-quality benchmark yet.',
     'dataset': stats,
     'dataset_creation': {k:dataset_config[k] for k in ('GENERATOR_VERSION','MASTER_SEED','MASTER_POOL_SIZE','PILOT_SIZE','DIMENSION_WEIGHTS','SUBDIM_WEIGHT_OVERRIDES','LLM_MODEL','LLM_EN_REWRITE_FRACTION','LLM_ZH_TRANSLATE_FRACTION','DECON_WORD_NGRAM','DECON_CHAR_NGRAM','DECON_THRESHOLD')},
     'dataset_benchmark_overlap_check': decontamination,
@@ -125,6 +134,14 @@ public = {
     'full_student_continuation_image_review': continuation_visual_review,
     'full_student_continuation_text_hypothesis': text_review,
     'full_student_continuation_text_qa_validation': text_qa_review,
+    'phase6_checkpoint_decision': {
+        **{k: alignment_review[k] for k in ('prompt_count', 'image_count', 'optimizer_updates', 'counts', 'groups',
+                                            'paired', 'text_no_clear_loss', 'decision', 'scope')},
+        'evidence': decision['rows'], 'rule_checks': decision['rule_checks'],
+        'examples': [{k: e[k] for k in ('source_id', 'kind', 'title', 'note', 'prompt', 'subdimension', 'scores')}
+                     for e in decision['examples']],
+        'per_prompt': [{k: r[k] for k in ('source_id', 'subdimension', 'language', 'prompt', 'question', 'scores')}
+                       for r in alignment_review['rows']]},
     'source_sha256': sources,
 }
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
@@ -293,6 +310,23 @@ for source_id in ('p1-9225ba4ccf76', 'p1-5962716b5dc8', 'p1-30b3b241cfaa'):
             raise RuntimeError('Text comparison PNG differs from saved report: ' + source_name)
         shutil.copy2(source, out/'images'/f'phase6-text-{source_id}-{role}.png')
         sources[source_name] = actual_hash
+align_sheets, align_examples = [], []
+for name, expected in sorted(decision_images['sha256'].items()):
+    if name == 'decision_examples.jpg':
+        continue
+    source_name = ALIGN + name
+    source = args.source / source_name
+    actual_hash = hashlib.sha256(source.read_bytes()).hexdigest()
+    if actual_hash != expected:
+        raise RuntimeError('Alignment evidence image differs from saved manifest: ' + source_name)
+    if name.startswith('labeled_sheets/'):
+        target = 'phase6-align-' + name.split('/')[-1]
+        align_sheets.append(target)
+    else:
+        target = 'phase6-align-' + name.split('/')[-1]
+    shutil.copy2(source, out/'images'/target)
+    sources[source_name] = actual_hash
+assert len(align_sheets) == 43
 public['source_sha256']=sources
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n',encoding='utf-8')
 
@@ -306,6 +340,75 @@ text_qa_links = ' · '.join(
 )
 text_qa_first = 'images/phase6-text-qa-' + text_qa_sheets['sheets'][0]['name']
 
+def sheet_viewer(slug, label, files, per, total, alt):
+    options = ''.join(f'<option value="images/{f}">Prompts {per*i+1}-{min(per*i+per,total)}</option>' for i, f in enumerate(files))
+    links = ' · '.join(f'<a href="images/{f}">{per*i+1}-{min(per*i+per,total)}</a>' for i, f in enumerate(files))
+    first = 'images/' + files[0]
+    return (f'<div class="text-qa-viewer sheet-viewer" id="{slug}-gallery" aria-label="{esc(label)}" data-per-sheet="{per}" data-total="{total}" data-alt="{esc(alt)}">'
+            f'<div class="text-qa-controls" hidden><button type="button" class="sheet-prev">Previous</button><label for="{slug}-select">View sheet</label>'
+            f'<select id="{slug}-select" class="sheet-select">{options}</select><button type="button" class="sheet-next">Next</button>'
+            f'<span class="sheet-position" role="status" aria-live="polite">1 of {len(files)}</span></div>'
+            f'<figure class="comparison"><a class="sheet-full" href="{first}"><img class="sheet-image" loading="lazy" src="{first}" alt="{esc(alt.replace("{start}", "1").replace("{end}", str(min(per, total))))}"></a>'
+            f'<figcaption>Open the current sheet at full resolution.</figcaption></figure>'
+            f'<details><summary>Direct links to all {len(files)} full-size sheets</summary><p>{links}</p></details></div>')
+
+text_qa_viewer = sheet_viewer('text-qa', '45 validation text prompt comparisons',
+                              ['phase6-text-qa-' + s['name'] for s in text_qa_sheets['sheets']], 3, 45,
+                              'Text QA prompts {start} through {end}: teacher, pretrained bridge, update 120, update 180')
+text_pilot_viewer = sheet_viewer('text-pilot', '16 fresh text prompt comparisons',
+                                 ['phase6-' + s['name'] for s in text_sheets['sheets']], 4, 16,
+                                 'Text pilot prompts {start} through {end}: teacher, pretrained bridge, update 120, update 180')
+align_viewer = sheet_viewer('align', '129 alignment prompt comparisons', align_sheets, 3, 129,
+                            'Alignment prompts {start} through {end}: pretrained bridge left, update 120 right, with pass, fail or uncertain scores')
+
+ap = alignment_review['paired']
+ac = alignment_review['counts']
+gain, (ci_low, ci_high) = 100*ap['clear_pass_gain_fraction'], [100*v for v in ap['paired_bootstrap_95pct']]
+def gx(v): return 70 + (v + 3) / 11 * 640
+decision_svg = f'''<figure class="decision-chart"><svg viewBox="0 0 780 190" role="img" aria-labelledby="decision-title decision-desc"><title id="decision-title">Update 120 gain over the pretrained bridge against the promotion bar</title><desc id="decision-desc">Paired clear-pass gain of {gain:+.1f} percentage points with a 95% bootstrap interval from {ci_low:.1f} to {ci_high:.1f}. Promotion needed at least +5 points and an interval above zero.</desc>
+<g style="font-family:var(--text,Georgia,serif);font-size:15px;fill:var(--ink)">
+<rect x="{gx(5):.1f}" y="30" width="{gx(8)-gx(5):.1f}" height="110" style="fill:var(--rule);fill-opacity:.55"/>
+<text x="{gx(6.5):.1f}" y="52" text-anchor="middle" style="fill:var(--ink-soft)">promote zone</text>
+<path d="M{gx(5):.1f} 30 V140" style="stroke:var(--ink);stroke-width:2"/><text x="{gx(5)+6:.1f}" y="134" style="fill:var(--ink)">promotion bar +5</text>
+<path d="M{gx(0):.1f} 30 V140" style="stroke:var(--ink-soft);stroke-width:1.5;stroke-dasharray:5 4"/><text x="{gx(0)-6:.1f}" y="52" text-anchor="end" style="fill:var(--ink-soft)">no difference</text>
+<path d="M{gx(ci_low):.1f} 92 H{gx(ci_high):.1f} M{gx(ci_low):.1f} 84 V100 M{gx(ci_high):.1f} 84 V100" style="stroke:var(--ink);stroke-width:2;fill:none"/>
+<circle cx="{gx(gain):.1f}" cy="92" r="7" style="fill:var(--ink);stroke:var(--paper);stroke-width:2"><title>Gain {gain:+.1f} points; 95% CI [{ci_low:.1f}, {ci_high:.1f}]</title></circle>
+<text x="{gx(gain):.1f}" y="74" text-anchor="middle" style="font-weight:600">{gain:+.1f} points</text>
+<text x="{(gx(ci_low)+gx(ci_high))/2:.1f}" y="118" text-anchor="middle" style="fill:var(--ink-soft);font-size:13px">95% CI {ci_low:.1f} to {ci_high:.1f}</text>
+<path d="M70 150 H710" style="stroke:var(--rule)"/>
+''' + ''.join(f'<text x="{gx(t):.1f}" y="168" text-anchor="middle" style="fill:var(--ink-soft);font-size:13px">{t:+d}</text>' for t in range(-2, 9, 2)) + f'''
+<text x="390" y="186" text-anchor="middle" style="fill:var(--ink-soft);font-size:13px">update 120 minus pretrained, clear-pass rate, percentage points (129 paired prompts)</text>
+</g></svg><figcaption>The dot is the measured gain; the bar is its 95% paired bootstrap interval (20,000 resamples). Promotion required the dot to sit in the shaded zone <b>and</b> the interval to stay right of the dashed zero line. The dot falls short of +5 and the interval touches zero.</figcaption></figure>'''
+
+decision_tiles = (f'<ul class="figures"><li><span class="n">{ac["pretrained"]["pass"]} <small>vs</small> {ac["update120"]["pass"]}</span><span class="c">clear passes out of 129: pretrained bridge vs update 120</span></li>'
+                  f'<li><span class="n">{ap["same_clear_pass_status"]} <small>/ 129</small></span><span class="c">prompts where both models got the same result</span></li>'
+                  f'<li><span class="n">{ap["update120_clear_pass_wins"]} <small>–</small> {ap["pretrained_clear_pass_wins"]}</span><span class="c">clear paired wins for update 120 vs pretrained</span></li>'
+                  f'<li><span class="n">{gain:+.1f} <small>pts</small></span><span class="c">gain; 95% CI [{ci_low:.1f}, {ci_high:.1f}]; bar was +5 with CI above 0</span></li></ul>')
+rule_table = table(['Predeclared promotion condition', 'Measured', 'Met?'],
+                   [[c['check'], c['value'], '<b>Yes</b>' if c['met'] else '<b>No</b>'] for c in decision['rule_checks']],
+                   'Update 120 needed all three conditions; the rule was saved before any image was rendered')
+group_names = {'counting': 'Counting', 'spatial_relation': 'Spatial relation', 'colors': 'Colors', 'multiple_objects': 'Multiple objects'}
+group_rows = []
+for key, label in group_names.items():
+    g = alignment_review['groups'][key]
+    n = sum(g['pretrained'].values())
+    group_rows.append([label, n, g['pretrained'].get('pass', 0), g['update120'].get('pass', 0),
+                       f"{g['update120'].get('pass', 0) - g['pretrained'].get('pass', 0):+d}"])
+group_rows.append(['<b>All</b>', 129, f"<b>{ac['pretrained']['pass']}</b>", f"<b>{ac['update120']['pass']}</b>",
+                   f"<b>{ac['update120']['pass'] - ac['pretrained']['pass']:+d}</b>"])
+group_table = table(['Category', 'Prompts', 'Pretrained clear passes', 'Update 120 clear passes', 'Difference'], group_rows,
+                    'Clear passes by question category; uncertain images do not count as passes')
+pass_chart = bars('Clear passes on 129 fresh alignment prompts', [('Pretrained bridge (selected)', ac['pretrained']['pass'], 'open'), ('Update 120 (healed)', ac['update120']['pass'], 'solid')], 129, unit='', hint='out of 129 · higher is better', decimals=0)
+status_word = {'pass': 'pass', 'fail': 'fail', 'uncertain': 'uncertain'}
+example_figures = ''.join(
+    f'<figure class="comparison"><a href="images/phase6-align-{Path(e["name"]).name}"><img loading="lazy" src="images/phase6-align-{Path(e["name"]).name}" '
+    f'alt="{esc(e["title"])}. Pretrained bridge {status_word[e["scores"]["pretrained"]]}, update 120 {status_word[e["scores"]["update120"]]}. Prompt: {esc(e["prompt"])}"></a>'
+    f'<figcaption><b>{esc(e["title"])}</b> | pretrained {status_word[e["scores"]["pretrained"]]}, update 120 {status_word[e["scores"]["update120"]]}<br>{esc(e["note"])}</figcaption></figure>'
+    for e in decision['examples'])
+evidence_table = table(['Phase 6 comparison', 'Size', 'Pretrained bridge', 'Update 120', 'Paired result', 'Reading'],
+                       [[r['test'], r['size'], r['pretrained'], r['update120'], r['paired'], r['reading']] for r in decision['rows']],
+                       'Every Phase 6 comparison between the selected pretrained bridge and cumulative update 120')
+
 template = (site/'saikei/index.html').read_text(encoding='utf-8')
 head=template[:template.index('<main>')].replace('<title>Saikei · Niwaki</title>','<title>Nihonga · Qwen Image compression research · Niwaki</title>')
 start=head.index('  <meta name="description"')
@@ -314,7 +417,7 @@ head=head[:start]+'''  <meta name="description" content="Nihonga: a research log
   <link rel="canonical" href="https://niwakiai.com/nihonga/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Nihonga · Qwen Image compression research">
-  <meta property="og:description" content="Full-student healing improved teacher agreement on a broader validation sample, but a small matched-image pilot found no clear visual gain.">
+  <meta property="og:description" content="Phase 6 closes: full-student healing was safe but not measurably better in a blinded 129-prompt adherence test, so the pretrained bridge stays.">
   <meta property="og:url" content="https://niwakiai.com/nihonga/">
   <meta property="og:image" content="https://niwakiai.com/assets/nihonga.jpg">
 '''+head[end:]
@@ -456,34 +559,43 @@ body=f'''<main id="main">
     <p class="summary">We rendered <b>16 previously unused explicit-text prompts</b>: eight posters and eight other text scenes. Each uses the same fixed prompt and seed for teacher, pretrained bridge, update 120, and update 180, producing 64 saved images. The rubric was written before image review: a prompt passes only when every requested phrase is readable; ambiguous lettering remains uncertain. No weights were updated.</p>
     {table(['Model','Clear full-text passes','Uncertain'],[[role, text_review['counts'][role].get('true',0),text_review['counts'][role].get('uncertain',0)] for role in ('teacher','pretrained','update120','update180')],'Manual full-requested-text review on 16 fixed prompts; each prompt counts once')}
     <p class="summary">Update 120 <b>clearly restores the Northern Orchard title</b> that the pretrained bridge and update 180 omit, although its small Visit Kyoto tagline is borderline. On a fresh <b>ENDLESS HARBOR / Visit Kyoto</b> poster, all three students render both phrases correctly, so the CRIMSON HARBOR failure did not repeat on that close template. Update 180 breaks <b>Midnight River</b>, which pretrained and update 120 render correctly. The strict full-prompt score is tied between pretrained and update 120 at 13 clear passes; update 120 has one additional uncertain case. This supports a local recovery and an update-180 regression, not a general claim that update 120 fixes text.</p>
-    <p class="note">The four sheets below show every prompt, four models per row. The <a href="images/phase6-text-p1-9225ba4ccf76-update120.png">ENDLESS HARBOR</a>, <a href="images/phase6-text-p1-5962716b5dc8-update120.png">Northern Orchard</a>, and <a href="images/phase6-text-p1-30b3b241cfaa-update120.png">Midnight River</a> update-120 PNGs can also be opened at full resolution; each sheet links to its full-size image. The review is unblinded and uses one seed per prompt.</p>
-    <figure class="comparison"><div style="overflow-x:auto"><a href="images/phase6-text_sheet_1.png"><img loading="lazy" src="images/phase6-text_sheet_1.png" alt="Text comparison prompts 1 through 4, teacher, pretrained, update 120, update 180" style="max-width:none;width:1640px;height:auto"></a></div><figcaption><b>Text prompts 1-4</b> | posters</figcaption></figure>
-    <figure class="comparison"><div style="overflow-x:auto"><a href="images/phase6-text_sheet_2.png"><img loading="lazy" src="images/phase6-text_sheet_2.png" alt="Text comparison prompts 5 through 8, teacher, pretrained, update 120, update 180" style="max-width:none;width:1640px;height:auto"></a></div><figcaption><b>Text prompts 5-8</b> | posters</figcaption></figure>
-    <figure class="comparison"><div style="overflow-x:auto"><a href="images/phase6-text_sheet_3.png"><img loading="lazy" src="images/phase6-text_sheet_3.png" alt="Text comparison prompts 9 through 12, teacher, pretrained, update 120, update 180" style="max-width:none;width:1640px;height:auto"></a></div><figcaption><b>Text prompts 9-12</b> | storefronts and banners</figcaption></figure>
-    <figure class="comparison"><div style="overflow-x:auto"><a href="images/phase6-text_sheet_4.png"><img loading="lazy" src="images/phase6-text_sheet_4.png" alt="Text comparison prompts 13 through 16, teacher, pretrained, update 120, update 180" style="max-width:none;width:1640px;height:auto"></a></div><figcaption><b>Text prompts 13-16</b> | signs and lettering</figcaption></figure>
+    <p class="note">The viewer below shows all 16 prompts, four per sheet, with the four models in each row. The <a href="images/phase6-text-p1-9225ba4ccf76-update120.png">ENDLESS HARBOR</a>, <a href="images/phase6-text-p1-5962716b5dc8-update120.png">Northern Orchard</a>, and <a href="images/phase6-text-p1-30b3b241cfaa-update120.png">Midnight River</a> update-120 PNGs can also be opened at full resolution; each sheet links to its full-size image. The review is unblinded and uses one seed per prompt.</p>
+    {text_pilot_viewer}
     <p class="note">The observed 40-step generation averages on these 10 ordered pairs were {public['paired_images']['teacher_mean_seconds']:.2f} seconds for the teacher and {public['paired_images']['student_mean_seconds']:.2f} seconds for the student, a {public['paired_images']['teacher_mean_seconds']/public['paired_images']['student_mean_seconds']:.2f}x ratio. This ordered pilot does not control for run order or establish a production speed benchmark. Velocity error measures denoising predictions, not image quality.</p>
     <h3>All 45 remaining validation text prompts</h3>
     <p class="summary">To check whether update 120 consistently improves text, we rendered all <b>45 other unused validation prompts with explicit text</b>. The teacher, pretrained bridge, update 120, and update 180 produced 180 matched 40-step images at one fixed seed per prompt. A written rubric required every requested phrase to be readable. One AI visual reviewer scored anonymous A/B/C/D columns before revealing model identities; uncertain text was recorded separately. This step trained no weights.</p>
     {table(['Model','Clear full-text passes','Clear failures','Uncertain'],[[role, text_qa_review['counts'][role].get('pass',0),text_qa_review['counts'][role].get('fail',0),text_qa_review['counts'][role].get('uncertain',0)] for role in ('teacher','pretrained','update120','update180')],'45 matched prompts; each prompt counts once and passes only if all requested phrases are readable')}
     <p class="summary">The pretrained bridge and update 120 received <b>the same status on every prompt</b>: 41 clear passes, three failures, and one uncertain. Update 120 clearly beat update 180 on two posters, PAPER STATION and NORTHERN PARADE. The teacher had 43 clear passes. This broader qualitative check gives no general text-rendering advantage to update 120 over pretrained, despite its CRIMSON HARBOR recovery in the earlier image pilot.</p>
     <p class="note">All four models garbled tiny Moonlight Motel print in one storefront and missed the Live in Berlin tagline on GOLDEN RIVER. Three student images spelled Fresh Bread Daily with an extra letter. The Electric Frontier flag lettering was too small to judge confidently in three student images. Literal text scoring also misses layout mistakes: one image has Live Music Tonight at the top but garbled lettering where the prompt requested it in sand. The viewer below contains all 15 labeled sheets, three prompts per sheet. One seed and one AI reviewer do not establish a population-level quality ranking; the separate internal test prompts remain unused.</p>
-    <div class="text-qa-viewer" id="text-qa-gallery" aria-label="45 validation text prompt comparisons">
-      <div class="text-qa-controls" hidden><button type="button" id="text-qa-prev">Previous</button><label for="text-qa-select">View sheet</label><select id="text-qa-select">{text_qa_options}</select><button type="button" id="text-qa-next">Next</button><span id="text-qa-position" role="status" aria-live="polite">1 of 15</span></div>
-      <figure class="comparison"><a id="text-qa-full" href="{text_qa_first}"><img id="text-qa-image" loading="lazy" src="{text_qa_first}" alt="Text QA prompts 1 through 3: teacher, pretrained bridge, update 120, update 180"></a><figcaption>Open the current sheet for full-resolution lettering.</figcaption></figure>
-      <details><summary>Direct links to all 15 full-size sheets</summary><p>{text_qa_links}</p></details>
-    </div>
+    {text_qa_viewer}
     <p class="note">These 45 prompts mainly ask for exact words on signs, posters, menus, or other surfaces. Turning each into a visual question would mostly repeat the text score. The broader 1,002-prompt validation split also includes 260 alignment prompts with counts, colors, objects, and spatial relations that support more specific question-based checks. Aesthetics and fine-detail prompts need different evidence; one question score cannot rank overall image quality.</p>
-    <h3>Research decision</h3><p class="summary">Cumulative update 120 remains the strongest experimental checkpoint on the 20-prompt untouched fixed-input test and recovered the tracked CRIMSON HARBOR image. Two text-focused checks, covering 16 then 45 fresh prompts, did not show a clear full-text advantage over the pretrained bridge. The current selected image model remains the pretrained bridge until a broader blinded image-quality benchmark supports promotion. Few-step speed distillation remains a separate experiment.</p>
+    <h3 id="checkpoint-decision">Deciding test: 129 blind prompt-adherence questions</h3>
+    <p class="summary">Velocity agreement and text tests had not clearly separated update 120 from the pretrained bridge, so one last test asked whether update 120 <b>follows concrete prompt requirements more often</b>. We used <b>every unused validation prompt</b> in four checkable categories: counting, spatial relations, colors, and multiple objects. That is 129 prompts in English and Chinese. Each was rendered by both models with the same seed, size, and 40-step sampler: <b>258 matched images</b> and no training. Each category had one fixed question, such as <i>"Are the requested number(s) of each named object visible?"</i> Images were scored pass, fail, or uncertain as anonymous A/B columns before the model key was opened. The promotion rule was saved before any image existed.</p>
+    {decision_tiles}
+    {decision_svg}
+    {rule_table}
+    <div class="verdict"><p><b>Decision: keep the pretrained bridge.</b> Update 120 won 3 prompts, lost none, and tied on 126. That is a +{gain:.1f}-point gain whose 95% interval reaches down to 0.0. It misses both promotion conditions. The healing run was safe, causing no measured regression, but its benefit is too small to detect in every Phase 6 test. The pretrained bridge also remains the simpler artifact: only the bridge is trained, and the 31 surviving blocks keep the teacher's original weights.</p></div>
+    {pass_chart}
+    {group_table}
+    <h3>What the differences look like</h3>
+    <p class="summary">Below are <b>all five prompts where the two models scored differently</b>, followed by two typical failures shared by both and one typical tie. The pretrained bridge is always on the left and update 120 on the right; tags show the blind scores. The three clear wins are real: an occluded giraffe, the right count of octopuses, and a missing candle restored. Against 129 prompts, however, they are too few to clear the predeclared bar. Most prompts look like the last example: almost the same image, same verdict.</p>
+    <div class="decision-examples">{example_figures}</div>
+    <p class="note">Both checkpoints still fail about half of the counting prompts and about a third of the spatial-relation prompts in the same way. Those errors come from the base model and the bridge, not from healing. The viewer below shows all 129 prompts unblinded, three per sheet, with the score for every image.</p>
+    {align_viewer}
+    <h3>Research decision: all Phase 6 evidence side by side</h3>
+    {evidence_table}
+    <p class="summary">Every comparison points the same way. Update 120 is <b>numerically a little closer to the teacher</b> on saved inputs: lower velocity error on 46 of 60 untouched comparisons, by 0.04 points. It ties on text and is <b>not reliably better on generated images</b>. Phase 6 therefore closes with the <b>pretrained single-bridge student as the selected model</b>. The full-student checkpoints remain saved as evidence, but none is promoted. The next experiment is few-step speed distillation, starting from the pretrained bridge.</p>
+    <p class="note">Limits: one seed per prompt and one AI visual reviewer. A real effect of a few points cannot be ruled out, but this test was sized to detect the 5-point gain needed to justify the extra healing training. Per-prompt scores, the rubric, the blind key, and hashes are in the downloadable record.</p>
   </div></section>
   <section id="record" aria-labelledby="h-record"><div class="wrap"><p class="eyebrow">The research record</p><h2 id="h-record">What is complete, what remains open</h2>
-    <dl class="facts"><div><dt>Phase 0</dt><dd>Architecture inspected: 32 blocks and 4,096-wide hidden states.</dd></div><div><dt>Phase 1</dt><dd>20k prompt pilot serialized, with a 100k template pool and fixed split assignments.</dd></div><div><dt>Phase 2</dt><dd>Original-model images, judged baseline, repeatability analysis and H100 efficiency measurements saved.</dd></div><div><dt>Phase 3</dt><dd>Layer diagnostics and identity-bypass image pilots; blocks 2–5 retained as learned-replacement candidates.</dd></div><div><dt>Phase 4</dt><dd>Residual bottleneck bridges implemented and insertion checked.</dd></div><div><dt>Phase 5</dt><dd>Four independent bridge-pretraining pilots completed; checkpoints and optimizer states saved.</dd></div><div><dt>Phase 6</dt><dd>Repeatable teacher contract verified; bridge and full-student healing pilots saved. The 120-update continuation has an untouched 20-prompt fixed-input test, an 11-prompt five-way comparison, and separate 16- and 45-prompt text reviews. Update 120 is the strongest experimental checkpoint on fixed-input teacher agreement, with broader image benchmarking open.</dd></div><div><dt>Later phases</dt><dd>Finished-image benchmarking, progressive pruning, denoising-step distillation and optional quantization remain planned. No results are claimed for them.</dd></div></dl>
+    <dl class="facts"><div><dt>Phase 0</dt><dd>Architecture inspected: 32 blocks and 4,096-wide hidden states.</dd></div><div><dt>Phase 1</dt><dd>20k prompt pilot serialized, with a 100k template pool and fixed split assignments.</dd></div><div><dt>Phase 2</dt><dd>Original-model images, judged baseline, repeatability analysis and H100 efficiency measurements saved.</dd></div><div><dt>Phase 3</dt><dd>Layer diagnostics and identity-bypass image pilots; blocks 2–5 retained as learned-replacement candidates.</dd></div><div><dt>Phase 4</dt><dd>Residual bottleneck bridges implemented and insertion checked.</dd></div><div><dt>Phase 5</dt><dd>Four independent bridge-pretraining pilots completed; checkpoints and optimizer states saved.</dd></div><div><dt>Phase 6</dt><dd>Repeatable teacher contract verified; bridge and full-student healing pilots saved. The 120-update continuation was compared on an untouched 20-prompt fixed-input test, an 11-prompt five-way comparison, 16- and 45-prompt text reviews, and a blinded 129-prompt adherence test. <b>Complete: the pretrained bridge is selected</b>; update 120 (86 vs 83 clear passes, +2.3 points, 95% CI [0.0, 5.4]) missed the predeclared promotion bar.</dd></div><div><dt>Later phases</dt><dd>Finished-image benchmarking, progressive pruning, denoising-step distillation and optional quantization remain planned. No results are claimed for them.</dd></div></dl>
     <h3>Reproducibility and updates</h3><p class="summary">Each executable notebook step has a method description and a plain-language explanation of its result. Targets, raw outputs, metrics, selected weights, optimizer state and manifests are serialized locally, with expensive experiment artifacts backed up remotely. Matching saved steps reuse their results; changed inputs stop rather than silently overwrite the record.</p>
     <ul class="get"><li><a class="primary" href="results.json">Download the measurements<small>JSON · exact values and source SHA-256 hashes</small></a></li><li><a href="https://github.com/josejuanmartinez/nihonga">Research repository ↗<small>Phase notebooks and original plan</small></a></li><li><a href="https://github.com/Neopolita/niwaki-page/tree/main/nihonga">Page source ↗<small>Public research record</small></a></li><li><a href="healing.svg">Earlier bridge + LoRA graph<small>Standalone SVG · diagnostic ablation</small></a></li></ul>
     <p class="note">This page is a dated snapshot of saved experiments, not a live training dashboard. Its refresh script reads selected local summaries and copies existing comparison images; it runs no models and publishes no weights, caches or credentials. Every plotted value is available in the downloadable record.</p>
   </div></section>
   <section id="status" aria-labelledby="h-status"><div class="wrap">
-    <p class="eyebrow">Current result · development pilot</p><h2 id="h-status">Update 120 improved one tracked poster; broader quality remains open.</h2>
-    <p class="summary">Replacing original block 5 with a pretrained bottleneck bridge reduced mean velocity error from <b>6.406% to 5.518%</b> on the original 10 prompts. The continued full-student run reached update 180. On 20 untouched test prompts, update 120 had the lowest mean velocity error, <b>5.398%</b> against <b>5.439%</b> pretrained. Update 120 fixed the tracked CRIMSON HARBOR poster title, but tied the pretrained bridge on clear full-text passes in both the 16-prompt pilot (13 each) and the 45-prompt validation review (41 each). Update 120 is an experimental candidate; the pretrained bridge remains the current selected image model.</p>
+    <p class="eyebrow">Current result · development pilot</p><h2 id="h-status">Phase 6 complete: the pretrained bridge stays.</h2>
+    <p class="summary">Replacing original block 5 with a pretrained bottleneck bridge reduced mean velocity error from <b>6.406% to 5.518%</b> on the original 10 prompts. The continued full-student run reached update 180. On 20 untouched test prompts, update 120 had the lowest mean velocity error, <b>5.398%</b> against <b>5.439%</b> pretrained. Update 120 fixed the tracked CRIMSON HARBOR poster title, but tied the pretrained bridge on clear full-text passes in both the 16-prompt pilot (13 each) and the 45-prompt validation review (41 each). In the deciding blinded test on 129 fresh alignment prompts, it passed 86 versus 83: 3 wins and 0 losses, a +2.3-point gain with a 95% CI of [0.0, 5.4], below the predeclared +5-point bar. <b>The pretrained bridge is the selected Phase 6 model</b>; <a href="#checkpoint-decision">see the decision evidence</a>.</p>
     <ul class="figures"><li><span class="n">31 <small>+ 1</small></span><span class="c">surviving transformer blocks plus one bridge, from 32 original blocks</span></li><li><span class="n">5.518<small>%</small></span><span class="c">mean fixed-input validation velocity error for the selected bridge</span></li><li><span class="n">13.86<small>%</small></span><span class="c">relative error reduction against skipping block 5</span></li><li><span class="n">90 <small>/ 90</small></span><span class="c">teacher replay predictions exactly match the verified references</span></li></ul>
     <p class="note">The validation set is 10 prompts at three denoising stages: 30 comparisons, not 30 independent prompts. It has also been used for checkpoint and candidate selection. These numbers measure predictions on saved teacher inputs, rather than completed images or independent test generalization.</p>
   </div></section>
@@ -491,4 +603,4 @@ body=f'''<main id="main">
  <script src="text-qa-viewer.js" defer></script>
 '''
 (out/'index.html').write_text(head+body+footer,encoding='utf-8')
-print('Wrote Nihonga documentation, measurement snapshot, vector graph and five saved galleries.')
+print('Wrote Nihonga documentation, measurement snapshot, vector graph, galleries and the Phase 6 decision evidence.')

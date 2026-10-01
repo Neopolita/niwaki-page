@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-01",
-  "scope": "Development pilots; a 20-prompt untouched fixed-input test is complete, but no independent image-quality benchmark.",
+  "scope": "Development pilots. Phase 6 closed with a blinded 129-prompt paired prompt-adherence test that kept the pretrained bridge; no independent image-quality benchmark yet.",
   "dataset": {
     "phase": "Phase 1 — Build the Prompt Dataset",
     "pilot_size": 20000,
@@ -36641,6 +36641,1666 @@
     },
     "scope": "All 45 previously unused validation text prompts at one seed each; model-blind first-pass visual scoring; uncertain cases preserved"
   },
+  "phase6_checkpoint_decision": {
+    "prompt_count": 129,
+    "image_count": 258,
+    "optimizer_updates": 0,
+    "counts": {
+      "pretrained": {
+        "fail": 40,
+        "pass": 83,
+        "uncertain": 6
+      },
+      "update120": {
+        "fail": 37,
+        "pass": 86,
+        "uncertain": 6
+      }
+    },
+    "groups": {
+      "counting": {
+        "pretrained": {
+          "pass": 16,
+          "fail": 18,
+          "uncertain": 1
+        },
+        "update120": {
+          "pass": 17,
+          "fail": 16,
+          "uncertain": 2
+        }
+      },
+      "spatial_relation": {
+        "pretrained": {
+          "fail": 11,
+          "pass": 21,
+          "uncertain": 2
+        },
+        "update120": {
+          "pass": 22,
+          "fail": 10,
+          "uncertain": 2
+        }
+      },
+      "colors": {
+        "pretrained": {
+          "pass": 26,
+          "uncertain": 2,
+          "fail": 2
+        },
+        "update120": {
+          "pass": 26,
+          "uncertain": 1,
+          "fail": 3
+        }
+      },
+      "multiple_objects": {
+        "pretrained": {
+          "fail": 9,
+          "pass": 20,
+          "uncertain": 1
+        },
+        "update120": {
+          "fail": 8,
+          "pass": 21,
+          "uncertain": 1
+        }
+      }
+    },
+    "paired": {
+      "update120_clear_pass_wins": 3,
+      "pretrained_clear_pass_wins": 0,
+      "same_clear_pass_status": 126,
+      "pairs_with_uncertain": 7,
+      "clear_pass_gain_fraction": 0.023255813953488372,
+      "paired_bootstrap_95pct": [
+        0.0,
+        0.05426356589147287
+      ],
+      "bootstrap_replicates": 20000
+    },
+    "text_no_clear_loss": true,
+    "decision": {
+      "selected_model": "pretrained",
+      "promote_update120": false,
+      "rule": "Promote update120 only if its paired clear-pass gain is at least 5 percentage points and a two-sided 95% paired bootstrap confidence interval excludes zero; otherwise retain pretrained. Existing text QA must show no clear loss."
+    },
+    "scope": "Fresh validation alignment prompts, one saved seed each; model-blind AI visual question review; one reviewer; no training",
+    "evidence": [
+      {
+        "test": "Untouched fixed-input velocity test",
+        "size": "20 prompts x 3 stages = 60 comparisons",
+        "metric": "mean velocity relative L2 vs teacher (lower is better)",
+        "pretrained": "5.439%",
+        "update120": "5.398%",
+        "paired": "update 120 lower on 46/60",
+        "reading": "Consistent but very small numerical gain (0.04 points; 0.7% relative)."
+      },
+      {
+        "test": "Fresh text pilot",
+        "size": "16 prompts, 64 images",
+        "metric": "every requested phrase readable (clear passes)",
+        "pretrained": "13",
+        "update120": "13",
+        "paired": "0 clear wins / 0 clear losses for update 120",
+        "reading": "Tie; update 120 restored one title but that prompt stays uncertain."
+      },
+      {
+        "test": "All remaining validation text prompts",
+        "size": "45 prompts, 180 images, blind",
+        "metric": "every requested phrase readable (clear passes)",
+        "pretrained": "41",
+        "update120": "41",
+        "paired": "0 wins / 0 losses; same status on 44",
+        "reading": "Exact tie."
+      },
+      {
+        "test": "Fresh alignment prompts (decision test)",
+        "size": "129 prompts, 258 images, blind",
+        "metric": "category question fully met (clear passes)",
+        "pretrained": "83",
+        "update120": "86",
+        "paired": "3 wins / 0 losses; same status on 126",
+        "reading": "+2.3 points, 95% CI [0.0, 5.4]; below the 5-point promotion bar."
+      }
+    ],
+    "rule_checks": [
+      {
+        "check": "Paired clear-pass gain >= 5 points",
+        "value": "+2.3 points",
+        "met": false
+      },
+      {
+        "check": "95% paired bootstrap interval excludes zero",
+        "value": "[0.0, 5.4]",
+        "met": false
+      },
+      {
+        "check": "No clear loss on the 45 text prompts",
+        "value": "0 losses",
+        "met": true
+      }
+    ],
+    "examples": [
+      {
+        "source_id": "p1-0c99a4e9e487",
+        "kind": "update120_win",
+        "title": "Update 120 win: hidden giraffe",
+        "note": "Update 120 places the giraffe's neck behind the mug. The pretrained bridge draws the giraffe beside the mug, so it is not partially hidden.",
+        "prompt": "A giraffe partially hidden behind a coffee mug, stylized 3D",
+        "subdimension": "spatial_relation",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-2f254870e71a",
+        "kind": "update120_win",
+        "title": "Update 120 win: four octopuses",
+        "note": "Update 120 shows four octopuses. The pretrained bridge adds a fifth, smaller octopus at the front.",
+        "prompt": "A candid photograph of four octopuses on a rocky hillside, high dynamic range.",
+        "subdimension": "counting",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-79d1abf1854a",
+        "kind": "update120_win",
+        "title": "Update 120 win: missing candle restored",
+        "note": "The pretrained bridge leaves out the requested candle. Update 120 includes all five objects.",
+        "prompt": "A digital illustration of a candle, an apple, a backpack, a brown potted cactus and an orange cherry on a white studio backdrop, soft shadows.",
+        "subdimension": "multiple_objects",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-885aa50e2805",
+        "kind": "uncertain_difference",
+        "title": "Not a clear win: seven umbrellas",
+        "note": "The pretrained bridge shows six umbrellas (fail). Update 120 has seven or eight overlapping umbrellas, which cannot be counted confidently (uncertain), so this is not counted as a win.",
+        "prompt": "Create a detailed image of seven umbrellas arranged on a lush grassy lawn, captured with high dynamic range. Style: claymation, handmade clay figures.",
+        "subdimension": "counting",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-c960b5387a4c",
+        "kind": "uncertain_difference",
+        "title": "The one case that leans toward pretrained",
+        "note": "Prompt: a red lantern and a saffron-colored apple. Update 120 draws a lamp-like shade instead of a lantern (fail). The pretrained bridge draws a lantern, but its apple color is ambiguous (uncertain).",
+        "prompt": "一个红色灯笼和一个藏红花色苹果放在大理石台面上，丰富的色彩，数字插画风格，简洁线条",
+        "subdimension": "colors",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-a706ef27d981",
+        "kind": "shared_failure",
+        "title": "Shared failure: eight deer",
+        "note": "Both models draw more than eight deer. Counting errors like this are shared by both checkpoints, so healing did not fix them.",
+        "prompt": "A stylized 3D render of eight deer in a grassy meadow. Sharp focus. Stylized 3D, clay-like materials.",
+        "subdimension": "counting",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-c022b2c076da",
+        "kind": "shared_failure",
+        "title": "Shared failure: pear underneath a dog",
+        "note": "Both models put the pear on top of the dog instead of under it. The relation error is identical in both images.",
+        "prompt": "A stylized 3D render of an indigo pear underneath a dog, and a purple turtle hovering above a dog. Crisp details. Stylized 3D, clay-like materials.",
+        "subdimension": "spatial_relation",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-fd180db9136c",
+        "kind": "typical_tie",
+        "title": "Typical tie: near-identical images",
+        "note": "Most of the 126 tied prompts look like this: the same composition, with small differences in detail, and both pass.",
+        "prompt": "An orange sheep right next to a blue fox, DSLR photo",
+        "subdimension": "spatial_relation",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      }
+    ],
+    "per_prompt": [
+      {
+        "source_id": "p1-021a3d99464e",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A candid photograph of a tomato, a scarf and an orange in a greenhouse.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-02da40765f31",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Two coffee mugs on a stone ledge, DSLR photo",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-05a5b4844ca8",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A pink donut resting on a plain green background, crafted in claymation style with smooth, textured surfaces and subtle lighting effects.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-0b5e2d9247dd",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 3D render of a toy robot, an ivory egg, a pink orange, a toy car and a mushroom in a sunlit meadow. Highly detailed. 3D render, soft global illumination.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-0c99a4e9e487",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A giraffe partially hidden behind a coffee mug, stylized 3D",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-0fbe4269ee90",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A flamingo and a chess piece in a busy city street, stylized 3D",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-12fc55607a46",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A cherry in front of a wolf, 3D render",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-13a010a29d6b",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A digital illustration of four paintbrushes on a sandy beach.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-160567f53922",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 35mm film photograph of a potted cactus, a blue horse, a paintbrush and a black apple on a stone ledge, soft shadows.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-16814dfaf8b3",
+        "subdimension": "spatial_relation",
+        "language": "zh",
+        "prompt": "一只考拉在柠檬下，数字绘画，油画风格",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-17d01c85087d",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A photorealistic photograph of six magenta coins on a marble countertop, natural colors.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-19e3e694998c",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A photorealistic photograph of twelve snails on a snowy field. Natural colors. Photorealistic, professional photography.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-1a417b6b5e0f",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A digital painting of a bell with green and black stripes next to an ivory potted cactus. Sharp focus. Digital painting, painterly.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-1b70508ffda7",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A watercolor painting of a mint green cherry and a silver globe on a rustic shelf, soft shadows.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "uncertain",
+          "update120": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-1ff0c06e4d45",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A flat vector illustration of a crab directly below a sunflower, and an orange spoon in front of a sunflower, natural colors.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-208d97f93b13",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A brown cupcake in watercolor style",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-225675420c39",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "An oil painting of seven orange strawberries on snowy ground, rich colors.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-25dc97e0de76",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A graphite pencil sketch of a black snow globe sitting on a plain yellow background, featuring detailed cross-hatching to create texture and depth.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-29d0703cc9e6",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Show eight zebras on a riverbank, crisp details. Style: graphite pencil sketch, cross-hatching.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-2df84e5f0aa6",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A candid photograph of a wolf, a maroon backpack, a crab and a teal teddy bear in a subway station, rich colors.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-2f254870e71a",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A candid photograph of four octopuses on a rocky hillside, high dynamic range.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-2fa5fe695687",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A feather underneath a turtle, watercolor",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-32d162396e4a",
+        "subdimension": "spatial_relation",
+        "language": "zh",
+        "prompt": "一只羊和一只灰色蜗牛自然颜色的写实照片，两者紧挨着。",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "uncertain",
+          "pretrained": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-348049160148",
+        "subdimension": "spatial_relation",
+        "language": "zh",
+        "prompt": "渲染一个咖啡杯放在骆驼上，清晰的细节。风格：水彩，柔和的渐变，纸张纹理。",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-35258a6fe9b9",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "An oil painting of exactly two koalas and five butterflies in a sunlit garden. Natural colors. Oil on canvas, visible brushstrokes.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-361454af8cbd",
+        "subdimension": "multiple_objects",
+        "language": "zh",
+        "prompt": "一个扁平矢量插画，展示一本书、一个蓝色番茄、一个粉色香蕉和一个粉色棋子放在草地上。自然色彩。扁平矢量艺术，大胆简洁的形状。",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-3a32d2b118f4",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Two cats playing in a lush grassy meadow, candid photo with natural lighting and soft textures",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-3a45aa4fbdce",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 35mm film photograph of a blue hat, a silver feather, a white desk lamp and a purple scarf in a greenhouse. Rich colors. 35mm film photo, film grain.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-3ea5a30dc8a2",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A watercolor painting featuring an orange lollipop resting on a plain red background, rendered in natural, soft colors.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-3eaca196926c",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A stylized 3D render of a swan inside a paper bag, sharp focus.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-3f8228ebe75f",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A 3D render of a green fox right next to a mint green tiger. Sharp focus. 3D render, soft global illumination.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-46630dfe90b3",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A photorealistic photograph of a cyan coffee mug on top of an ivory book, highly detailed.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-476af9f44f99",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "a gray desk lamp, a potted cactus, an egg, a pear and a sunflower on a rainy sidewalk, sharp focus, graphite pencil sketch, cross-hatching",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-481b4317a17d",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "Render a mushroom to the right of a rose. Style: anime style, cel shading.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-48a571659728",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A detailed 3D illustration featuring a balloon, a red feather, an orange toy robot, a teal chess piece, and a gold book arranged on a white studio background. Highly detailed. Stylized 3D rendering with clay-like textures and materials.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-494f50be65c1",
+        "subdimension": "multiple_objects",
+        "language": "zh",
+        "prompt": "数字绘画风格，一个空房间中有一只羊、一只水獭、一只米色山羊、一只金狐狸和一个柠檬，丰富色彩，画风具有笔触感。\"羊\" \"水獭\" \"米色山羊\" \"金狐狸\" \"柠檬\"",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-4fc82f0c52de",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "Make a picture of a candle, a pencil and a book in a cozy café, high dynamic range. Style: digital painting, painterly.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-51b03a95dd88",
+        "subdimension": "counting",
+        "language": "zh",
+        "prompt": "一张高动态范围的写实照片，八个黑色咖啡杯放在公园长椅上，写实风格，专业摄影。",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-53819a9de4cc",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Two swans in a rural setting, 35mm film photograph",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-5679956e6a0b",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "An otter to the right of an orange desk lamp, candid photo",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-57e8f2b9e2c3",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A digital illustration of a burgundy fox, a teal pocket watch, a red crab and a flamingo on a glass table. Sharp focus. Digital illustration, clean lines.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-5acc00bc9433",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A photorealistic image of a white paintbrush and a navy blue orange placed on a sandy beach, sharp and detailed.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-5ba4a6d3fc87",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Two purple apples on a marble countertop, highly detailed. Style: stylized 3D with clay-like materials.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-5cb15c25d610",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Display two globes on a picnic blanket. Style: candid photograph, soft natural lighting.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-5f79935fad9d",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A 35mm film photo of four purple coffee mugs on a rustic shelf. Film grain, crisp details.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-6126a35add39",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "a teal sneaker, a beige seashell, a green banana and a snow globe in a sunlit meadow, clean composition, 35mm film photo, film grain",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-647aff9cae44",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 35mm film photograph of a gray cat, a teal teacup, a lavender desk lamp, an indigo lantern, a hedgehog and a backpack at a harbor at dawn. Highly detailed. 35mm film photo, film grain.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-6bdab6cbaae4",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A high-resolution DSLR photo of a chess piece, a bell and a donut in a cozy café, soft shadows.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-6e8e326086e6",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A digital painting of exactly two scarfs and five chess pieces on a glass table. Natural colors. Digital painting, painterly.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-6f457706ee9c",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "a turquoise strawberry on top of a red duck, clean composition, watercolor, soft washes, paper texture",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-7283c4cd2748",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A panda on top of a balloon, 35mm film photo",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-72c07e619246",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Three brown strawberries in an empty room, classical oil painting",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-736229a39d54",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A 35mm film shot of a brown tennis ball on a plain pink background, clean composition.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-75d11b3c691a",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "一个3D渲染的黄色茶壶、一个品红橡胶鸭子和一个猩红雪球在空房间中，柔和阴影。3D渲染，柔和全局光照。",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-774fc52e997a",
+        "subdimension": "counting",
+        "language": "zh",
+        "prompt": "一幅数字绘画，七个画笔放在白色工作室背景上，高度详细。",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-78619f2f97ea",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A squirrel underneath a crow, stylized 3D",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-79d1abf1854a",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A digital illustration of a candle, an apple, a backpack, a brown potted cactus and an orange cherry on a white studio backdrop, soft shadows.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-7e1e0f098671",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A 3D render of seven squirrels on a snowy field. Soft shadows. 3D render, soft global illumination.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-8131406fafec",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "Generate a 3D render of a hat and a lion in a small fishing village with soft global illumination.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-84b9834a32f6",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A sock, a hat and a pocket watch in a busy city street, 35mm film photo",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-87689caaaea3",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "橄榄绿色袜子、青色茶壶和白色苹果放在玻璃桌上的铅笔素描，柔和阴影，炭笔素描，交叉排线。",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-879faf36ef0a",
+        "subdimension": "counting",
+        "language": "zh",
+        "prompt": "一张抓拍的照片，五枚紫色棋子放在桌子旁的窗边，清晰的细节。",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-885aa50e2805",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Create a detailed image of seven umbrellas arranged on a lush grassy lawn, captured with high dynamic range. Style: claymation, handmade clay figures.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-893d2b2343c1",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A digital painting of a yellow frog to the right of a brown seashell, sharp focus.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-895f1b8c42ae",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A flat vector illustration of a cherry hovering above a crimson hedgehog, sharp focus.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-8c4343b18bdd",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "水彩画风格，象牙色花瓶和一个红色苹果放在公园长椅上，细节清晰。\"",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-8cfbaef7b3dd",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A watercolor painting of a single sneaker on a marble countertop.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-8e50247e3318",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "An octopus and a rubber duck in a quiet forest, watercolor",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9318639fe814",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Five pink pencils on a marble countertop, 3D render",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-943328e52ac5",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 35mm film photograph of a pear, a maroon bear, a lavender pine cone and a brown scarf on a rooftop at dusk, highly detailed.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-945c492e67f7",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "Render a cherry, a glass bottle and a cupcake in an empty room. Style: 35mm film photo, film grain.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-976fd6e227ad",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A high-resolution DSLR photograph featuring a maroon lantern, a white candle, and a mint green toy car arranged on a rustic shelf. Sharp focus. DSLR photo, high resolution.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-97cbe74d68d4",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A candid photograph of a turtle right next to a frog, and a beige hat to the right of a frog. Soft shadows. Candid photo, natural light.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-98ba0869d2a5",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "An anime-style illustration of a brown cat partially hidden behind a lollipop, and a navy blue coffee mug directly below a lollipop. Sharp focus. Anime style, cel shading.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9af0f4658cc1",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "an orange cupcake, candid photo, natural light",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9b73dee7067b",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Show four globes on a rustic shelf, high dynamic range. Style: 3D render, soft global illumination.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9cad7eff4723",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A flat vector illustration featuring a purple zebra, a silver rubber duck, a rubber boot, and an ivory globe arranged in a sunlit meadow. High dynamic range. Bold, simple shapes with flat vector art style.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9d5ab4175bc3",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Three cherries arranged on a wooden kitchen table, stylized 3D rendering with detailed textures and vibrant colors",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9e601065c649",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A pink globe on a plain white background, graphite pencil sketch",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9f7dcd798e2e",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A watercolor illustration featuring a mushroom perched atop a donut.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-9fc7b3c8d8c0",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A 3D render of an orange violin and an ivory sock on a red tablecloth. Clean composition. 3D render, soft global illumination.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-a1c04e9184c0",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A stylized 3D render of a cherry, a balloon, a silver snow globe, a gray lantern, a mint green headphone set and an orange violin in a night market. High dynamic range. Stylized 3D, clay-like materials.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-a50e79e52c51",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A flat vector illustration of a blue wine glass and a lime green tomato on a wooden kitchen table, high dynamic range.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-a706ef27d981",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A stylized 3D render of eight deer in a grassy meadow. Sharp focus. Stylized 3D, clay-like materials.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-a70da1c684c5",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "Create an image of a mint green flamingo inside a fishbowl, which is in front of an olive green koala, soft shadows. Style: DSLR photo, high resolution.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "uncertain",
+          "update120": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-a9c7d38ad735",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A photorealistic image featuring an alarm clock, a cherry, and a headphone set arranged on a white studio backdrop. Highly detailed and professionally captured, with lifelike textures and precise lighting.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-ab2a706c5cc0",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A candid photograph of a paper crane, a green rubber duck, a maroon cupcake and a yellow glass bottle in a busy city street. High dynamic range. Candid photo, natural light.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "uncertain",
+          "update120": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-aca4b47a0e89",
+        "subdimension": "spatial_relation",
+        "language": "zh",
+        "prompt": "一幅油画，前景是蓝色蜡烛，位于棕色骆驼前方，右侧是紫色螃蟹，棕色骆驼旁边，柔和的阴影。",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-afebdf34163f",
+        "subdimension": "spatial_relation",
+        "language": "zh",
+        "prompt": "一条围巾直接位于棕色花瓶下方，清晰对焦。数字插画，线条干净。",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-b0f90120c791",
+        "subdimension": "multiple_objects",
+        "language": "zh",
+        "prompt": "一个网球和一个甜甜圈放在红色桌布上， candid 拍摄照片",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-b177cb38cfed",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A highly detailed photorealistic image featuring a vibrant lime green sock and a bright magenta wooden block placed on a soft, textured picnic blanket, showcasing rich and saturated colors.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-b267a040b663",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "a seashell between a green violin and an orange koala, clean composition, stylized 3D, clay-like materials",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-ba26868d9f65",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Six stylized 3D hedgehogs lounging on a sandy beach, each with distinct fur textures and subtle color variations",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-bbea1c023df4",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A high-resolution DSLR photo of a lavender rubber boot, a magenta apple, a silver banana and a coral donut on a park bench. Highly detailed. DSLR photo, high resolution.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-bbead476386c",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A candid shot of five green tennis balls arranged on a polished marble countertop, casting soft, diffused shadows across the surface.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-bef74dc9eeb6",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "An anime-style illustration of a black balloon, a mint green potted cactus and a crimson pine cone on a red tablecloth. Rich colors. Anime style, cel shading.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-bf7cb713addd",
+        "subdimension": "counting",
+        "language": "zh",
+        "prompt": "四支品红铅笔放在红色桌布上，锐利对焦。风格：3D渲染，柔和全局光照。",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-c022b2c076da",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A stylized 3D render of an indigo pear underneath a dog, and a purple turtle hovering above a dog. Crisp details. Stylized 3D, clay-like materials.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-c049c41d2d54",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A camel underneath a sneaker, candid photo",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-c29a5786dfb5",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "An oil painting of a seashell directly below a donut, natural colors.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-c34cb68895af",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "一张35毫米胶片照片，一朵带有黄色和红色条纹的玫瑰旁边有一只酒红色橡胶鸭子，清晰细节，35毫米胶片摄影，胶片颗粒效果。\"35mm film photograph\" \"burgundy rubber duck\"",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-c8881e2e3fb1",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A 3D render of seven lions in a farmyard. Highly detailed. 3D render, soft global illumination.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-c960b5387a4c",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "一个红色灯笼和一个藏红花色苹果放在大理石台面上，丰富的色彩，数字插画风格，简洁线条",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-cb3f74615ef9",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "Two gray baseball caps on a concrete floor, graphite pencil sketch",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-cbfe09f86b0f",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "five bells on a glass table, clean composition, flat vector art, bold simple shapes",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-ce5b8c47e620",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A watercolor illustration featuring a gray spoon resting on a simple green background.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-cf0f852c61dc",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A single feather lying on snowy ground, captured in a 35mm film photo with rich texture and grainy detail",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-d8aa46f6a73a",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A high-resolution DSLR photo of a violin directly below an elephant. Crisp details. DSLR photo, high resolution.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-daad903be239",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "A candid photograph of twelve teal pumpkins on a concrete floor. Sharp focus. Candid photo, natural light.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-dd4f19c9e3b1",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "Render a vibrant mustard yellow panda sitting beside a luxurious gold scarf draped on a crisp picnic blanket, arranged with a clean and balanced composition. Style: 35mm film photo with visible film grain.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-dd7be2740719",
+        "subdimension": "colors",
+        "language": "zh",
+        "prompt": "一个3D渲染的品红海贝壳和黄色地球仪放在石头台面上，柔和的阴影。",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-e0f86ec59356",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A high-resolution DSLR photo of a mint green sheep right next to a navy blue dog, and a squirrel on top of a navy blue dog, sharp focus.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-e2f15c7e431a",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A digital illustration of a cyan scarf and a mustard yellow pocket watch in an empty room. Soft shadows. Clean lines.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-e5b414feb4c1",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A detailed mushroom, a small toy robot, and a worn backpack arranged on a weathered rustic shelf, digital illustration",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-e918c7a75376",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "a teddy bear on top of a red seashell, soft shadows, candid photo, natural light",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-eb0ec04828b3",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "An anime-style illustration featuring a vivid lime green paper crane, a deep indigo desk lamp, and a soft lavender rubber boot arranged on a picnic blanket. High dynamic range with anime style and cel shading.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-eb113defdcd6",
+        "subdimension": "counting",
+        "language": "en",
+        "prompt": "An anime-style illustration of exactly four sunflowers and four toy robots on a picnic blanket. Crisp details. Anime style, cel shading.",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-ec3c2f033a55",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "Generate an image of a koala inside a ceramic bowl, which is on top of a magenta spoon, clean composition. Style: candid photo, natural light.",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-ed712e9790fe",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "a maroon banana and a mustard yellow candle in an empty room, high dynamic range, watercolor, soft washes, paper texture",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-edb884c5e8a4",
+        "subdimension": "counting",
+        "language": "zh",
+        "prompt": "一个风格化3D渲染的八颗苹果放在公园长椅上，清晰对焦，风格化3D，黏土质感材料",
+        "question": "Are the requested number(s) of each named object visible?",
+        "scores": {
+          "update120": "uncertain",
+          "pretrained": "uncertain"
+        }
+      },
+      {
+        "source_id": "p1-ef150c5d83ad",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A 35mm film photograph featuring an alarm clock and an egg set in a night market scene",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "fail",
+          "update120": "fail"
+        }
+      },
+      {
+        "source_id": "p1-f0e803304fbb",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A green backpack, 3D render",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-f42b7b646e1e",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A backpack, a lemon, and a book placed on a rooftop during dusk, candid photograph",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-f4b6718b3ab6",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "A lantern inside a glass jar, oil on canvas",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "fail",
+          "pretrained": "fail"
+        }
+      },
+      {
+        "source_id": "p1-f4da070d23c5",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "A stylized 3D illustration featuring a lavender chess piece, a maroon violin, a teal glass bottle, and a silver umbrella arranged on a stone ledge. Sharp details. Stylized 3D, clay-like textures.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-fd180db9136c",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "An orange sheep right next to a blue fox, DSLR photo",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-fdbf0b0f82f5",
+        "subdimension": "multiple_objects",
+        "language": "en",
+        "prompt": "A flat vector illustration of a crimson strawberry, an orange cupcake, a crow, a squirrel and an indigo octopus on a rooftop at dusk, rich colors.",
+        "question": "Are all requested objects visible together?",
+        "scores": {
+          "pretrained": "pass",
+          "update120": "pass"
+        }
+      },
+      {
+        "source_id": "p1-fe804da7db90",
+        "subdimension": "colors",
+        "language": "en",
+        "prompt": "Make a picture of a brown tea kettle on a plain black background, clean composition. Style: candid photo, natural light.",
+        "question": "Are the named objects visible with the requested colors assigned correctly?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      },
+      {
+        "source_id": "p1-feea467551a7",
+        "subdimension": "spatial_relation",
+        "language": "en",
+        "prompt": "a pink spoon in front of an orange pocket watch, rich colors, stylized 3D, clay-like materials",
+        "question": "Are all named objects visible in the requested relative positions?",
+        "scores": {
+          "update120": "pass",
+          "pretrained": "pass"
+        }
+      }
+    ]
+  },
   "source_sha256": {
     "data/phase1/stats.json": "120806fe75529f4d8e767bf7ca8a35925119d6f5443c24fbe23209f21aaf0f66",
     "data/phase1/config.json": "3dc7192fbb0a091f98718ee15628fbd6840f567b4b15e2c2ca4c9effbc41814a",
@@ -36677,6 +38337,9 @@
     "data/phase6/full_student_continuation/text_qa_validation_v1/summary.json": "e82a25f7e4ec99cc701a9fcde3856b3b09bd7dab4ef7a7d15970da9d3c6ebe34",
     "data/phase6/full_student_continuation/text_qa_validation_v1/review_summary.json": "8ebf46f4f43f71283441c155982cdf18e4bf2a0cde7c8826646f9bb3e0032597",
     "data/phase6/full_student_continuation/text_qa_validation_v1/labeled_sheets.json": "67cfe399229a8ec0d40433f7c1f3375d2699bf2b68bf3e54548f5bfc3e3ab535",
+    "data/phase6/full_student_continuation/alignment_qa_v1/review_summary.json": "301540f4198ccd4abb915cb2bc2e97057132730b1ffe912fdd3a10b88f15d7cb",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_evidence.json": "390f53036279f61b95bd9d8c853dcd3f95aa65c7f5fdc303f4f07161660e4ac7",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_evidence_images.json": "ae0cb6b41ff119424de1315e1bf7defe6584ff570851d977cfbee86437151e17",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
@@ -36728,6 +38391,57 @@
     "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-teacher.png": "f3cf40952f2f245e9352c676bf492dabb4baf3b9b243a4e9e101120096bba18d",
     "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-pretrained.png": "8b36a7f7677190c1d8f15bf02364872f2f59c94335d92d82edb24c89a30df6aa",
     "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-update120.png": "ed14bf47442dad8161853707b1b9b5ac91b59a08181bbc2ffe2e04720b341f59",
-    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-update180.png": "e1bb0cd4dabca1f07e2755501467a34e1e58836dbaad20f32b9635e2c2483844"
+    "data/phase6/full_student_continuation/text_hypothesis_v1/p1-30b3b241cfaa-update180.png": "e1bb0cd4dabca1f07e2755501467a34e1e58836dbaad20f32b9635e2c2483844",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_01_p1-0c99a4e9e487.jpg": "5bd3abde6386c6fe38b0f0a795b5dd4a1760e8ee340c8b471cbe5b2bc07ebec1",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_02_p1-2f254870e71a.jpg": "1bafc4de04c6f332cfd78f85f1fbac01f64d9870684ccf5a7305cfd607fc5e41",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_03_p1-79d1abf1854a.jpg": "f71fcd90cea6b74933772d0f2f626258a02596178530fe27a9526f1503931ebf",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_04_p1-885aa50e2805.jpg": "8d818fcb6e11340d89fe142bfbc070fb034b2776752dc73f713166a718dc7f4d",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_05_p1-c960b5387a4c.jpg": "cc5ffca61c161bb6e00471ca155a12d68df13476fccd4ff997698c82c45b883e",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_06_p1-a706ef27d981.jpg": "9fa9ca639a3f77b4c5446af5458045444f11f40ac1a5c047c40c98c46e90f758",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_07_p1-c022b2c076da.jpg": "436f765d841bc6151be8d6d4a05ce7ccf1d88983ade5e324d70c71d58c750683",
+    "data/phase6/full_student_continuation/alignment_qa_v1/decision_examples/example_08_p1-fd180db9136c.jpg": "ab833c31cd7dbd386238327565a7a6d629abd5f4c4f9c3ae240751223d3cd620",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_01.jpg": "d72334f96385a28f2ddd05728bf661eb852bcee6fd9c99579efa47a037510484",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_02.jpg": "592c5fd102868422abd3194b63e7db9c60235f599afda682105532b61f3e1ecb",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_03.jpg": "b7016c1f376e2aa3089a7e6db79425bd865b58ce8a11de6854b221ceb0aa717e",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_04.jpg": "cb3124d5eb577c66e5d168199cd7b8c07f6aa0523f6aea12fded4a14f9c1abf9",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_05.jpg": "7770f3d15a764c7529fc3c485a10a791969c6063048925898a3d50ec122ccc82",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_06.jpg": "396030b1415e0a01e4836639b098b8d85650496a187446861b0471eff834fec0",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_07.jpg": "754c8c9316712e3187fd91ce55bf2c5b233eb4260e53351574b807558861d05d",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_08.jpg": "80c2f610f76ad3663555dc5b1c3fd9d160cae8604cf6e605fb8ec25c921d2f17",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_09.jpg": "9927911628fc2d6c7d9915c45405986221cd5e95169a2421e28e496e4a303b61",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_10.jpg": "f79c797c1eb377cbadb4a259a936ebf658e5611a9c2c4be5d0b57afd25a422c4",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_11.jpg": "2bb006f24501339f160a3b5c6f973adc8ae9aef956df1600b6db1ecab7c97c91",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_12.jpg": "c2849628d1f9df8f34719cd5e23166d0ccc5bf39f48c076ca61e61bc7b86419f",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_13.jpg": "df2d116969c7f0af7e0a46dffe755e2688224bc720bdbc9df90316979b5cf401",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_14.jpg": "4ca8ee9dcc58531891ca1746dd637eb26a315947bfc7136f794efa4d1fd96492",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_15.jpg": "2ff2e076c215661faae50a8d075adb8f35b1948245f02b67625054bfe2a110c9",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_16.jpg": "2e6fc8cc483c6b12abf8aec1dc87f791c8514aa993c6299dfe7a0d5f8181e04b",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_17.jpg": "3bc32475be770dcabfdb3852d65fd20c90e89b6145f0963f405b5e9bc0635e25",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_18.jpg": "f802168406a7ef7551cd47e99423d405e371e3480f21036c0f259db8aadfb035",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_19.jpg": "d8eba736d8a0962152e359747f3498f52844a5388896e0569029acc9761dbe73",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_20.jpg": "b46a5f0cbfe9c7f6b756669df5fda0002fea03a6da709c695db9c8cf1273d47c",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_21.jpg": "3b874e37efa6b621d1d748e3406ce6f24a89a62ae6f96269d658e832238a3a55",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_22.jpg": "029c00945d02f5f4f99cc4c5c2bb53e9fd489f21c7c560ae59e51b85e7d38bb1",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_23.jpg": "8a5f14e36c1af8100f602c94e6f8a6de9142a5600189a2bcb93528678790a2c6",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_24.jpg": "e1d37a7952288c345de70b474f083844ad69232a30132e8e6b01463057dd586c",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_25.jpg": "7eb243ed02e99ea5895c954a01c28b6c9574d80e6e2d6f8e02ebc232998621ac",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_26.jpg": "f9bb4ddc0e401ddce76df41e26f40a65f27636f48de38e5bffd0b6b93208871a",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_27.jpg": "4b46db9982698546dc837bb52936d471d55e6fabe06635dcef25e42c7864105e",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_28.jpg": "02629576ac1321aade344e67f9863fedd5a905c496da590102bbc6d4dc8e2605",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_29.jpg": "e10cadf6ab2bea9f8fa53e6c7cfb6a636eac419215c620a7f0445bc997dc9d5a",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_30.jpg": "9e77306a12873cf91f8a4e3f47942c875c1788312c0c664700822b007ff265d7",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_31.jpg": "1ab3358c19870d1714c04b4a8eafb175371d3965c5c44b16c9c2deec8199c8e3",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_32.jpg": "1cc94af1ff8b3fb44120cbdcbae56034e53a3959a87b2c89378a6488d256ac90",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_33.jpg": "bdb64e01d096b2c7a174d07b25d49c4ae1b1c7755404e094c7793d0f44e19571",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_34.jpg": "b87aed7deb1c21efe7550d3c4d1095203ad4aa62bc2c2b8542fa4637fc77db78",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_35.jpg": "02c79ed8e02927aa9202c394e81ef7c68fa741d3ec6d35750f5b239327e839fd",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_36.jpg": "04acf14f1156d4bf01cc2cdfc2cff623a8e38b7ab82727aaddce4f6befa680e2",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_37.jpg": "eeefc6278298e232b27ef0e8e9a941e1a2811f16430c890eab62de50ad853db2",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_38.jpg": "aa4cbfc51ba0853981323027cf0b64a0c4be143bd6573bb005e83fb24a8476b6",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_39.jpg": "5b7f18c148f0cf0aa7937cb3b37b03be156d27c434a0af4c2aadab1043832884",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_40.jpg": "d04e812d1fa5e7e73b4ed499616afba945785f4596fb2e60e3fae62f5d9c7aa4",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_41.jpg": "96ae6c02f3b96ed0df11240ed6d8db76ab7edb56c63540d080597f1f0df372fe",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_42.jpg": "f50f88d1a5dfaf712fbcac86027189d3069c96af7240982cd04e6fe65bbc5ea5",
+    "data/phase6/full_student_continuation/alignment_qa_v1/labeled_sheets/labeled_sheet_43.jpg": "cef899113f3c334b991fb1947f1eb41d71e85da9d9cb13c32a05d61762624793"
   }
 }
