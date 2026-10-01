@@ -22,6 +22,19 @@ table caption + thead th { vertical-align: top; }
 .comparison img { display: block; width: 100%; height: auto; }
 .comparison figcaption { margin-top: .65rem; font-size: 1.02rem; color: var(--ink-soft); max-width: 75ch; }
 .comparison figcaption b { font-weight: 500; color: var(--ink); }
+.text-qa-viewer { margin-top: 1.5rem; border-block: 1px solid var(--rule); padding-block: 1.25rem; }
+.text-qa-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.text-qa-controls[hidden] { display: none; }
+.text-qa-controls button, .text-qa-controls select { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--rule); border-radius: .2rem; padding: .4rem .6rem; }
+.text-qa-controls button { cursor: pointer; }
+.text-qa-controls button:disabled { cursor: default; opacity: .45; }
+.text-qa-controls label, .text-qa-controls span { font-size: .95rem; color: var(--ink-soft); }
+.text-qa-viewer .comparison { margin-top: 1rem; }
+.text-qa-viewer .comparison a { display: block; background: #f7f4ef; }
+.text-qa-viewer .comparison img { width: 100%; max-height: 65vh; object-fit: contain; }
+.text-qa-viewer details { margin-top: 1rem; font-size: .95rem; }
+.text-qa-viewer summary { cursor: pointer; text-decoration: underline; text-underline-offset: .18em; }
+.text-qa-viewer details p { display: flex; flex-wrap: wrap; gap: .25rem .8rem; }
 .paired-images { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
 @media (max-width: 680px) { .paired-images { grid-template-columns: 1fr; } }
 .healing-chart { margin-top: 2.5rem; }

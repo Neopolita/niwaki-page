@@ -296,14 +296,15 @@ for source_id in ('p1-9225ba4ccf76', 'p1-5962716b5dc8', 'p1-30b3b241cfaa'):
 public['source_sha256']=sources
 (out/'results.json').write_text(json.dumps(public, indent=2, ensure_ascii=False)+'\n',encoding='utf-8')
 
-text_qa_gallery = ''.join(
-    f'<figure class="comparison"><div style="overflow-x:auto"><a href="images/phase6-text-qa-{sheet["name"]}">'
-    f'<img loading="lazy" src="images/phase6-text-qa-{sheet["name"]}" '
-    f'alt="Text QA prompts {3*i+1} through {3*i+3}: teacher, pretrained bridge, update 120, update 180" '
-    f'style="max-width:none;width:1640px;height:auto"></a></div>'
-    f'<figcaption><b>Validation text prompts {3*i+1}-{3*i+3}</b> | open for full-size comparison</figcaption></figure>'
+text_qa_options = ''.join(
+    f'<option value="images/phase6-text-qa-{sheet["name"]}">Prompts {3*i+1}-{3*i+3}</option>'
     for i, sheet in enumerate(text_qa_sheets['sheets'])
 )
+text_qa_links = ' · '.join(
+    f'<a href="images/phase6-text-qa-{sheet["name"]}">{3*i+1}-{3*i+3}</a>'
+    for i, sheet in enumerate(text_qa_sheets['sheets'])
+)
+text_qa_first = 'images/phase6-text-qa-' + text_qa_sheets['sheets'][0]['name']
 
 template = (site/'saikei/index.html').read_text(encoding='utf-8')
 head=template[:template.index('<main>')].replace('<title>Saikei · Niwaki</title>','<title>Nihonga · Qwen Image compression research · Niwaki</title>')
@@ -330,7 +331,7 @@ body=f'''<main id="main">
     </picture>
   </figure>
   <div class="wrap lead solo nihonga-lead">
-    <p class="eyebrow">Research notebook | updated <time datetime="2026-09-30">30 September 2026</time></p>
+    <p class="eyebrow">Research notebook | updated <time datetime="2026-10-01">1 October 2026</time></p>
     <h1>Nihonga <span lang="ja">日本画</span></h1>
     <p>A smaller image model, with every cut measured.</p>
     <p>We are compressing Qwen-Image-2.1: identify transformer blocks that can be replaced, learn inexpensive bridges, and distill the original model’s behavior back into the student. This is our working research record, including results that did not work.</p>
@@ -465,8 +466,12 @@ body=f'''<main id="main">
     <p class="summary">To check whether update 120 consistently improves text, we rendered all <b>45 other unused validation prompts with explicit text</b>. The teacher, pretrained bridge, update 120, and update 180 produced 180 matched 40-step images at one fixed seed per prompt. A written rubric required every requested phrase to be readable. One AI visual reviewer scored anonymous A/B/C/D columns before revealing model identities; uncertain text was recorded separately. This step trained no weights.</p>
     {table(['Model','Clear full-text passes','Clear failures','Uncertain'],[[role, text_qa_review['counts'][role].get('pass',0),text_qa_review['counts'][role].get('fail',0),text_qa_review['counts'][role].get('uncertain',0)] for role in ('teacher','pretrained','update120','update180')],'45 matched prompts; each prompt counts once and passes only if all requested phrases are readable')}
     <p class="summary">The pretrained bridge and update 120 received <b>the same status on every prompt</b>: 41 clear passes, three failures, and one uncertain. Update 120 clearly beat update 180 on two posters, PAPER STATION and NORTHERN PARADE. The teacher had 43 clear passes. This broader qualitative check gives no general text-rendering advantage to update 120 over pretrained, despite its CRIMSON HARBOR recovery in the earlier image pilot.</p>
-    <p class="note">All four models garbled tiny Moonlight Motel print in one storefront and missed the Live in Berlin tagline on GOLDEN RIVER. Three student images spelled Fresh Bread Daily with an extra letter. The Electric Frontier flag lettering was too small to judge confidently in three student images. Literal text scoring also misses layout mistakes: one image has Live Music Tonight at the top but garbled lettering where the prompt requested it in sand. The 15 sheets below show every result, with model names and requested strings visible. One seed and one AI reviewer do not establish a population-level quality ranking; the separate internal test prompts remain unused.</p>
-    {text_qa_gallery}
+    <p class="note">All four models garbled tiny Moonlight Motel print in one storefront and missed the Live in Berlin tagline on GOLDEN RIVER. Three student images spelled Fresh Bread Daily with an extra letter. The Electric Frontier flag lettering was too small to judge confidently in three student images. Literal text scoring also misses layout mistakes: one image has Live Music Tonight at the top but garbled lettering where the prompt requested it in sand. The viewer below contains all 15 labeled sheets, three prompts per sheet. One seed and one AI reviewer do not establish a population-level quality ranking; the separate internal test prompts remain unused.</p>
+    <div class="text-qa-viewer" id="text-qa-gallery" aria-label="45 validation text prompt comparisons">
+      <div class="text-qa-controls" hidden><button type="button" id="text-qa-prev">Previous</button><label for="text-qa-select">View sheet</label><select id="text-qa-select">{text_qa_options}</select><button type="button" id="text-qa-next">Next</button><span id="text-qa-position" role="status" aria-live="polite">1 of 15</span></div>
+      <figure class="comparison"><a id="text-qa-full" href="{text_qa_first}"><img id="text-qa-image" loading="lazy" src="{text_qa_first}" alt="Text QA prompts 1 through 3: teacher, pretrained bridge, update 120, update 180"></a><figcaption>Open the current sheet for full-resolution lettering.</figcaption></figure>
+      <details><summary>Direct links to all 15 full-size sheets</summary><p>{text_qa_links}</p></details>
+    </div>
     <h3>Research decision</h3><p class="summary">Cumulative update 120 remains the strongest experimental checkpoint on the 20-prompt untouched fixed-input test and recovered the tracked CRIMSON HARBOR image. Two text-focused checks, covering 16 then 45 fresh prompts, did not show a clear full-text advantage over the pretrained bridge. The current selected image model remains the pretrained bridge until a broader blinded image-quality benchmark supports promotion. Few-step speed distillation remains a separate experiment.</p>
   </div></section>
   <section id="record" aria-labelledby="h-record"><div class="wrap"><p class="eyebrow">The research record</p><h2 id="h-record">What is complete, what remains open</h2>
@@ -481,7 +486,8 @@ body=f'''<main id="main">
     <ul class="figures"><li><span class="n">31 <small>+ 1</small></span><span class="c">surviving transformer blocks plus one bridge, from 32 original blocks</span></li><li><span class="n">5.518<small>%</small></span><span class="c">mean fixed-input validation velocity error for the selected bridge</span></li><li><span class="n">13.86<small>%</small></span><span class="c">relative error reduction against skipping block 5</span></li><li><span class="n">90 <small>/ 90</small></span><span class="c">teacher replay predictions exactly match the verified references</span></li></ul>
     <p class="note">The validation set is 10 prompts at three denoising stages: 30 comparisons, not 30 independent prompts. It has also been used for checkpoint and candidate selection. These numbers measure predictions on saved teacher inputs, rather than completed images or independent test generalization.</p>
   </div></section>
-</main>
+ </main>
+ <script src="text-qa-viewer.js" defer></script>
 '''
 (out/'index.html').write_text(head+body+footer,encoding='utf-8')
 print('Wrote Nihonga documentation, measurement snapshot, vector graph and five saved galleries.')
