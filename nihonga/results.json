@@ -36861,6 +36861,366 @@
     "gate": "mean error at most 1.0 point above the one-block student and at least 50% of the skip penalty removed",
     "conclusion": "No bridge-only variant passes; the 28-block student needs healing."
   },
+  "phase7_healing_28_blocks": {
+    "student": "28 blocks (2-5 removed), rank-1024 region bridge, full-student healing",
+    "single_moment_lr_1e-5": [
+      {
+        "step": 0,
+        "mean_relative_l2": 0.16632140688598157,
+        "gate_mean_relative_l2": 0.1773109725366036
+      },
+      {
+        "step": 60,
+        "mean_relative_l2": 0.18260346464812754,
+        "gate_mean_relative_l2": 0.1813534028828144
+      },
+      {
+        "step": 120,
+        "mean_relative_l2": 0.21257384645442168,
+        "gate_mean_relative_l2": 0.2164198548843463
+      },
+      {
+        "step": 180,
+        "mean_relative_l2": 0.18257953472435473,
+        "gate_mean_relative_l2": 0.20079525833328565
+      }
+    ],
+    "learning_rate_grid": {
+      "lr_1e-6": [
+        {
+          "step": 0,
+          "mean_relative_l2": 0.16632140688598157,
+          "gate_mean_relative_l2": 0.1773109725366036
+        },
+        {
+          "step": 30,
+          "mean_relative_l2": 0.1611453179270029,
+          "gate_mean_relative_l2": 0.17343290808300177
+        },
+        {
+          "step": 60,
+          "mean_relative_l2": 0.15636200221876304,
+          "gate_mean_relative_l2": 0.16732751714686553
+        }
+      ],
+      "lr_3e-6": [
+        {
+          "step": 0,
+          "mean_relative_l2": 0.16632140688598157,
+          "gate_mean_relative_l2": 0.1773109725366036
+        },
+        {
+          "step": 30,
+          "mean_relative_l2": 0.15547084547579287,
+          "gate_mean_relative_l2": 0.17069049378236134
+        },
+        {
+          "step": 60,
+          "mean_relative_l2": 0.15161226804057756,
+          "gate_mean_relative_l2": 0.16325212890903154
+        }
+      ],
+      "lr_1e-5": [
+        {
+          "step": 0,
+          "mean_relative_l2": 0.16632140688598157,
+          "gate_mean_relative_l2": 0.1773109725366036
+        },
+        {
+          "step": 30,
+          "mean_relative_l2": 0.16906148739159108,
+          "gate_mean_relative_l2": 0.1956901350369056
+        },
+        {
+          "step": 60,
+          "mean_relative_l2": 0.174078191096584,
+          "gate_mean_relative_l2": 0.1782044840355714
+        }
+      ],
+      "lr_3e-5": [
+        {
+          "step": 0,
+          "mean_relative_l2": 0.16632140688598157,
+          "gate_mean_relative_l2": 0.1773109725366036
+        },
+        {
+          "step": 30,
+          "mean_relative_l2": 0.21002509606381256,
+          "gate_mean_relative_l2": 0.2439198604474465
+        },
+        {
+          "step": 60,
+          "mean_relative_l2": 0.2540029497941335,
+          "gate_mean_relative_l2": 0.24998095482587815
+        }
+      ]
+    },
+    "continuation_3e-6": [
+      {
+        "step": 60,
+        "mean_relative_l2": 0.15161226804057756,
+        "gate_mean_relative_l2": 0.16325212890903154
+      },
+      {
+        "step": 120,
+        "mean_relative_l2": 0.14585097273190817,
+        "gate_mean_relative_l2": 0.16197741404175758
+      },
+      {
+        "step": 180,
+        "mean_relative_l2": 0.14260498575866223,
+        "gate_mean_relative_l2": 0.1540777647246917
+      },
+      {
+        "step": 240,
+        "mean_relative_l2": 0.1421377821266651,
+        "gate_mean_relative_l2": 0.1488335425655047
+      }
+    ],
+    "early_examples_captured": 600,
+    "early_pool_healing": [
+      {
+        "step": 240,
+        "mean_relative_l2": 0.1421377821266651,
+        "gate_mean_relative_l2": 0.1488335425655047
+      },
+      {
+        "step": 300,
+        "mean_relative_l2": 0.13776014186441898,
+        "gate_mean_relative_l2": 0.14934959622720878
+      },
+      {
+        "step": 360,
+        "mean_relative_l2": 0.13465870708227157,
+        "gate_mean_relative_l2": 0.14374511192242304
+      },
+      {
+        "step": 420,
+        "mean_relative_l2": 0.1323571904997031,
+        "gate_mean_relative_l2": 0.14939928191403548
+      },
+      {
+        "step": 480,
+        "mean_relative_l2": 0.13605694949626923,
+        "gate_mean_relative_l2": 0.14757574399312337
+      }
+    ],
+    "selected_step": 420
+  },
+  "phase7_blocks_4_5": {
+    "bridge_only_velocity_relative_l2": [
+      {
+        "variant": "one_block_bridge",
+        "stage": "early",
+        "mean_relative_l2": 0.09947016127407551
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "middle",
+        "mean_relative_l2": 0.025970355793833732
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "late",
+        "mean_relative_l2": 0.040096317417919636
+      },
+      {
+        "variant": "one_block_bridge",
+        "stage": "all",
+        "mean_relative_l2": 0.055178944828609626
+      },
+      {
+        "variant": "skip_blocks_4_5",
+        "stage": "early",
+        "mean_relative_l2": 0.16736421957612038
+      },
+      {
+        "variant": "skip_blocks_4_5",
+        "stage": "middle",
+        "mean_relative_l2": 0.04361346736550331
+      },
+      {
+        "variant": "skip_blocks_4_5",
+        "stage": "late",
+        "mean_relative_l2": 0.07876650169491768
+      },
+      {
+        "variant": "skip_blocks_4_5",
+        "stage": "all",
+        "mean_relative_l2": 0.09658139621218045
+      },
+      {
+        "variant": "stacked_bridges_4_5",
+        "stage": "early",
+        "mean_relative_l2": 0.14933182597160338
+      },
+      {
+        "variant": "stacked_bridges_4_5",
+        "stage": "middle",
+        "mean_relative_l2": 0.03557611405849457
+      },
+      {
+        "variant": "stacked_bridges_4_5",
+        "stage": "late",
+        "mean_relative_l2": 0.06992357783019543
+      },
+      {
+        "variant": "stacked_bridges_4_5",
+        "stage": "all",
+        "mean_relative_l2": 0.08494383928676447
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "early",
+        "mean_relative_l2": 0.15387034490704538
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "middle",
+        "mean_relative_l2": 0.035479118674993516
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "late",
+        "mean_relative_l2": 0.07097808979451656
+      },
+      {
+        "variant": "region_rank256",
+        "stage": "all",
+        "mean_relative_l2": 0.08677585112551849
+      },
+      {
+        "variant": "region_rank512",
+        "stage": "early",
+        "mean_relative_l2": 0.13504972457885742
+      },
+      {
+        "variant": "region_rank512",
+        "stage": "middle",
+        "mean_relative_l2": 0.03438359461724758
+      },
+      {
+        "variant": "region_rank512",
+        "stage": "late",
+        "mean_relative_l2": 0.06957978457212448
+      },
+      {
+        "variant": "region_rank512",
+        "stage": "all",
+        "mean_relative_l2": 0.07967103458940983
+      }
+    ],
+    "healing": [
+      {
+        "step": 0,
+        "mean_relative_l2": 0.0809879833459854,
+        "gate_mean_relative_l2": 0.07967103458940983
+      },
+      {
+        "step": 60,
+        "mean_relative_l2": 0.0740953787167867,
+        "gate_mean_relative_l2": 0.07974985990052422
+      },
+      {
+        "step": 120,
+        "mean_relative_l2": 0.08154110100120306,
+        "gate_mean_relative_l2": 0.09188126480827728
+      },
+      {
+        "step": 180,
+        "mean_relative_l2": 0.07839543768515189,
+        "gate_mean_relative_l2": 0.08286456512287259
+      },
+      {
+        "step": 240,
+        "mean_relative_l2": 0.07980799141029517,
+        "gate_mean_relative_l2": 0.07685837422808012
+      }
+    ],
+    "selected_step": 60,
+    "gate_limit": 0.0652,
+    "gate_passed_steps": []
+  },
+  "phase7_candidate_images": {
+    "prompts": 30,
+    "images": 150,
+    "review": {
+      "version": "phase7-candidate-images-visual-review-v1",
+      "request_key": "dda8c184e657dfb604c35fb261d83371c108c39fac033a0f57db66f7686c30ad",
+      "reviewer": "Claude (unblinded, model labels visible), one seed per prompt, 2026-10-03",
+      "rubric": "text prompts: pass only if every requested phrase is readable and correctly spelled (small sign checked on a full-resolution crop); fresh prompts: qualitative notes on subject, prompt adherence and image quality versus the teacher",
+      "text_prompts": [
+        {
+          "source_id": "p1-e83d7dcacb2d",
+          "requested": "\"GOLDEN RIVER\" / \"Live in Berlin\"",
+          "verdicts": {
+            "teacher": "pass",
+            "A_healed_u60": "pass",
+            "B_healed_u240": "pass",
+            "C_bridge_only": "pass",
+            "D_blocks25_u420": "fail: \"GOLDLEN RAVER\""
+          }
+        },
+        {
+          "source_id": "p1-0b32a45e0b90",
+          "requested": "\"Welcome Home\"",
+          "verdicts": {
+            "teacher": "pass",
+            "A_healed_u60": "pass",
+            "B_healed_u240": "pass",
+            "C_bridge_only": "pass",
+            "D_blocks25_u420": "fail: \"Wolome Home\""
+          }
+        },
+        {
+          "source_id": "p1-c9344c076abf",
+          "requested": "\"Happy Birthday Emma\"",
+          "verdicts": {
+            "teacher": "pass",
+            "A_healed_u60": "pass",
+            "B_healed_u240": "pass",
+            "C_bridge_only": "pass",
+            "D_blocks25_u420": "fail: \"Happy B'rday Emma\""
+          }
+        },
+        {
+          "source_id": "p1-f66dd8002f66",
+          "requested": "营业中",
+          "verdicts": {
+            "teacher": "pass",
+            "A_healed_u60": "pass",
+            "B_healed_u240": "pass",
+            "C_bridge_only": "pass",
+            "D_blocks25_u420": "fail: wrong first character"
+          }
+        },
+        {
+          "source_id": "p1-2fa54a3c4eb8",
+          "requested": "\"The Rusty Anchor\" + small \"Moonlight Motel\" sign",
+          "verdicts": {
+            "teacher": "pass",
+            "A_healed_u60": "pass",
+            "B_healed_u240": "fail: \"The Rusty Anchar\", sign has no text",
+            "C_bridge_only": "fail: sign has no text",
+            "D_blocks25_u420": "fail: \"The Rusty Coit\", sign has no text"
+          }
+        }
+      ],
+      "text_pass_counts": {
+        "teacher": 5,
+        "A_healed_u60": 5,
+        "B_healed_u240": 4,
+        "C_bridge_only": 4,
+        "D_blocks25_u420": 0
+      },
+      "fresh_prompt_notes": {
+        "thirty_block_students": "A, B and C are nearly identical to each other and usually share a composition that differs from the teacher (e.g. checkered vs plain plate, yellow vs grey biplane, different group arrangement); sharpness, lighting, anatomy and style match the teacher on every fresh prompt; on the 3D-shapes prompt all three draw the requested star while the teacher star is malformed",
+        "twenty_eight_block_student": "D often loses the subject or the prompt: a cat instead of the requested dog, an eye instead of a peacock feather, a harbour scene instead of a biplane, a missing alarm clock, a creature instead of a hover tank, a chess piece instead of a crystal cone"
+      },
+      "conclusion": "Blocks 2-5 removed (28 blocks, D) is not usable. Blocks 4-5 removed (30 blocks) looks release-quality in this unblinded 30-prompt screen; A (healed update 60) is the strongest candidate (5/5 text, like the teacher).",
+      "limitations": "single unblinded reviewer, 30 prompts, one seed each; not a blinded benchmark"
+    }
+  },
   "phase6_checkpoint_decision": {
     "prompt_count": 129,
     "image_count": 258,
@@ -38563,6 +38923,20 @@
     "data/phase7/four_block_replay/summary.json": "d68322e348945a4d40724038529cd9b8c499cf7163c1290cf1341ab162873536",
     "data/phase7/region_bridge_fit/summary.json": "7ca6e0d33bbdd5a6ccba8a0660771a522594fe926d1238a9cb48da90e8bb8f3a",
     "data/phase7/region_replay/summary.json": "46de60292817548d42ad9ed22d1cc6a14dc58782ba99fbf205fbcf70b90929ed",
+    "data/phase7/full_student_healing/summary.json": "bb06eecd7a43d014f7cc540dd2758dce304e81733ab96f24c6533c3c8b411ee5",
+    "data/phase7/stage_balanced_grid/lr_1e-6/summary.json": "5ef22a8f5e15e1f66363e51e5e75bf426624c2fd311ed9a14081e29cab441c31",
+    "data/phase7/stage_balanced_grid/lr_3e-6/summary.json": "87216830bf26d363190e5a5f1a5be733c1d55206fd5f9ca5fd794152edea0097",
+    "data/phase7/stage_balanced_grid/lr_1e-5/summary.json": "a853677032937a0e3fc453e5d2a0bdc2f8048e9d6caadf186ab1a51286e0175e",
+    "data/phase7/stage_balanced_grid/lr_3e-5/summary.json": "f1315a02869b1128bcc598dabc1a25b0b8cb71cbc5a2c56bed723ff9c17a1234",
+    "data/phase7/stage_balanced_continuation/summary.json": "2b47aa466bc02fc449a6cd6b1739621b75fc533965c0a38e02833d26e6bb8d06",
+    "data/phase7/early_capture_v2/index.json": "129d49f585f68fde6481d3605f903dcd44ba4b055386afd90a7533dc740f0338",
+    "data/phase7/early_pool_healing/summary.json": "09468c41e076cd4673dc28ae5b81c636c2c3bc825c70548e04b332d144cafd89",
+    "data/phase7/region_bridge_fit_4_5/summary.json": "ecfda58aae622d44ca831642bd53b90155cad53ecb5952b0b3a85bec419aac50",
+    "data/phase7/region_replay_4_5/summary.json": "d1e0ac8636a364ce870b416e271ba14e4ba6cbecd42071c8f129b74ecc406649",
+    "data/phase7/blocks45_healing_v3/summary.json": "9d7ab1de6cdcd3acc20524b4cd461414dc6d1e1999b7019771afae3a5ec3cd39",
+    "data/phase7/candidate_images/summary_blocks45.json": "477e9ecf4ec9fab040cfd567bff7d795c444963e5fc08e98692a9e0ff1c1d386",
+    "data/phase7/candidate_images/summary_blocks25.json": "4b253490e629d8b77c965faefafbc771388957acd97c37a9cc2289c0ac128f9f",
+    "data/phase7/candidate_images/visual_review.json": "4454280e75cc7ca470f0b8ae8f7278f690fd6102d2e97ee7726bbe433e019381",
     "data/phase3/activations/full/summary.json": "01108b00b0f7daba3dcd742c68baff3c35cad3dfffef1ea6988d1ef4134f474d",
     "data/phase3/bypass/block_02_pilot/summary.json": "df700b4cb0e5b42d838640a0b1397851d6941f8c1ddeff76a46f820b674dc201",
     "data/phase3/bypass/block_03_pilot/summary.json": "9ddbdfa82e16adb7dfaa126563526818e365eb64d77b18fa189339072b53dd0f",
