@@ -29,3 +29,10 @@ sample or an antique reproduction. The built-in image-generation tool created it
 to match the existing monochrome engraved plates. Its source is
 `assets/nihonga.png`; JPEG and WebP encodings are used on the page. The generation
 prompt is preserved in `assets/nihonga-prompt.txt`.
+
+The 4 October 2026 planning update records adaptive pruning from candidate A:
+30 surviving transformer blocks, a rank-512 region bridge covering blocks 4-5,
+and 60 healing updates. `results.json` includes `phase7_adaptive_pruning_plan`
+with status `planned_not_executed` and the source protocol hash. It contains no
+conditional importance measurements. The baseline remains provisional: it failed
+the historical velocity gate, and the image screen was small and unblinded.
