@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Origami · Niwaki</title>
+  <meta name="description" content="Origami: a typed decision model for Apple silicon. Give it a state and typed questions, and it returns a calibrated probability for every option without generating a token. Qwen3.6-35B-A3B at 8-bit, compatible with TypeSafe's System One API; MLX weights.">
+  <link rel="canonical" href="https://niwakiai.com/origami/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Origami · Niwaki">
+  <meta property="og:description" content="A typed decision model for Apple silicon: calibrated probabilities for yes/no, choice and score questions from one read of the state. 0.802 on typed-decisions; 10th of 72 on the Decision Index's 13 headline benchmarks.">
+  <meta property="og:url" content="https://niwakiai.com/origami/">
+  <meta property="og:image" content="https://niwakiai.com/assets/og-origami.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7EEE3">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <ul>
+      <li><a href="../">Niwaki</a></li>
+      <li><a href="../saikei/">Saikei</a></li>
+      <li><a href="./" aria-current="page">Origami</a></li>
+      <li><a href="../nihonga/">Nihonga</a></li>
+      <li><a href="../dojo/">Dojo</a></li>
+      <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
+    </ul>
+  </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="lead">
+      <h1>Origami</h1>
+      <p>Origami (折り紙) folds a single sheet into a precise form, without a cut.</p>
+      <p>These models fold a general language model into a decision engine. The state is read once, and every question is answered in its own fold of it: a calibrated probability for every option, without generating a token.</p>
+    </div>
+    <figure class="tree plate-art">
+      <picture>
+        <source srcset="../assets/origami.webp" type="image/webp">
+        <img src="../assets/origami.jpg" width="1774" height="887" alt="Engraving of a folded paper fortune teller, one inner face tinted green, casting a hatched shadow.">
+      </picture>
+    </figure>
+  </div>
+
+  <!-- ======================= Origami v1.0 ======================= -->
+  <section id="v1" class="first" aria-labelledby="h-origami">
+    <div class="wrap">
+      <p class="eyebrow">Latest release</p>
+      <h2 id="h-origami"><span class="nb">Qwen3.6-35B-A3B</span> <span class="nb">Origami v1.0</span> <span class="sub">typed decisions · 8-bit</span></h2>
+      <p class="summary">Give it a state and typed questions — yes/no, a choice among up to 255 options, a score on 2–10 levels — and it returns a probability for every option, calibrated per question type. It speaks TypeSafe's System One API (<code>POST /v1/systemone</code>), so a TypeSafe client can point at it, and it runs locally on Apple silicon: about 0.65&nbsp;s for a five-question case on an M4 Max. Built for English and Spanish.</p>
+
+      <ul class="figures">
+        <li><span class="n">0.802</span><span class="c">accuracy on typed-decisions, against Jev 1.13.0's 0.727</span></li>
+        <li><span class="n">0.081</span><span class="c">KL from the benchmark's soft gold, against Jev's 1.442</span></li>
+        <li><span class="n">10th <small>of 72</small></span><span class="c">on the Decision Index board, over 13 of its benchmarks</span></li>
+        <li><span class="n">0.65 <small>s</small></span><span class="c">for a five-question case on an M4 Max, p50</span></li>
+      </ul>
+
+      <div class="charts">
+        <figure class="chart">
+          <figcaption><b>typed-decisions accuracy</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.802">
+            <li class="solid" style="--v:0.802;--i:0"><span class="name">Origami v1.0</span><span class="track"><span class="bar"></span><span class="val">0.802</span></span></li>
+            <li class="hatch" style="--v:0.801;--i:1"><span class="name">OpenDecider-large-td</span><span class="track"><span class="bar"></span><span class="val">0.801</span></span></li>
+            <li class="hatch" style="--v:0.797;--i:2"><span class="name">od1-typed-decisions</span><span class="track"><span class="bar"></span><span class="val">0.797</span></span></li>
+            <li class="hatch" style="--v:0.796;--i:3"><span class="name">OpenDecider-nano</span><span class="track"><span class="bar"></span><span class="val">0.796</span></span></li>
+            <li class="hatch" style="--v:0.768;--i:4"><span class="name">meraGPT Decider 1</span><span class="track"><span class="bar"></span><span class="val">0.768</span></span></li>
+            <li class="hatch" style="--v:0.766;--i:5"><span class="name">Laya typed-decisions</span><span class="track"><span class="bar"></span><span class="val">0.766</span></span></li>
+            <li class="hatch" style="--v:0.742;--i:6"><span class="name">Liquid AI d1</span><span class="track"><span class="bar"></span><span class="val">0.742</span></span></li>
+            <li class="open" style="--v:0.727;--i:7"><span class="name">Jev 1.13.0</span><span class="track"><span class="bar"></span><span class="val">0.727</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>typed-decisions Brier score, against the soft gold</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:0.155">
+            <li class="solid" style="--v:0.044;--i:0"><span class="name">Origami v1.0</span><span class="track"><span class="bar"></span><span class="val">0.044</span></span></li>
+            <li class="hatch" style="--v:0.044;--i:1"><span class="name">OpenDecider-large-td</span><span class="track"><span class="bar"></span><span class="val">0.044</span></span></li>
+            <li class="hatch" style="--v:0.045;--i:2"><span class="name">od1-typed-decisions</span><span class="track"><span class="bar"></span><span class="val">0.045</span></span></li>
+            <li class="hatch" style="--v:0.043;--i:3"><span class="name">OpenDecider-nano</span><span class="track"><span class="bar"></span><span class="val">0.043</span></span></li>
+            <li class="hatch" style="--v:0.052;--i:4"><span class="name">meraGPT Decider 1</span><span class="track"><span class="bar"></span><span class="val">0.052</span></span></li>
+            <li class="hatch" style="--v:0.155;--i:5"><span class="name">Liquid AI d1</span><span class="track"><span class="bar"></span><span class="val">0.155</span></span></li>
+            <li class="open" style="--v:0.148;--i:6"><span class="name">Jev 1.13.0</span><span class="track"><span class="bar"></span><span class="val">0.148</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Decision Index, 13 benchmarks, chance-corrected</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.732">
+            <li class="open" style="--v:0.732;--i:0"><span class="name">Jev 1.13.0</span><span class="track"><span class="bar"></span><span class="val">0.732</span></span></li>
+            <li class="hatch" style="--v:0.649;--i:1"><span class="name">pplx-decider-v1-27b</span><span class="track"><span class="bar"></span><span class="val">0.649</span></span></li>
+            <li class="hatch" style="--v:0.647;--i:2"><span class="name">Surogate Rune 26B-A4B v3</span><span class="track"><span class="bar"></span><span class="val">0.647</span></span></li>
+            <li class="solid" style="--v:0.619;--i:3"><span class="name">Origami v1.0</span><span class="track"><span class="bar"></span><span class="val">0.619</span></span></li>
+            <li class="hatch" style="--v:0.590;--i:4"><span class="name">Decider 35B-A3B</span><span class="track"><span class="bar"></span><span class="val">0.590</span></span></li>
+          </ol>
+        </figure>
+
+        <figure class="chart">
+          <figcaption><b>Latency on an M4 Max, p50, seconds</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:1.35">
+            <li class="solid" style="--v:0.32;--i:0"><span class="name">1 question · 256-token state</span><span class="track"><span class="bar"></span><span class="val">0.32</span></span></li>
+            <li class="solid" style="--v:0.65;--i:1"><span class="name">typed-decisions case · 5 questions</span><span class="track"><span class="bar"></span><span class="val">0.65</span></span></li>
+            <li class="solid" style="--v:0.79;--i:2"><span class="name">10 questions · 256-token state</span><span class="track"><span class="bar"></span><span class="val">0.79</span></span></li>
+            <li class="solid" style="--v:0.95;--i:3"><span class="name">1 question · 1,024-token state</span><span class="track"><span class="bar"></span><span class="val">0.95</span></span></li>
+            <li class="solid" style="--v:1.35;--i:4"><span class="name">10 questions · 1,024-token state</span><span class="track"><span class="bar"></span><span class="val">1.35</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>Origami v1.0</li>
+        <li><span class="hatch"></span>other open decision models</li>
+        <li><span class="open"></span>TypeSafe's Jev 1.13.0</li>
+      </ul>
+
+      <p class="note">typed-decisions: its test split, 400 cases and 2,000 decisions over four business workflows, scored against a soft gold from three teacher samples. Origami is trained on the benchmark's train split, as are OpenDecider, od1 and Laya typed-decisions; meraGPT Decider 1, Liquid AI d1 and Jev are not. Rows other than Origami's are as published on the benchmark's card, most of them self-reported. The benchmark's teacher agrees with itself on 0.735 of decisions, so accuracy above that measures agreement with its labels as much as correctness. Latency is measured in short runs; over hours of back-to-back requests a MacBook slows down, and requests took 1.4–2× as long.</p>
+
+      <h3>Decision Index, by benchmark</h3>
+      <div class="charts">
+        <figure class="chart wide">
+          <figcaption><b>Origami v1.0 against Jev 1.13.0</b><i>each benchmark's own metric · higher is better</i></figcaption>
+          <ol class="bars pairs" style="--max:1">
+            <li style="--i:0"><span class="name">BFCL · case exact accuracy</span><span class="track solid" style="--v:0.952"><span class="bar"></span><span class="val">0.952</span><span class="delta">−0.006</span></span><span class="track open" style="--v:0.958"><span class="bar"></span><span class="val">0.958</span></span></li>
+            <li style="--i:1"><span class="name">API-Bank · accuracy</span><span class="track solid" style="--v:0.815"><span class="bar"></span><span class="val">0.815</span><span class="delta">−0.067</span></span><span class="track open" style="--v:0.882"><span class="bar"></span><span class="val">0.882</span></span></li>
+            <li style="--i:2"><span class="name">When2Call* · accuracy</span><span class="track solid" style="--v:0.782"><span class="bar"></span><span class="val">0.782</span><span class="delta">−0.028</span></span><span class="track open" style="--v:0.810"><span class="bar"></span><span class="val">0.810</span></span></li>
+            <li style="--i:3"><span class="name">BANKING77* · macro-F1</span><span class="track solid" style="--v:0.857"><span class="bar"></span><span class="val">0.857</span><span class="delta">+0.060</span></span><span class="track open" style="--v:0.797"><span class="bar"></span><span class="val">0.797</span></span></li>
+            <li style="--i:4"><span class="name">CLINC150 with out-of-scope* · macro-F1</span><span class="track solid" style="--v:0.800"><span class="bar"></span><span class="val">0.800</span><span class="delta">−0.093</span></span><span class="track open" style="--v:0.893"><span class="bar"></span><span class="val">0.893</span></span></li>
+            <li style="--i:5"><span class="name">BRIGHT · nDCG@10</span><span class="track solid" style="--v:0.459"><span class="bar"></span><span class="val">0.459</span><span class="delta">−0.016</span></span><span class="track open" style="--v:0.475"><span class="bar"></span><span class="val">0.475</span></span></li>
+            <li style="--i:6"><span class="name">ANLI · macro-F1</span><span class="track solid" style="--v:0.663"><span class="bar"></span><span class="val">0.663</span><span class="delta">−0.085</span></span><span class="track open" style="--v:0.748"><span class="bar"></span><span class="val">0.748</span></span></li>
+            <li style="--i:7"><span class="name">WinoGrande · accuracy</span><span class="track solid" style="--v:0.840"><span class="bar"></span><span class="val">0.840</span><span class="delta">−0.079</span></span><span class="track open" style="--v:0.919"><span class="bar"></span><span class="val">0.919</span></span></li>
+            <li style="--i:8"><span class="name">HellaSwag · accuracy</span><span class="track solid" style="--v:0.920"><span class="bar"></span><span class="val">0.920</span><span class="delta">−0.025</span></span><span class="track open" style="--v:0.945"><span class="bar"></span><span class="val">0.945</span></span></li>
+            <li style="--i:9"><span class="name">MMLU-Pro · accuracy</span><span class="track solid" style="--v:0.604"><span class="bar"></span><span class="val">0.604</span><span class="delta">−0.223</span></span><span class="track open" style="--v:0.827"><span class="bar"></span><span class="val">0.827</span></span></li>
+            <li style="--i:10"><span class="name">BBH, fixed-option tasks · accuracy</span><span class="track solid" style="--v:0.747"><span class="bar"></span><span class="val">0.747</span><span class="delta">−0.182</span></span><span class="track open" style="--v:0.929"><span class="bar"></span><span class="val">0.929</span></span></li>
+            <li style="--i:11"><span class="name">GPQA Diamond · accuracy</span><span class="track solid" style="--v:0.469"><span class="bar"></span><span class="val">0.469</span><span class="delta">−0.317</span></span><span class="track open" style="--v:0.786"><span class="bar"></span><span class="val">0.786</span></span></li>
+            <li style="--i:12"><span class="name">HLE · accuracy</span><span class="track solid" style="--v:0.116"><span class="bar"></span><span class="val">0.116</span><span class="delta">−0.088</span></span><span class="track open" style="--v:0.204"><span class="bar"></span><span class="val">0.204</span></span></li>
+          </ol>
+        </figure>
+      </div>
+
+      <ul class="key" aria-label="Legend">
+        <li><span class="solid"></span>Origami v1.0, with its difference from Jev</li>
+        <li><span class="open"></span>TypeSafe's Jev 1.13.0</li>
+      </ul>
+
+      <p class="note"><a href="https://huggingface.co/spaces/multimodalart/jev-decision-index">Decision Index</a> 0.2.1 on 13 of its 38 benchmarks, chosen before the run: the 12 that the board marks gold apart from ForecastBench, plus When2Call. It was run with the Index's own kit and scorers through Origami's server on an M4 Max, and every request was answered. Other models' scores are the board's, as published on 5 October 2026. The 13-benchmark average is not the Decision Index, which weighs five areas over all 38; without the three in-distribution benchmarks (*, whose train splits Origami is trained on) it ranks 9th of 63. The full Index follows. Origami is strongest on routing, classification and tool decisions, and well below Jev on knowledge-heavy reasoning (MMLU-Pro, BBH, GPQA, HLE). CLINC150 is low because of how the Index writes it: an empty state, with the request inside the question. With the request in the state, its in-scope accuracy rises from 0.80 to 0.95 on a 600-request sample. Put the text to decide on in the state.</p>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Origami-v1.0-mlx">MLX weights ↗<small>36.9 GB · Apple silicon, 64 GB</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Origami-v1.0-mlx/blob/main/origami.py">origami.py ↗<small>Python API and /v1/systemone server · stock mlx-lm</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= paper ======================= -->
+  <section aria-labelledby="h-paper">
+    <div class="wrap">
+      <p class="eyebrow">Technical paper</p>
+      <h2 id="h-paper">A paper with the full method and measurements is in the writing.</h2>
+      <p class="summary">Until then, every number on this page comes from the model card, which carries the evaluation details and the full tables.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Base model by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversion of the reference by mlx-community. Decision training and builds by the Niwaki project. Not affiliated with TypeSafe; “System One” and “Jev” are TypeSafe's.</p>
+    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="../">Niwaki models</a> · <a href="../paper/">Paper</a></p>
+    <p class="made">Pruned and tended in Seville, Spain and Valença, Portugal.</p>
+  </div>
+</footer>
+
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8cd674c9e00d4cffa8a037381ee5b2b9"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

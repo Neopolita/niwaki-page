@@ -30,8 +30,8 @@
     <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
     <ul>
       <li><a href="../">Niwaki</a></li>
-      <li class="soon"><a href="../paper/" title="Coming soon">Paper</a></li>
       <li><a href="../saikei/">Saikei</a></li>
+      <li><a href="../origami/">Origami</a></li>
       <li><a href="./" aria-current="page">Nihonga</a></li>
       <li><a href="../dojo/">Dojo</a></li>
       <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
@@ -41,18 +41,20 @@
 </header>
 
 <main id="main">
-  <figure class="plate">
-    <picture>
-      <source srcset="../assets/nihonga.webp" type="image/webp">
-      <img src="../assets/nihonga.jpg" width="1774" height="887" fetchpriority="high" alt="Engraving of a Japanese painter’s low worktable with an unfurled pine-and-mountain landscape, brushes, an inkstone and bowls of mineral pigment, under the word Nihonga.">
-    </picture>
-  </figure>
-  <div class="wrap lead solo nihonga-lead">
-    <p class="eyebrow">Research notebook | updated <time datetime="2026-10-01">1 October 2026</time></p>
-    <h1>Nihonga <span lang="ja">日本画</span></h1>
-    <p>A smaller image model, with every cut measured.</p>
-    <p>We are compressing Qwen-Image-2.1: identify transformer blocks that can be replaced, learn inexpensive bridges, and distill the original model’s behavior back into the student. This is our working research record, including results that did not work.</p>
-    <nav class="contents" aria-label="On this page"><a href="#foundation">Dataset &amp; baseline</a><a href="#pruning">Layer selection</a><a href="#bridges">Learned bridges</a><a href="#replay">Teacher replay</a><a href="#healing">Healing</a><a href="#record">Research record</a><a href="#status">Current result</a></nav>
+  <div class="wrap hero">
+    <div class="lead nihonga-lead">
+      <p class="eyebrow">Research notebook | updated <time datetime="2026-10-01">1 October 2026</time></p>
+      <h1>Nihonga <span lang="ja">日本画</span></h1>
+      <p>A smaller image model, with every cut measured.</p>
+      <p>We are compressing Qwen-Image-2.1: identify transformer blocks that can be replaced, learn inexpensive bridges, and distill the original model’s behavior back into the student. This is our working research record, including results that did not work.</p>
+      <nav class="contents" aria-label="On this page"><a href="#foundation">Dataset &amp; baseline</a><a href="#pruning">Layer selection</a><a href="#bridges">Learned bridges</a><a href="#replay">Teacher replay</a><a href="#healing">Healing</a><a href="#record">Research record</a><a href="#status">Current result</a></nav>
+    </div>
+    <figure class="tree plate-art">
+      <picture>
+        <source srcset="../assets/nihonga.webp" type="image/webp">
+        <img src="../assets/nihonga.jpg" width="1774" height="887" fetchpriority="high" alt="Engraving of a Japanese painter’s low worktable with an unfurled pine-and-mountain landscape, brushes, an inkstone and bowls of mineral pigment, under the word Nihonga.">
+      </picture>
+    </figure>
   </div>
   <section class="first" id="foundation" aria-labelledby="h-foundation"><div class="wrap"><p class="eyebrow">Phases 0–2 · establish the reference</p><h2 id="h-foundation">Understand the model before removing anything</h2>
     <p class="summary">The inspected transformer has 32 blocks, a hidden width of 4,096, and approximately 7.115 billion parameters. The 60-layer examples in the original plan are illustrative; our experiments use this actual 32-block architecture. The model predicts a velocity that updates the noisy latent at each denoising step; the VAE decodes the final latent into an image.</p>

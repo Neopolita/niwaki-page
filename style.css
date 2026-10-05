@@ -272,3 +272,7 @@ footer .made { flex-basis: 100%; max-width: none; margin-top: 0.4rem; font-famil
   .top { position: static; }
   .nav ul, .get { display: none; }
 }
+
+/* ---------- a 2:1 plate (Saikei, Origami, Nihonga, Dojo) beside the lead, laid out like the Niwaki tree ---------- */
+.tree.plate-art { max-width: 36rem; }
+.tree.plate-art img { aspect-ratio: 2 / 1; }
