@@ -6,6 +6,10 @@ artifacts. The five older gallery sheets are Phase 3 identity-bypass comparisons
 The three Phase 6 poster images compare the original teacher, the selected
 pretrained-bridge student, and the low-rate trained checkpoint. They were
 generated with matched prompts and seeds; no healed checkpoint was promoted.
+The six `phase7-candidates-sheet-*.jpg` sheets compare the teacher with four Phase 7
+candidates (A, B, C: 30 blocks with blocks 4-5 removed; D: 28 blocks with blocks 2-5
+removed) on 30 validation prompts with matched seeds. They are JPEG encodings of the
+saved PNG sheets, whose SHA-256 hashes are recorded in `results.json`.
 
 To refresh from the research checkout (no GPU or network calls):
 
@@ -25,3 +29,10 @@ sample or an antique reproduction. The built-in image-generation tool created it
 to match the existing monochrome engraved plates. Its source is
 `assets/nihonga.png`; JPEG and WebP encodings are used on the page. The generation
 prompt is preserved in `assets/nihonga-prompt.txt`.
+
+The 4 October 2026 planning update records adaptive pruning from candidate A:
+30 surviving transformer blocks, a rank-512 region bridge covering blocks 4-5,
+and 60 healing updates. `results.json` includes `phase7_adaptive_pruning_plan`
+with status `planned_not_executed` and the source protocol hash. It contains no
+conditional importance measurements. The baseline remains provisional: it failed
+the historical velocity gate, and the image screen was small and unblinded.
