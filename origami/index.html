@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://niwakiai.com/origami/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Origami · Niwaki">
-  <meta property="og:description" content="A typed decision model for Apple silicon: calibrated probabilities for yes/no, choice and score questions from one read of the state. 0.802 on typed-decisions; 10th of 72 on the Decision Index's 13 headline benchmarks.">
+  <meta property="og:description" content="A typed decision model for Apple silicon: calibrated probabilities for yes/no, choice and score questions from one read of the state. 0.802 on typed-decisions, trained on its train split; 10th of 72 on the Decision Index's 13 headline benchmarks.">
   <meta property="og:url" content="https://niwakiai.com/origami/">
   <meta property="og:image" content="https://niwakiai.com/assets/og-origami.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -61,8 +61,8 @@
       <p class="summary">Give it a state and typed questions — yes/no, a choice among up to 255 options, a score on 2–10 levels — and it returns a probability for every option, calibrated per question type. It speaks TypeSafe's System One API (<code>POST /v1/systemone</code>), so a TypeSafe client can point at it, and it runs locally on Apple silicon: about 0.65&nbsp;s for a five-question case on an M4 Max. Built for English and Spanish.</p>
 
       <ul class="figures">
-        <li><span class="n">0.802</span><span class="c">accuracy on typed-decisions, against Jev 1.13.0's 0.727</span></li>
-        <li><span class="n">0.081</span><span class="c">KL from the benchmark's soft gold, against Jev's 1.442</span></li>
+        <li><span class="n">0.802</span><span class="c">accuracy on typed-decisions, trained on its train split; Jev 1.13.0, not trained on it, scores 0.727</span></li>
+        <li><span class="n">0.081</span><span class="c">KL from the benchmark's soft gold, trained on its train split; Jev's is 1.442</span></li>
         <li><span class="n">10th <small>of 72</small></span><span class="c">on the Decision Index board, over 13 of its benchmarks</span></li>
         <li><span class="n">0.65 <small>s</small></span><span class="c">for a five-question case on an M4 Max, p50</span></li>
       </ul>
@@ -124,7 +124,7 @@
         <li><span class="open"></span>TypeSafe's Jev 1.13.0</li>
       </ul>
 
-      <p class="note">typed-decisions: its test split, 400 cases and 2,000 decisions over four business workflows, scored against a soft gold from three teacher samples. Origami is trained on the benchmark's train split, as are OpenDecider, od1 and Laya typed-decisions; meraGPT Decider 1, Liquid AI d1 and Jev are not. Rows other than Origami's are as published on the benchmark's card, most of them self-reported. The benchmark's teacher agrees with itself on 0.735 of decisions, so accuracy above that measures agreement with its labels as much as correctness. Latency is measured in short runs; over hours of back-to-back requests a MacBook slows down, and requests took 1.4–2× as long.</p>
+      <p class="note">typed-decisions: its test split, 400 cases and 2,000 decisions over four business workflows, scored against a soft gold from three teacher samples. Origami is trained on the benchmark's train split, as are OpenDecider, od1 and Laya typed-decisions; meraGPT Decider 1, Liquid AI d1 and Jev are not. Rows other than Origami's are as published on the benchmark's card, most of them self-reported. The benchmark's teacher agrees with itself on 0.735 of decisions, so accuracy above that measures agreement with its labels as much as correctness. Origami's probabilities are calibrated to the soft gold (calibration error 0.016); against the majority label its top probability is conservative: answers at 0.7 or above are right 98.7% of the time, and none of the 239 at 0.9 or above is wrong. Latency is measured in short runs; over hours of back-to-back requests a MacBook slows down, and requests took 1.4–2× as long.</p>
 
       <h3>Decision Index, by benchmark</h3>
       <div class="charts">
