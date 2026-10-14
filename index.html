@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Niwaki · Model pruning</title>
-  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0, 141B parameters in 44.8 GB with lattice-coded experts, for 64 GB Macs.">
+  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0, 141B parameters in 44.8 GB with lattice-coded experts for 64 GB Macs, and a 19 GB build for 32 GB Macs.">
   <link rel="canonical" href="https://niwakiai.com/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Niwaki · Model pruning">
-  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0 at 141B parameters and 44.8 GB on disk, with perplexity 10% below v2.4's at the same size.">
+  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0 at 141B parameters and 44.8 GB on disk, with perplexity 10% below v2.4's at the same size, and a 19 GB build of it for 32 GB Macs.">
   <meta property="og:url" content="https://niwakiai.com/">
   <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -74,8 +74,9 @@
             <li class="open" style="--v:111.5;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">111.5</span></span></li>
             <li class="open" style="--v:55.3;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">55.3</span></span></li>
             <li class="solid" style="--v:44.8;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
-            <li class="hatch" style="--v:44.8;--i:3"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
-            <li class="hatch" style="--v:37.5;--i:4"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">37.5</span></span></li>
+            <li class="solid" style="--v:33.3;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">33.3</span></span></li>
+            <li class="hatch" style="--v:44.8;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
+            <li class="hatch" style="--v:37.5;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">37.5</span></span></li>
           </ol>
         </figure>
 
@@ -85,8 +86,9 @@
             <li class="open" style="--v:5.06;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">5.06</span></span></li>
             <li class="open" style="--v:6.35;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">6.35</span></span></li>
             <li class="solid" style="--v:5.70;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">5.70</span></span></li>
-            <li class="hatch" style="--v:6.36;--i:3"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
-            <li class="hatch" style="--v:7.84;--i:4"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">7.84</span></span></li>
+            <li class="solid" style="--v:6.51;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">6.51</span></span></li>
+            <li class="hatch" style="--v:6.36;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
+            <li class="hatch" style="--v:7.84;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">7.84</span></span></li>
           </ol>
         </figure>
 
@@ -96,16 +98,18 @@
             <li class="open" style="--v:0.759;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">0.759</span></span></li>
             <li class="open" style="--v:0.761;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">0.761</span></span></li>
             <li class="solid" style="--v:0.794;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">0.794</span></span></li>
-            <li class="hatch" style="--v:0.762;--i:3"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
-            <li class="hatch" style="--v:0.738;--i:4"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">0.738</span></span></li>
+            <li class="solid" style="--v:0.765;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">0.765</span></span></li>
+            <li class="hatch" style="--v:0.762;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
+            <li class="hatch" style="--v:0.738;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">0.738</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
           <figcaption><b>Ten languages, perplexity against the unpruned model</b><i>best to worst · lower is better</i></figcaption>
-          <ol class="bars" style="--max:1.27">
+          <ol class="bars" style="--max:1.34">
             <li class="solid range" style="--v:1.08;--v2:1.15;--i:0"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.08–1.15</span></span></li>
-            <li class="hatch range" style="--v:0.97;--v2:1.27;--i:1"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–1.27</span></span></li>
+            <li class="solid range" style="--v:1.18;--v2:1.34;--i:1"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.18–1.34</span></span></li>
+            <li class="hatch range" style="--v:0.97;--v2:1.27;--i:2"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–1.27</span></span></li>
           </ol>
         </figure>
       </div>
@@ -126,31 +130,32 @@
             <li class="solid" style="--v:5.76;--i:0"><span class="name">Niwaki v4.0 141B · 61.7 GB</span><span class="track"><span class="bar"></span><span class="val">5.76</span></span></li>
             <li class="hatch" style="--v:6.88;--i:1"><span class="name">Niwaki v2.4 119B · UD-Q4K · 64.3 GB</span><span class="track"><span class="bar"></span><span class="val">6.88</span></span></li>
             <li class="hatch" style="--v:7.04;--i:2"><span class="name">Niwaki v2.4 119B · UD-Q3K · 51.0 GB</span><span class="track"><span class="bar"></span><span class="val">7.04</span></span></li>
-            <li class="hatch" style="--v:8.57;--i:3"><span class="name">Niwaki v2.4 102B · UD-Q4K · 55.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.57</span></span></li>
-            <li class="hatch" style="--v:8.75;--i:4"><span class="name">Niwaki v2.4 102B · UD-Q3K · 43.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.75</span></span></li>
+            <li class="solid" style="--v:7.16;--i:3"><span class="name">Niwaki v4.0 23GB · 40.2 GB</span><span class="track"><span class="bar"></span><span class="val">7.16</span></span></li>
+            <li class="hatch" style="--v:8.57;--i:4"><span class="name">Niwaki v2.4 102B · UD-Q4K · 55.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.57</span></span></li>
+            <li class="hatch" style="--v:8.75;--i:5"><span class="name">Niwaki v2.4 102B · UD-Q3K · 43.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.75</span></span></li>
           </ol>
         </figure>
       </div>
-      <p class="note">The v4.0 file stores the same experts as the MLX weights at higher precision, Q3_K and IQ4_NL, which makes it 17&nbsp;GB larger; on identical tokens it reads 9% lower perplexity than they do. On an M4 Max with Metal (llama-bench, in one session with v2.4's UD-Q3K file) it runs at 506 tokens/s on a 512-token prompt, 396 on a 2,048-token prompt and 26 in decode, against 488, 417 and 26 for v2.4. Its weights take 57.5&nbsp;GiB once loaded, so on a 64&nbsp;GB Mac use the MLX weights. Like the v2.4 files, it needs the <a href="https://github.com/Neopolita/neopolita-llama.cpp">neopolita-llama.cpp</a> fork: stock llama.cpp cannot represent this model's layout yet.</p>
+      <p class="note">The v4.0 file stores the same experts as the MLX weights at higher precision, Q3_K and IQ4_NL, which makes it 17&nbsp;GB larger; on identical tokens it reads 9% lower perplexity than they do. On an M4 Max with Metal (llama-bench, in one session with v2.4's UD-Q3K file) it runs at 506 tokens/s on a 512-token prompt, 396 on a 2,048-token prompt and 26 in decode, against 488, 417 and 26 for v2.4. On a Mac it holds 42.0&nbsp;GiB on the GPU at a 2,048-token context, within a 64&nbsp;GB Mac's default GPU limit; its n-gram table stays in CPU memory, read from the file as tokens need it. The 23GB file is the GGUF build of the 19&nbsp;GB model below and holds 21.8&nbsp;GiB on the GPU. Like the v2.4 files, these need the <a href="https://github.com/Neopolita/neopolita-llama.cpp">neopolita-llama.cpp</a> fork: stock llama.cpp cannot represent this model's layout yet.</p>
 
       <ul class="get">
         <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Qwen3.8-Flash-Next-141B-A6B-v4.0-mlx">MLX weights ↗<small>44.8 GB · Apple silicon, 64 GB</small></a></li>
         <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.8-Flash-Next-141B-A6B-v4.0-gguf">GGUF build ↗<small>61.7 GB · llama.cpp</small></a></li>
       </ul>
 
-      <h3 id="flash-next-102b">For 48 GB Macs: <span class="nb">v2.4 · 102B-A5B</span></h3>
-      <p class="summary">Niwaki v2.4 at the first-generation 99B's size: 37.5&nbsp;GB on disk. Perplexity and task average match that model; what changes is function. The variable tracking the 99B lost is back at the unpruned model's level — 0.96 past distractor lines, from 0.68 — and two-step arithmetic sits at 0.87 against the unpruned model's 0.91.</p>
+      <h3 id="flash-next-19gb">For 32 GB Macs: <span class="nb">v4.0 · 19 GB</span></h3>
+      <p class="summary">The v4.0 model sized for 32&nbsp;GB Macs: its routed experts are stored as E8 lattice codes at about 2 bits per weight, and recovery training follows. Its 14.4&nbsp;GB n-gram table stays on disk and is read as tokens need it, so the model holds about 19&nbsp;GB in memory although the download is 33.3&nbsp;GB. Against v2.4's 102B, the smallest v2.4 release, it reads lower perplexity and KL divergence, a higher task average and an equal or higher score on every program-state behaviour.</p>
 
       <ul class="figures">
-        <li><span class="n">37.5 <small>GB</small></span><span class="c">on disk, from 111.5 GB for the 4-bit reference</span></li>
-        <li><span class="n">102B <small>/ 5.3B</small></span><span class="c">total / active parameters, from ~177B / ~6.7B</span></li>
-        <li><span class="n">97<small>%</small></span><span class="c">of the unpruned model's task average (0.738 against 0.759)</span></li>
-        <li><span class="n">−15 <small>/</small> +7</span><span class="c">program-state items lost / gained against the unpruned model, of 1,928</span></li>
+        <li><span class="n">19.1 <small>GiB</small></span><span class="c">peak on a 2,048-token prompt, under a 32&nbsp;GB Mac's default GPU limit of 21.3&nbsp;GiB</span></li>
+        <li><span class="n">−17<small>%</small></span><span class="c">WikiText-2 perplexity against v2.4's 102B (6.51 against 7.84)</span></li>
+        <li><span class="n">0.765</span><span class="c">task average, against 0.738 for v2.4's 102B and 0.759 for the unpruned model</span></li>
+        <li><span class="n">92.9<small>%</small></span><span class="c">of 2,000 fresh two-step arithmetic problems, against 98.0% for the unpruned model</span></li>
       </ul>
 
       <ul class="get">
-        <li><a class="primary" href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-mlx">MLX weights ↗<small>37.5 GB · Apple silicon, 48 GB</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-gguf">GGUF builds ↗<small>43.9 GB and 55.9 GB · llama.cpp</small></a></li>
+        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Flash-Next-19GB-v4.0-mlx">MLX weights ↗<small>33.3 GB download · Apple silicon, 32 GB</small></a></li>
+        <li><a href="https://huggingface.co/neopolita/Niwaki-Flash-Next-23GB-v4.0-gguf">GGUF build ↗<small>40.2 GB · llama.cpp</small></a></li>
       </ul>
 
       <h3>Earlier generations</h3>
@@ -159,6 +164,11 @@
           <span class="what">v2.4 · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">119B-A5B · 3-bit</span></span>
           <span class="nums">44.8 GB · perplexity 6.36 · task average 0.762</span>
           <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-gguf">GGUF ↗</a></span>
+        </li>
+        <li>
+          <span class="what">v2.4 · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">102B-A5B · 3-bit</span></span>
+          <span class="nums">37.5 GB, fits a 48 GB Mac · perplexity 7.84 · task average 0.738</span>
+          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-gguf">GGUF ↗</a></span>
         </li>
         <li>
           <span class="what">First generation · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">113B-A5B · 3-bit</span></span>
