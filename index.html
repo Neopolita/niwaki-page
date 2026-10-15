@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Niwaki · Model pruning</title>
-  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0, 141B parameters in 44.8 GB with lattice-coded experts for 64 GB Macs, and a 19 GB build for 32 GB Macs.">
+  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0, 141B parameters in 44.8 GB with lattice-coded experts for 64 GB Macs, a 19 GB build for 32 GB Macs and a 15 GB v5.0 build for 24 GB Macs.">
   <link rel="canonical" href="https://niwakiai.com/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Niwaki · Model pruning">
-  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0 at 141B parameters and 44.8 GB on disk, with perplexity 10% below v2.4's at the same size, and a 19 GB build of it for 32 GB Macs.">
+  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0 at 141B parameters and 44.8 GB on disk, with perplexity 10% below v2.4's at the same size, and 19 GB and 15 GB builds of it for 32 GB and 24 GB Macs.">
   <meta property="og:url" content="https://niwakiai.com/">
   <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -75,8 +75,9 @@
             <li class="open" style="--v:55.3;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">55.3</span></span></li>
             <li class="solid" style="--v:44.8;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
             <li class="solid" style="--v:33.3;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">33.3</span></span></li>
-            <li class="hatch" style="--v:44.8;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
-            <li class="hatch" style="--v:37.5;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">37.5</span></span></li>
+            <li class="solid" style="--v:29.5;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">29.5</span></span></li>
+            <li class="hatch" style="--v:44.8;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
+            <li class="hatch" style="--v:37.5;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">37.5</span></span></li>
           </ol>
         </figure>
 
@@ -87,8 +88,9 @@
             <li class="open" style="--v:6.35;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">6.35</span></span></li>
             <li class="solid" style="--v:5.70;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">5.70</span></span></li>
             <li class="solid" style="--v:6.51;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">6.51</span></span></li>
-            <li class="hatch" style="--v:6.36;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
-            <li class="hatch" style="--v:7.84;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">7.84</span></span></li>
+            <li class="solid" style="--v:6.90;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">6.90</span></span></li>
+            <li class="hatch" style="--v:6.36;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
+            <li class="hatch" style="--v:7.84;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">7.84</span></span></li>
           </ol>
         </figure>
 
@@ -99,23 +101,25 @@
             <li class="open" style="--v:0.761;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">0.761</span></span></li>
             <li class="solid" style="--v:0.794;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">0.794</span></span></li>
             <li class="solid" style="--v:0.765;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">0.765</span></span></li>
-            <li class="hatch" style="--v:0.762;--i:4"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
-            <li class="hatch" style="--v:0.738;--i:5"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">0.738</span></span></li>
+            <li class="solid" style="--v:0.760;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">0.760</span></span></li>
+            <li class="hatch" style="--v:0.762;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
+            <li class="hatch" style="--v:0.738;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">0.738</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
           <figcaption><b>Ten languages, perplexity against the unpruned model</b><i>best to worst · lower is better</i></figcaption>
-          <ol class="bars" style="--max:1.34">
+          <ol class="bars" style="--max:1.40">
             <li class="solid range" style="--v:1.08;--v2:1.15;--i:0"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.08–1.15</span></span></li>
             <li class="solid range" style="--v:1.18;--v2:1.34;--i:1"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.18–1.34</span></span></li>
-            <li class="hatch range" style="--v:0.97;--v2:1.27;--i:2"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–1.27</span></span></li>
+            <li class="solid range" style="--v:1.06;--v2:1.40;--i:2"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.06–1.40</span></span></li>
+            <li class="hatch range" style="--v:0.97;--v2:1.27;--i:3"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–1.27</span></span></li>
           </ol>
         </figure>
       </div>
 
       <ul class="key" aria-label="Legend">
-        <li><span class="solid"></span>Niwaki v4.0</li>
+        <li><span class="solid"></span>Niwaki v4.0 and v5.0</li>
         <li><span class="hatch"></span>earlier Niwaki generations</li>
         <li><span class="open"></span>the unpruned model</li>
       </ul>
@@ -156,6 +160,20 @@
       <ul class="get">
         <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Flash-Next-19GB-v4.0-mlx">MLX weights ↗<small>33.3 GB download · Apple silicon, 32 GB</small></a></li>
         <li><a href="https://huggingface.co/neopolita/Niwaki-Flash-Next-23GB-v4.0-gguf">GGUF build ↗<small>40.2 GB · llama.cpp</small></a></li>
+      </ul>
+
+      <h3 id="flash-next-15gb">For 24 GB Macs: <span class="nb">v5.0 · 15 GB</span></h3>
+      <p class="summary">The 19&nbsp;GB model with its routed experts stored as trellis codes at about 1.5 bits per weight instead of E8 lattice codes at about 2: the same experts and everything else, in 11.9&nbsp;GB of expert storage instead of 15.7&nbsp;GB. It holds about 15&nbsp;GB in memory against a 29.5&nbsp;GB download, so a 24&nbsp;GB Mac runs it with prompts up to about 8K tokens. Against the 19&nbsp;GB model it reads 4–6% higher perplexity and a little lower variable tracking; against v2.4's 102B, lower perplexity and KL divergence and a higher task average. Two-step arithmetic matches the 19&nbsp;GB model when it thinks first (60 of 60 word problems, against 58) and falls behind when it answers directly (42 against 50). There is no GGUF build: llama.cpp does not read trellis-coded experts.</p>
+
+      <ul class="figures">
+        <li><span class="n">15.8 <small>GiB</small></span><span class="c">peak on an 8,192-token prompt, under a 24&nbsp;GB Mac's default GPU limit of about 16&nbsp;GiB</span></li>
+        <li><span class="n">−12<small>%</small></span><span class="c">WikiText-2 perplexity against v2.4's 102B (6.90 against 7.84)</span></li>
+        <li><span class="n">0.760</span><span class="c">task average, against 0.738 for v2.4's 102B and 0.759 for the unpruned model</span></li>
+        <li><span class="n">92.9<small>%</small></span><span class="c">of 2,000 fresh two-step arithmetic problems, as the 19&nbsp;GB model</span></li>
+      </ul>
+
+      <ul class="get">
+        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Flash-Next-15GB-v5.0-mlx">MLX weights ↗<small>29.5 GB download · Apple silicon, 24 GB</small></a></li>
       </ul>
 
       <h3>Earlier generations</h3>
