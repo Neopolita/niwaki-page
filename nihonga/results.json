@@ -39373,7 +39373,52 @@
     "candidate_B": null,
     "candidate_B_status": "running",
     "comparisons_per_block": 180,
-    "gate_percent": 6.52
+    "gate_percent": 6.52,
+    "blind_quality_candidate_A": {
+      "status": "scored",
+      "protocol_sha256": "5d32cb4ad9babfb34b80968b78d3c83e700466b365d5a008640cf39f5d935f60",
+      "scores_sha256": "f70cdfc0417fdb561e7b57d3b13b7e94f3ec7764cc687e0fd01863f9f6eeb415",
+      "blind_key_sha256": "1a998f7934657bcfde995784907fe782bde59720364294a08fa594be07f42c55",
+      "counts": {
+        "adherence": {
+          "teacher": {
+            "fail": 34,
+            "pass": 89,
+            "uncertain": 6
+          },
+          "candidate_A": {
+            "fail": 39,
+            "pass": 78,
+            "uncertain": 12
+          }
+        },
+        "text": {
+          "teacher": {
+            "pass": 28,
+            "fail": 2
+          },
+          "candidate_A": {
+            "fail": 12,
+            "pass": 18
+          }
+        }
+      },
+      "adherence_gain_fraction": -0.08527131782945736,
+      "paired_bootstrap_95pct": [
+        -0.15503875968992248,
+        -0.015503875968992248
+      ],
+      "adherence_noninferiority_passed": false,
+      "text_gate_passed": false,
+      "performance_gate_passed": true,
+      "research_replacement_gate_passed": false,
+      "historical_velocity_gate_passed": false,
+      "production_promoted": false,
+      "limitations": [
+        "One model-blind AI reviewer; one saved seed per prompt.",
+        "No independent external image-quality benchmark; no production promotion."
+      ]
+    }
   },
   "phase7_latency_candidate_A": {
     "request_key": "29f50a4db5f63a6c73135438800ab2d5413e32878bc3fa61284aebbb5c165f4c",
