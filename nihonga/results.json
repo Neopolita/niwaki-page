@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-10-18",
   "scope": "Development pilots. The selected model is the one-block student (block 5 bridged). Phase 7 candidate A (blocks 4-5) failed the velocity gate; conditional importance scans and A latency are measured on development prompts. No independent image-quality benchmark yet.",
   "dataset": {
     "phase": "Phase 1 — Build the Prompt Dataset",
