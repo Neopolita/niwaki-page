@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nihonga · Niwaki</title>
-  <meta name="description" content="Nihonga v1.0: Qwen-Image-2.1 with two transformer blocks replaced by learned bridges and a fused 10-step adapter. 3.9 times faster, 15 of 16 exact spellings on our hardest sign test. Diffusers weights.">
+  <meta name="description" content="Nihonga v1.0: Qwen-Image-2.1 with two transformer blocks replaced by learned bridges and a fused 10-step Lightning LoRA. 3.9 times faster, 15 of 16 exact spellings on our hardest sign test. Diffusers weights.">
   <link rel="canonical" href="https://niwakiai.com/nihonga/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Nihonga · Niwaki">
@@ -65,7 +65,7 @@
     <div class="wrap">
       <p class="eyebrow">Latest release</p>
       <h2 id="h-nihonga"><span class="nb">Qwen-Image-2.1</span> <span class="nb">Nihonga v1.0</span> <span class="sub">text to image · 10 steps</span></h2>
-      <p class="summary">Qwen-Image-2.1 with two of its 32 transformer blocks replaced by small learned bridges, and a step-distillation adapter fused into the weights, so an image takes 10 steps instead of 40. Run it with stock <code>diffusers</code> and the loader shipped with the weights. Built with Qwen; for non-commercial use.</p>
+      <p class="summary">Qwen-Image-2.1 with two of its 32 transformer blocks replaced by small learned bridges, and a Lightning LoRA (step distillation) fused into the weights, so an image takes 10 steps instead of 40. Run it with stock <code>diffusers</code> and the loader shipped with the weights. Built with Qwen; for non-commercial use.</p>
 
       <ul class="figures">
         <li><span class="n">3.9<small>×</small></span><span class="c">faster: 1.75 s against 6.89 s for a 1024 × 1024 image on one H100</span></li>
@@ -80,7 +80,7 @@
           <ol class="bars" style="--max:6.89">
             <li class="open" style="--v:6.89;--i:0"><span class="name">Qwen-Image-2.1 · 40 steps</span><span class="track"><span class="bar"></span><span class="val">6.89</span></span></li>
             <li class="solid" style="--v:1.75;--i:1"><span class="name">Nihonga v1.0 · 10 steps</span><span class="track"><span class="bar"></span><span class="val">1.75</span></span></li>
-            <li class="hatch" style="--v:0.87;--i:2"><span class="name">Lightning adapter on Qwen-Image-2.1 · 4 steps</span><span class="track"><span class="bar"></span><span class="val">0.87</span></span></li>
+            <li class="hatch" style="--v:0.87;--i:2"><span class="name">LightX2V Lightning LoRA on Qwen-Image-2.1 · 4 steps</span><span class="track"><span class="bar"></span><span class="val">0.87</span></span></li>
           </ol>
         </figure>
 
@@ -89,14 +89,14 @@
           <ol class="bars" style="--max:16">
             <li class="open" style="--v:16;--i:0"><span class="name">Qwen-Image-2.1 · 40 steps</span><span class="track"><span class="bar"></span><span class="val">16</span></span></li>
             <li class="solid" style="--v:15;--i:1"><span class="name">Nihonga v1.0 · 10 steps</span><span class="track"><span class="bar"></span><span class="val">15</span></span></li>
-            <li class="hatch" style="--v:13;--i:2"><span class="name">Lightning adapter on Qwen-Image-2.1 · 4 steps</span><span class="track"><span class="bar"></span><span class="val">13</span></span></li>
+            <li class="hatch" style="--v:13;--i:2"><span class="name">LightX2V Lightning LoRA on Qwen-Image-2.1 · 4 steps</span><span class="track"><span class="bar"></span><span class="val">13</span></span></li>
           </ol>
         </figure>
       </div>
 
       <ul class="key" aria-label="Legend">
         <li><span class="solid"></span>Nihonga v1.0</li>
-        <li><span class="hatch"></span>published few-step adapter (LightX2V), on the full model</li>
+        <li><span class="hatch"></span>published Lightning LoRA (LightX2V), on the full model</li>
         <li><span class="open"></span>Qwen-Image-2.1, unchanged</li>
       </ul>
 
@@ -104,7 +104,7 @@
 
       <h3>Architecture</h3>
       <figure class="plate">
-        <a href="v1-architecture.svg"><img loading="lazy" src="v1-architecture.svg" width="1100" height="1150" alt="Nihonga v1: 32 slots of the Qwen-Image-2.1 transformer; slots 5 and 20 hold bridges of about 25 million weights, the other 30 blocks carry a fused rank-32 adapter; sampling uses points 0, 1, 3, 5, 10, 15, 20, 25, 30 and 35 of the 40-step schedule."></a>
+        <a href="v1-architecture.svg"><img loading="lazy" src="v1-architecture.svg" width="1100" height="1150" alt="Nihonga v1: 32 slots of the Qwen-Image-2.1 transformer; slots 5 and 20 hold bridges of about 25 million weights, the other 30 blocks carry a fused rank-32 Lightning LoRA; sampling uses points 0, 1, 3, 5, 10, 15, 20, 25, 30 and 35 of the 40-step schedule."></a>
       </figure>
       <figure class="plate" style="max-width:560px">
         <a href="bridge-architecture.svg"><img loading="lazy" src="bridge-architecture.svg" width="560" height="1060" alt="The bridge: hidden states, timestep modulation, positions and a prompt cache feed an attention branch with 8 heads of 128 (RMSNorm and RoPE on Q and K), then a conditioned MLP 4096 to 1024 to 4096 with tanh gates; about 25.2 million weights."></a>
@@ -112,9 +112,14 @@
       </figure>
       <dl class="facts">
         <div><dt>Bridges</dt><dd>Blocks 5 and 20 are replaced by modules of about 25 M weights, against 218 M for a block: an 8-head attention branch with its own prompt cache, then a timestep-conditioned MLP, trained end to end against the original model. Blocks were chosen by checking spelling, not only average error: block 13 looked cheap by average measures and turned out to carry letters, so it stays.</dd></div>
-        <div><dt>Fused adapter</dt><dd>Rank 32 on q, k, v and out of the 30 blocks, trained so that one step lands where five steps of the pruned model’s own 40-step path land, on 1,000 prompts, half with text. The tokens that hold letters, found by OCR, weigh ten times in the loss. The adapter is merged into the weights, so it adds nothing at run time.</dd></div>
+        <div><dt>Lightning LoRA</dt><dd>The speed comes from a Lightning LoRA we trained for this model. A LoRA leaves each weight matrix frozen and learns a thin correction beside it: two small matrices B and A of rank 32, here on q, k, v and out of the 30 blocks (31.5 M trainable weights). It was trained by step distillation: the pruned model was run in its normal 40 steps on 1,000 prompts, half with text, saving the image after every step, and the LoRA learned to make one big step land where five of those small steps land. The tokens that hold letters, found by OCR, count ten times in the loss. After training, each pair was multiplied out and added to its matrix (W&prime; = W + B&middot;A), so the LoRA is fused into the weights: no extra files, weights or time.</dd></div>
         <div><dt>10-step schedule</dt><dd>Points 0, 1, 3, 5, 10, 15, 20, 25, 30 and 35 of the stock 40-step schedule, then the end. One big first jump from noise merged figures, dropped small objects and broke patterns; three small steps there fixed them.</dd></div>
       </dl>
+
+      <figure class="plate">
+        <a href="lightning-lora.svg"><img loading="lazy" src="lightning-lora.svg" width="1100" height="1240" alt="The Lightning LoRA in three panels: a frozen 4096 by 4096 matrix W plus a rank-32 pair B times A; one LoRA step trained to land where five recorded steps land, with letter tokens weighted ten times; fusing W prime equals W plus B times A, the same shape as W."></a>
+        <figcaption>The Lightning LoRA: what a LoRA is, how ours learned to take one step for five, and how it was fused into the weights.</figcaption>
+      </figure>
 
       <figure class="plate">
         <a href="images/phase10-hybrid-off-fused.jpg"><img loading="lazy" src="images/phase10-hybrid-off-fused.jpg" alt="Nine hard prompts, from the pruned model at 40 steps to Nihonga at 10 steps: a checkerboard plate, a star, a laptop-lit face, four friends, a cyclist, an alarm clock, the Rusty Anchor, Happy Birthday Emma and a handwritten Chinese note."></a>
