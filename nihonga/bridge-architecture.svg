@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 1060" role="img" aria-labelledby="t d">
-<title id="t">Attention bridge for block 13</title>
-<desc id="d">Inputs: hidden states, the shared timestep modulation, token positions and a prefix key/value cache. An attention branch (8 heads of 128) updates image tokens, then a conditioned MLP branch updates all tokens. About 25.2 million weights, against 218 million in the original block.</desc>
+<title id="t">The Nihonga bridge (slots 5 and 20)</title>
+<desc id="d">Inputs: hidden states, the shared timestep modulation, token positions and a prefix key/value cache. An attention branch (8 heads of 128) updates image tokens, then a conditioned MLP branch updates all tokens. About 25.2 million weights, against 218 million in an original block. One replaces block 5 and one block 20.</desc>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10" fill="#231F1A"/></marker></defs>
 <rect width="560" height="1060" fill="#F7EEE3"/>
 <g font-family="Georgia,serif">
-<text x="280.0" y="36" font-size="23" text-anchor="middle" fill="#231F1A" font-style="italic">Attention bridge for block 13</text>
+<text x="280.0" y="36" font-size="23" text-anchor="middle" fill="#231F1A" font-style="italic">The bridge in slots 5 and 20</text>
 <rect x="20" y="56" width="122" height="46" rx="2" fill="#C3D3DB" stroke="#231F1A" stroke-width="1.2"/>
 <text x="81" y="76" font-size="15" text-anchor="middle" fill="#231F1A" >hidden h</text>
 <text x="81" y="94" font-size="12" text-anchor="middle" fill="#231F1A" >4,096 per token</text>
@@ -82,5 +82,5 @@
 <path d="M280 940 V966" stroke="#231F1A" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
 <rect x="110" y="966" width="340" height="42" rx="2" fill="#C3D3DB" stroke="#231F1A" stroke-width="1.2"/>
 <text x="280" y="992" font-size="16" text-anchor="middle" fill="#231F1A" >h_out · 4,096 per token</text>
-<text x="280" y="1036" font-size="14" text-anchor="middle" fill="#5E564B" >≈ 25.2M weights · 8 heads   (original block 13: 218M · 32 heads)</text>
+<text x="280" y="1036" font-size="14" text-anchor="middle" fill="#5E564B" >≈ 25.2M weights · 8 heads   (an original block: 218M · 32 heads)</text>
 </g></svg>
