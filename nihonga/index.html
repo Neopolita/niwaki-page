@@ -104,12 +104,9 @@
 
       <h3>Architecture</h3>
       <figure class="plate">
-        <a href="v1-architecture.svg"><img loading="lazy" src="v1-architecture.svg" width="1100" height="1150" alt="Nihonga v1: 32 slots of the Qwen-Image-2.1 transformer; slots 5 and 20 hold bridges of about 25 million weights, the other 30 blocks carry a fused rank-32 Lightning LoRA; sampling uses points 0, 1, 3, 5, 10, 15, 20, 25, 30 and 35 of the 40-step schedule."></a>
+        <a href="v1-architecture.svg"><img loading="lazy" src="v1-architecture.svg" width="1120" height="1640" alt="Nihonga v1 in one diagram: the 32 slots of the Qwen-Image-2.1 transformer, with slots 5 and 20 linked to a detailed drawing of the bridge (an 8-head attention branch with its own prompt cache, then a conditioned MLP); below, the fused Lightning LoRA and the 10-step schedule."></a>
       </figure>
-      <figure class="plate" style="max-width:560px">
-        <a href="bridge-architecture.svg"><img loading="lazy" src="bridge-architecture.svg" width="560" height="1060" alt="The bridge: hidden states, timestep modulation, positions and a prompt cache feed an attention branch with 8 heads of 128 (RMSNorm and RoPE on Q and K), then a conditioned MLP 4096 to 1024 to 4096 with tanh gates; about 25.2 million weights."></a>
-        <figcaption>One bridge, in slots 5 and 20: an attention branch, then a conditioned MLP, both reading the block&rsquo;s own timestep signal.</figcaption>
-      </figure>
+
       <dl class="facts">
         <div><dt>Bridges</dt><dd>Blocks 5 and 20 are replaced by modules of about 25 M weights, against 218 M for a block: an 8-head attention branch with its own prompt cache, then a timestep-conditioned MLP, trained end to end against the original model. Blocks were chosen by checking spelling, not only average error: block 13 looked cheap by average measures and turned out to carry letters, so it stays.</dd></div>
         <div><dt>Lightning LoRA</dt><dd>The speed comes from a Lightning LoRA we trained for this model. A LoRA leaves each weight matrix frozen and learns a thin correction beside it: two small matrices B and A of rank 32, here on q, k, v and out of the 30 blocks (31.5 M trainable weights). It was trained by step distillation: the pruned model was run in its normal 40 steps on 1,000 prompts, half with text, saving the image after every step, and the LoRA learned to make one big step land where five of those small steps land. The tokens that hold letters, found by OCR, count ten times in the loss. After training, each pair was multiplied out and added to its matrix (W&prime; = W + B&middot;A), so the LoRA is fused into the weights: no extra files, weights or time.</dd></div>
