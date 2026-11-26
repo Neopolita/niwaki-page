@@ -1,0 +1,138 @@
+/* Kanji's page: what style.css doesn't have yet. The waiting-list button (a button, no action yet), the comparison table and the
+   demos' placeholders, in the site's paper, ink and hairlines. */
+
+/* ---------- the waiting list ---------- */
+.lead .get { margin-top: 1.75rem; }
+.get button {
+  display: inline-block; font: inherit; font-size: 1.05rem; line-height: 1.2; cursor: pointer;
+  padding: 0.5rem 1rem 0.55rem; border: 0; border-radius: 2px;
+  background: var(--ink); color: var(--paper); box-shadow: inset 0 0 0 1px var(--ink);
+}
+.get button:hover { background: transparent; color: var(--ink); }
+.get button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.get button small { display: block; font-size: 0.86rem; opacity: 0.8; margin-top: 0.1rem; }
+.get.big button { font-size: 1.2rem; padding: 0.7rem 1.4rem 0.75rem; }
+/* the waiting list's two buttons as wide as the text over each: the hero's paragraph (46ch) and the last section's summary (64ch),
+   each list in the body's font so that its ch is theirs */
+.lead .get, #waitlist .get { display: block; }
+.lead .get { max-width: 46ch; }
+#waitlist .get { max-width: 64ch; }
+.lead .get li, #waitlist .get li { display: block; }
+.lead .get button, #waitlist .get button { display: block; width: 100%; font-size: 1.3rem; padding: 0.85rem 1.2rem 0.9rem; }
+.lead .get button small { font-size: 0.95rem; margin-top: 0.15rem; }
+.get button.ghost { background: transparent; color: var(--ink); }      /* a secondary action: outlined, filled on hover */
+.get button.ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- reading against writing: a comparison, in hairlines ---------- */
+.compare-scroll { margin-top: 1.75rem; overflow-x: auto; }
+.compare { width: 100%; min-width: 44rem; border-collapse: collapse; font-size: 1.02rem; line-height: 1.35; }
+.compare th, .compare td { text-align: left; vertical-align: top; padding: 0.7rem 0.9rem 0.7rem 0; border-bottom: 1px solid var(--rule); }
+.compare thead th {
+  font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: 0.09em; color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink); padding-top: 0;
+}
+.compare tbody th { font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: 0.09em; color: var(--ink-soft); width: 15%; }
+.compare td { color: var(--ink-soft); }
+.compare td.us { color: var(--ink); background: color-mix(in srgb, var(--tint-release) 26%, transparent); padding-left: 0.7rem; }
+.compare thead th.us { color: var(--ink); padding-left: 0.7rem; }
+.compare td.us + td, .compare th.us + th { padding-left: 1.1rem; }   /* air between Kanji's tinted column and the next */
+
+/* ---------- the demos' heading: "bring your own schema" in ink and medium weight, where a subtitle is grey */
+h2 .sub.byos { color: var(--ink); font-weight: 500; }
+
+/* ---------- benchmarks: a chart of Kanji's readings alone names its sets plainly, as the other charts name their other models */
+.bars.one li.solid .name { font-weight: 400; color: var(--ink-soft); }
+.bars.one li.solid:hover .name { color: var(--ink); }
+
+/* ---------- a video in a popup: everything around it dimmed; a click outside it, or Escape, closes it ---------- */
+.player { padding: 0; border: 0; background: transparent; width: min(calc(100vw - 9rem), 1280px, calc(82vh * 16 / 9)); max-width: none; max-height: 92vh; overflow: visible; }
+.player::backdrop { background: rgb(20 17 14 / 0.84); }
+.player video { display: block; width: 100%; height: auto; max-height: 92vh; background: #000; box-shadow: 0 12px 48px rgb(0 0 0 / 0.45); }
+.player .hint { position: absolute; top: -2rem; right: 0; margin: 0; color: rgb(247 238 227 / 0.8); font-size: 0.95rem; pointer-events: none; }
+.player .title {
+  position: absolute; top: -2.25rem; left: 0; max-width: 62%; margin: 0; pointer-events: none;
+  font-family: var(--display); font-style: italic; font-size: 1.3rem; line-height: 1.2; color: #F7EEE3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* the arrows to the previous and next demo, in the dimmed space on either side of the video */
+.player .step {
+  position: absolute; top: 50%; width: 3rem; height: 3rem; margin-top: -1.5rem; display: grid; place-items: center; padding: 0;
+  border: 0; border-radius: 50%; cursor: pointer; font: inherit; font-size: 1.3rem; line-height: 1; color: #F7EEE3;
+  background: rgb(247 238 227 / 0.1); box-shadow: inset 0 0 0 1px rgb(247 238 227 / 0.6); transition: background-color 0.2s ease;
+}
+.player .step:hover { background: rgb(247 238 227 / 0.25); }
+.player .step:focus-visible { outline: 2px solid #F7EEE3; outline-offset: 3px; }
+/* under a video made from someone else's footage, a link to the original, in the paper's colour over the dimmed page */
+.player .source {
+  position: absolute; top: calc(100% + 0.6rem); left: 0; right: 0; margin: 0;
+  font-size: 0.95rem; line-height: 1.35; color: rgb(247 238 227 / 0.8);
+}
+.player .source[hidden] { display: none; }
+.player .source a { color: #F7EEE3; }
+.player .prev { left: -4rem; }
+.player .next { right: -4rem; }
+@media (max-width: 46rem) {   /* no room beside the video on a phone: the arrows sit on its edges, the hint under it */
+  .player { width: 94vw; }
+  .player .step { width: 2.5rem; height: 2.5rem; margin-top: -1.25rem; background: rgb(20 17 14 / 0.6); }
+  .player .prev { left: 0.35rem; }
+  .player .next { right: 0.35rem; }
+  .player .title { max-width: 100%; font-size: 1.1rem; }
+  .player .hint { top: auto; bottom: -1.9rem; }
+  .player .source { top: calc(100% + 2.4rem); }   /* under the hint */
+}
+
+/* ---------- the demos, to come ---------- */
+/* a horizontal carousel: three tiles in view, the rest a scroll away (arrows, a swipe or a tab), each tile snapping to the start */
+.carousel { margin-top: 1.75rem; }
+.reels {
+  display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 2 * 1.5rem) / 3); gap: 1.5rem;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; padding: 3px 3px 0.25rem; margin: -3px -3px 0; scroll-padding-inline: 3px;   /* room for a tile's focus ring */
+}
+.reels::-webkit-scrollbar { display: none; }
+.reel { margin: 0; scroll-snap-align: start; }
+.carousel-nav { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.9rem; }
+.carousel-nav .count { margin-right: auto; font-size: 0.95rem; color: var(--ink-soft); font-variant-numeric: lining-nums tabular-nums; }
+.carousel-nav button {
+  width: 2.4rem; height: 2.4rem; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  font: inherit; font-size: 1.1rem; line-height: 1; color: var(--ink); background: transparent; box-shadow: inset 0 0 0 1px var(--ink);
+}
+.carousel-nav button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.carousel-nav button:disabled { opacity: 0.3; cursor: default; }
+.carousel-nav button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.reel .frame {
+  aspect-ratio: 16 / 9; display: grid; place-items: center; text-align: center; padding: 1rem;
+  box-shadow: inset 0 0 0 1px var(--ink-soft);
+  background: repeating-linear-gradient(135deg, rgb(35 31 26 / 0.05) 0 1px, transparent 1px 7px);
+  font-family: var(--display); font-style: italic; font-size: 1.25rem; color: var(--ink-soft);
+}
+.reel figcaption { margin-top: 0.55rem; font-size: 0.98rem; color: var(--ink-soft); }
+.reel figcaption b { font-weight: 500; color: var(--ink); }
+
+/* a demo's tile: its poster as a button that opens the video in the popup, a play mark on it and its length in a corner */
+.reel .frame.play {
+  position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 0; cursor: pointer; overflow: hidden;
+  background: var(--paper); box-shadow: inset 0 0 0 1px var(--ink-soft);
+}
+.reel .frame.play img { display: block; width: 100%; height: 100%; object-fit: cover; transition: filter 0.3s ease; }
+.reel .frame.play::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 3.2rem; height: 3.2rem; margin: -1.6rem 0 0 -1.6rem; border-radius: 50%;
+  background: rgb(35 31 26 / 0.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6.5v11l9-5.5z' fill='%23F7EEE3'/%3E%3C/svg%3E") center / 1.5rem no-repeat;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.22); transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.reel .frame.play:hover img { filter: brightness(0.94); }
+.reel .frame.play:hover::after { transform: scale(1.07); background-color: rgb(35 31 26 / 0.92); }
+.reel .frame.play:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.reel .frame .len {
+  position: absolute; right: 0.45rem; bottom: 0.4rem; padding: 0.05rem 0.4rem; border-radius: 2px;
+  font-family: var(--text, inherit); font-style: normal; font-size: 0.82rem; line-height: 1.3; color: #F7EEE3; background: rgb(35 31 26 / 0.75);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+@media (max-width: 46rem) {
+  .reels { grid-auto-columns: 86%; gap: 1rem; }   /* one tile at a time, the next one's edge in view */
+}
+
+@media print {
+  .get button { display: none; }
+}

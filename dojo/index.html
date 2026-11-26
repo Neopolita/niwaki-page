@@ -16,9 +16,6 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
   <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -26,15 +23,17 @@
 <header class="top">
   <div class="wrap">
   <nav class="nav" aria-label="Site">
-    <a class="mark" href="../"><img src="../assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <a class="mark" href="../"><img src="../assets/logo.png" width="168" height="168" alt="">Niwaki</a>
     <ul>
-      <li><a href="../">Niwaki</a></li>
+      <li><a href="../">Kanji</a></li>
+      <li><a href="../niwaki/">Niwaki</a></li>
       <li><a href="../saikei/">Saikei</a></li>
       <li><a href="../origami/">Origami</a></li>
       <li><a href="../nihonga/">Nihonga</a></li>
       <li><a href="./" aria-current="page">Dojo</a></li>
       <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
     </ul>
+    <div class="social"><a href="https://x.com/NiwakiAI" aria-label="Niwaki on X" title="Niwaki on X"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a href="https://www.instagram.com/niwakiai" aria-label="Niwaki on Instagram" title="Niwaki on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.6" cy="6.4" r="1.25" fill="currentColor"/></svg></a><a href="mailto:niwakiai@gmail.com" aria-label="Email niwakiai@gmail.com" title="niwakiai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.75" y="4.75" width="18.5" height="14.5" rx="1.75" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></a></div>
   </nav>
   </div>
 </header>
@@ -232,7 +231,10 @@
 <footer>
   <div class="wrap">
     <p>Independent AI research. Models and collections are on Hugging Face; code is on GitHub.</p>
-    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/neopolita">GitHub</a> · <a href="../">Niwaki models</a></p>
+    <div class="links">
+      <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/neopolita">GitHub</a> · <a href="../niwaki/">Niwaki models</a></p>
+      <p class="social"><a href="https://x.com/NiwakiAI">X</a> · <a href="https://www.instagram.com/niwakiai">Instagram</a> · <a href="mailto:niwakiai@gmail.com">niwakiai@gmail.com</a></p>
+    </div>
     <p class="made">Pruned and tended in Seville, Spain and Valença, Portugal.</p>
   </div>
 </footer>

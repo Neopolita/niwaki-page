@@ -3,38 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Niwaki · Model pruning</title>
-  <meta name="description" content="Niwaki prunes Mixture-of-Experts language models and releases them as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0, 141B parameters in 44.8 GB with lattice-coded experts for 64 GB Macs, a 19 GB build for 32 GB Macs and a 15 GB v5.0 build for 24 GB Macs.">
+  <title>Kanji · Niwaki</title>
+  <meta name="description" content="Kanji is a System 1 state model. It reads a conversation, a document or a broadcast once, as it arrives, and keeps a table of what it says up to date: every change with its probability and the words it came from, and no text generated.">
   <link rel="canonical" href="https://niwakiai.com/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Niwaki · Model pruning">
-  <meta property="og:description" content="Pruned Mixture-of-Experts language models, released as MLX and GGUF weights. Latest: Qwen3.8-Flash-Next v4.0 at 141B parameters and 44.8 GB on disk, with perplexity 10% below v2.4's at the same size, and 19 GB and 15 GB builds of it for 32 GB and 24 GB Macs.">
+  <meta property="og:title" content="Kanji · Niwaki">
+  <meta property="og:description" content="A System 1 state model: one read of each line, a table kept current, every value pointing back to its words, and no text generated. Against its own generative backbone writing the same table: more accurate, in a tenth of the time.">
   <meta property="og:url" content="https://niwakiai.com/">
-  <meta property="og:image" content="https://niwakiai.com/assets/og.jpg">
+  <meta property="og:image" content="https://niwakiai.com/assets/og-kanji.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#F7EEE3">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="kanji/kanji.css">
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
   <nav class="nav" aria-label="Site">
-    <a class="mark" href="./"><img src="assets/mark.png" width="112" height="112" alt="">Niwaki</a>
+    <a class="mark" href="./"><img src="assets/logo.png" width="168" height="168" alt="">Niwaki</a>
     <ul>
-      <li><a href="./" aria-current="page">Niwaki</a></li>
+      <li><a href="./" aria-current="page">Kanji</a></li>
+      <li><a href="niwaki/">Niwaki</a></li>
       <li><a href="saikei/">Saikei</a></li>
       <li><a href="origami/">Origami</a></li>
       <li><a href="nihonga/">Nihonga</a></li>
       <li><a href="dojo/">Dojo</a></li>
       <li class="ext"><a href="https://huggingface.co/neopolita">Hugging Face ↗</a></li>
     </ul>
+    <div class="social"><a href="https://x.com/NiwakiAI" aria-label="Niwaki on X" title="Niwaki on X"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a href="https://www.instagram.com/niwakiai" aria-label="Niwaki on Instagram" title="Niwaki on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.6" cy="6.4" r="1.25" fill="currentColor"/></svg></a><a href="mailto:niwakiai@gmail.com" aria-label="Email niwakiai@gmail.com" title="niwakiai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.75" y="4.75" width="18.5" height="14.5" rx="1.75" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></a></div>
   </nav>
   </div>
 </header>
@@ -42,322 +42,348 @@
 <main>
   <div class="wrap hero">
     <div class="lead">
-      <p>Niwaki (庭木) are Japan's garden trees, sculpted by meticulous pruning so that every branch serves the form of the whole.</p>
-      <p>This project applies that spirit to Mixture-of-Experts language models: open weights pruned to fit the memory you have, measured against the unpruned model, and released for MLX and llama.cpp.</p>
+      <p>Kanji, a New Kind of Model</p>
+      <p>Kanji reads a conversation, a document or a broadcast once, as it arrives, and keeps a table of what matters in it up to date: who and what is in it, and every value as it changes. It writes no text of its own.</p>
+      <ul class="get">
+        <li><button type="button">Join the waiting list</button></li>
+      </ul>
     </div>
-    <figure class="tree">
+    <figure class="tree plate-art">
       <picture>
-        <source srcset="assets/niwaki_tree.webp" type="image/webp">
-        <img src="assets/niwaki_tree.jpg" width="1221" height="868" alt="Engraving of a niwaki: a Japanese garden pine with a twisted trunk and cloud-pruned foliage.">
+        <source srcset="assets/kanji.webp" type="image/webp">
+        <img src="assets/kanji.jpg" width="1774" height="887" alt="Engraving of the characters 漢字 drawn as islands of rock and bonsai, with waterfalls, a pagoda and a still lake below.">
       </picture>
     </figure>
   </div>
 
-  <!-- ======================= Flash-Next v4.0 ======================= -->
-  <section id="flash-next" class="first" aria-labelledby="h-fn">
+  <!-- ======================= demos (placeholders until chosen) ======================= -->
+  <section id="demos" class="first" aria-labelledby="h-demos">
     <div class="wrap">
-      <p class="eyebrow">Latest release</p>
-      <h2 id="h-fn"><span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">141B-A6B</span> <span class="sub">Niwaki v4.0 · lattice-coded experts</span></h2>
-      <p class="summary">Qwen3.8-Flash-Next at 141B total and about 5.9B active parameters, its routed experts stored as E8 lattice codes at about 3, 1.4 or 1 bit per weight: 44.8&nbsp;GB on disk, the same as v2.4, for 64&nbsp;GB Macs. In that space it keeps more of the model's experts than v2.4 — 17,259 of 24,576 — and reads 10% lower perplexity. The task average reaches 0.794 against the unpruned model's 0.759, the program-state behaviours we test stay at the unpruned model's level, and twenty languages sit within 0.96–1.17× of its perplexity.</p>
+      <p class="eyebrow">Demos</p>
+      <h2 id="h-demos"><span class="nb">Watch it read</span> <span class="sub byos">bring your own schema</span></h2>
+      <p class="summary">Kanji reading as it happens, each time with a schema written for the stream: the types and fields it should keep.</p>
+      <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Demo videos">
+      <div class="reels">
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="haul" data-src="kanji/haul-counts.mp4" aria-label="Play The long haul, 1 minute 51 seconds">
+            <img src="kanji/haul-counts.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">1:51</span>
+          </button>
+          <figcaption><b>The long haul.</b> Thirteen companies' annual reports read back to back: 1.3 million tokens, with its memory and its time flat.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="race" data-src="kanji/race-duel.mp4" aria-label="Play The race, 33 seconds">
+            <img src="kanji/race-duel.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">0:33</span>
+          </button>
+          <figcaption><b>The race.</b> A team's incident channel, 148 lines, read by Kanji and by its generative backbone.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="radio" data-src="kanji/radio-drive.mp4" data-source="https://www.youtube.com/watch?v=HZlAgm08jBo&amp;t=1140s" data-source-title="Broncos Radio Broadcast of the Rams-Broncos Ending | 2026 NFL" data-source-by=", on YouTube" aria-label="Play A radio call, 1 minute 29 seconds">
+            <img src="kanji/radio-drive.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">1:29</span>
+          </button>
+          <figcaption><b>A radio call.</b> A football drive as the commentators call it: the down, the play and the score as they change.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="party" data-src="kanji/meet-the-party.mp4" data-source="https://www.youtube.com/watch?v=jL1xWl7udUk" data-source-title="D&amp;D Forgotten Realms Official One Shot - Adventures in Faerûn w/ Dungeon Master Aabria Iyengar" data-source-by=", the official D&amp;D channel on YouTube" aria-label="Play Meet the party, 2 minutes 30 seconds">
+            <img src="kanji/meet-the-party.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:30</span>
+          </button>
+          <figcaption><b>Meet the party.</b> A live Dungeons &amp; Dragons game's opening: each character's race, class and level, their gear and the place, as the players introduce them.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="orgchart" data-src="kanji/orgchart.mp4" aria-label="Play An org chart, 2 minutes 52 seconds">
+            <img src="kanji/orgchart.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:52</span>
+          </button>
+          <figcaption><b>An org chart.</b> A hospital group's new data team planned in a Slack thread: who reports to whom, drawn as the thread decides it.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="rpg" data-src="kanji/tabletop-chat.mp4" aria-label="Play A tabletop game chat, 2 minutes 56 seconds">
+            <img src="kanji/tabletop-chat.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:56</span>
+          </button>
+          <figcaption><b>A tabletop game chat.</b> A game master and four players on Discord, voiced, storming a sea fort: each attack, and how the characters stand. Read by a variant trained on more tabletop games.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="close" data-src="kanji/market-close.mp4" data-source="https://www.youtube.com/watch?v=zxYpKR-9Nq0&amp;t=104s" data-source-title="S&amp;P 500 Hits Record as Inflation Cools | Closing Bell" data-source-by=", Bloomberg Television on YouTube" aria-label="Play The market close, 1 minute 50 seconds">
+            <img src="kanji/market-close.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">1:50</span>
+          </button>
+          <figcaption><b>The market close.</b> A financial news show at the close: the indices, the record highs and an earnings report, with their numbers.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="coding" data-src="kanji/coding-session.mp4" aria-label="Play A coding agent's session, 2 minutes 36 seconds">
+            <img src="kanji/coding-session.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:36</span>
+          </button>
+          <figcaption><b>A coding agent's session.</b> An agent fixing a library's Spanish numbers, step by step: the issue, the files it reads and writes, the commands it runs.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="cabin" data-src="kanji/cabin-weekend.mp4" aria-label="Play A cabin weekend, 3 minutes">
+            <img src="kanji/cabin-weekend.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">3:00</span>
+          </button>
+          <figcaption><b>A cabin weekend.</b> Four friends planning a trip in a group chat, read against a schema typed on the spot: the bookings, their costs, who pays, the to-dos.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="paper" data-src="kanji/mixtral-paper.mp4" data-source="https://arxiv.org/abs/2401.04088" data-source-what="Original paper" data-source-title="Mixtral of Experts" data-source-by=", Albert Q. Jiang et al. (Mistral AI, 2024), on arXiv, under " data-source-licence="CC BY 4.0" data-source-licence-url="https://creativecommons.org/licenses/by/4.0/" aria-label="Play A research paper, 2 minutes 15 seconds">
+            <img src="kanji/mixtral-paper.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:15</span>
+          </button>
+          <figcaption><b>A research paper.</b> Mixtral of Experts, read paragraph by paragraph: each model in its tables, with its scores.</figcaption>
+        </figure>
+        <figure class="reel">
+          <button type="button" class="frame play" data-video="filing" data-src="kanji/nvidia-filing.mp4" aria-label="Play A company's annual report, 2 minutes 50 seconds">
+            <img src="kanji/nvidia-filing.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:50</span>
+          </button>
+          <figcaption><b>A company's annual report.</b> NVIDIA's 10-K for fiscal 2023: its segments and financial metrics, and how each changed.</figcaption>
+        </figure>
+      </div>
+      <div class="carousel-nav">
+        <span class="count" aria-live="polite"></span>
+        <button type="button" class="prev" aria-label="Previous videos">←</button>
+        <button type="button" class="next" aria-label="Next videos">→</button>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= what it is ======================= -->
+  <section id="what" aria-labelledby="h-what">
+    <div class="wrap">
+      <p class="eyebrow">A new kind of model</p>
+      <h2 id="h-what"><span class="nb">A System 1 State Model</span> <span class="sub">state from a stream</span></h2>
+      <p class="summary">Psychologists call the fast, automatic way of thinking System 1: reading a face, a sentence or a scoreboard at a glance. Language models today work the slow way: they write out every answer a token at a time, and to keep track of something they write it all out again. Kanji is a System 1 model. It reads each line once and its table follows: new people, things and events are added, values change, and what has ended is retired. Each change comes with a probability and points back to the words it came from.</p>
 
       <ul class="figures">
-        <li><span class="n">44.8 <small>GB</small></span><span class="c">on disk, the same as v2.4; from 111.5 GB for the 4-bit reference</span></li>
-        <li><span class="n">−10<small>%</small></span><span class="c">WikiText-2 perplexity against v2.4 at the same size (5.70 against 6.36)</span></li>
-        <li><span class="n">0.794</span><span class="c">task average, against 0.759 for the unpruned model and 0.762 for v2.4</span></li>
-        <li><span class="n">98.0<small>%</small></span><span class="c">of 2,000 fresh two-step arithmetic problems, as the unpruned model</span></li>
+        <li><span class="n">0</span><span class="c">tokens generated: every value is read from the text or chosen among your schema's options, never written</span></li>
+        <li><span class="n">157 <small>ms</small></span><span class="c">to read a line and update the table, on the mean, on an M4 Max; 72&nbsp;ms the median</span></li>
+        <li><span class="n">1M <small>tokens</small></span><span class="c">read with memory flat: it carries the table, not the transcript</span></li>
+        <li><span class="n">Any</span><span class="c">schema: the types and fields you care about, given at run time</span></li>
       </ul>
+
+      <h3>What it gives you</h3>
+      <dl class="facts">
+        <div><dt>A table, kept current</dt><dd>The objects your schema names (people, tasks, orders, plays, attacks) with their fields, from a name or a number to a choice or a link between two objects. As the text goes on, Kanji adds them, changes their values and retires what has ended.</dd></div>
+        <div><dt>Patches, not prose</dt><dd>Every change arrives as a small patch: create, set, retire. Apply them in order and your table matches the text so far, with nothing to parse.</dd></div>
+        <div><dt>Evidence on every value</dt><dd>Each value points back to the words it was read from, so you can show it, check it and trust it.</dd></div>
+        <div><dt>A probability on every change</dt><dd>Act at once on the sure ones and send the rest for review.</dd></div>
+        <div><dt>Changes of mind</dt><dd>When the text later says otherwise (“actually, make it Friday”), the value changes with it, and the old one is kept in the history.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ======================= against the generative alternative ======================= -->
+  <section id="writing" aria-labelledby="h-writing">
+    <div class="wrap">
+      <p class="eyebrow">Against the generative alternative</p>
+      <h2 id="h-writing">Reading against writing</h2>
+      <p class="summary">The usual way to keep a state with a language model is to have it write the state out: after each message, the whole table again. Every update then costs seconds, grows with the state, and can carry values nobody said. We gave Kanji and its own backbone, the generative model it is built on, the same 148 lines of a team's incident channel, on the same machine, scored by the same count.</p>
 
       <div class="charts">
         <figure class="chart">
-          <figcaption><b>Size on disk, GB</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:111.5">
-            <li class="open" style="--v:111.5;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">111.5</span></span></li>
-            <li class="open" style="--v:55.3;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">55.3</span></span></li>
-            <li class="solid" style="--v:44.8;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
-            <li class="solid" style="--v:33.3;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">33.3</span></span></li>
-            <li class="solid" style="--v:29.5;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">29.5</span></span></li>
-            <li class="hatch" style="--v:44.8;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">44.8</span></span></li>
-            <li class="hatch" style="--v:37.5;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">37.5</span></span></li>
+          <figcaption><b>Field F1 against the channel's gold table</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:0.6">
+            <li class="solid" style="--v:0.582;--i:0"><span class="name">Kanji</span><span class="track"><span class="bar"></span><span class="val">0.582</span></span></li>
+            <li class="open" style="--v:0.335;--i:1"><span class="name">Its backbone, writing the table</span><span class="track"><span class="bar"></span><span class="val">0.335</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
-          <figcaption><b>WikiText-2 perplexity</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:7.84">
-            <li class="open" style="--v:5.06;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">5.06</span></span></li>
-            <li class="open" style="--v:6.35;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">6.35</span></span></li>
-            <li class="solid" style="--v:5.70;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">5.70</span></span></li>
-            <li class="solid" style="--v:6.51;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">6.51</span></span></li>
-            <li class="solid" style="--v:6.90;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">6.90</span></span></li>
-            <li class="hatch" style="--v:6.36;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">6.36</span></span></li>
-            <li class="hatch" style="--v:7.84;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">7.84</span></span></li>
-          </ol>
-        </figure>
-
-        <figure class="chart">
-          <figcaption><b>Task average, five tasks</b><i>higher is better</i></figcaption>
-          <ol class="bars" style="--max:0.794">
-            <li class="open" style="--v:0.759;--i:0"><span class="name">Unpruned, 4-bit reference</span><span class="track"><span class="bar"></span><span class="val">0.759</span></span></li>
-            <li class="open" style="--v:0.761;--i:1"><span class="name">Unpruned, best 2-bit cast</span><span class="track"><span class="bar"></span><span class="val">0.761</span></span></li>
-            <li class="solid" style="--v:0.794;--i:2"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="val">0.794</span></span></li>
-            <li class="solid" style="--v:0.765;--i:3"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="val">0.765</span></span></li>
-            <li class="solid" style="--v:0.760;--i:4"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="val">0.760</span></span></li>
-            <li class="hatch" style="--v:0.762;--i:5"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="val">0.762</span></span></li>
-            <li class="hatch" style="--v:0.738;--i:6"><span class="name">Niwaki v2.4 · 102B</span><span class="track"><span class="bar"></span><span class="val">0.738</span></span></li>
-          </ol>
-        </figure>
-
-        <figure class="chart">
-          <figcaption><b>Ten languages, perplexity against the unpruned model</b><i>best to worst · lower is better</i></figcaption>
-          <ol class="bars" style="--max:1.40">
-            <li class="solid range" style="--v:1.08;--v2:1.15;--i:0"><span class="name">Niwaki v4.0 · 141B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.08–1.15</span></span></li>
-            <li class="solid range" style="--v:1.18;--v2:1.34;--i:1"><span class="name">Niwaki v4.0 · 19 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.18–1.34</span></span></li>
-            <li class="solid range" style="--v:1.06;--v2:1.40;--i:2"><span class="name">Niwaki v5.0 · 15 GB</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.06–1.40</span></span></li>
-            <li class="hatch range" style="--v:0.97;--v2:1.27;--i:3"><span class="name">Niwaki v2.4 · 119B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–1.27</span></span></li>
+          <figcaption><b>Time to update after each line, mean, ms</b><i>lower is better</i></figcaption>
+          <ol class="bars" style="--max:1692">
+            <li class="solid" style="--v:157;--i:0"><span class="name">Kanji</span><span class="track"><span class="bar"></span><span class="val">157</span></span></li>
+            <li class="open" style="--v:1692;--i:1"><span class="name">Its backbone, writing the table</span><span class="track"><span class="bar"></span><span class="val">1,692</span></span></li>
           </ol>
         </figure>
       </div>
 
       <ul class="key" aria-label="Legend">
-        <li><span class="solid"></span>Niwaki v4.0 and v5.0</li>
-        <li><span class="hatch"></span>earlier Niwaki generations</li>
-        <li><span class="open"></span>the unpruned model</li>
+        <li><span class="solid"></span>Kanji</li>
+        <li><span class="open"></span>its generative backbone, writing the table after each line</li>
       </ul>
 
-      <p class="note">Perplexity over 64 × 2048-token windows; task average over arc_easy, hellaswag, piqa, winogrande and boolq, zero-shot, 500 examples each, the same examples for every row; languages on FLORES-200 devtest (English, Spanish, French, German, Russian, Chinese, Japanese, Korean, Arabic and Hindi), 1.00 meaning the unpruned model's perplexity; the program-state suite (variable tracking, distractor lines, two-step arithmetic, multi-hop lookups) scored by forced choice on two held-out seeds, and the arithmetic figure on 2,000 freshly generated problems scored the same way. The task average sits above the unpruned model's on the strength of boolq, winogrande and arc_easy; on hellaswag and piqa v4.0 stays below it. v2.4 stays lower on Hindi (0.97 against 1.12) and Malayalam; on the other eighteen of the twenty languages we measure, v4.0 reads lower. The best 2-bit cast of the unpruned model (routed experts and n-gram table at 2-bit) is 10.5&nbsp;GB larger than v4.0 and behind it on both perplexity and task average. In MLX, v4.0 decodes 2–3% slower than v2.4, and its prompt throughput on 2,048 tokens is 9–13% lower. Protocols and the full tables are on the model cards.</p>
+      <ul class="figures two">
+        <li><span class="n">23 <small>s</small></span><span class="c">for Kanji to read all 148 lines, handed to it at once</span></li>
+        <li><span class="n">4 <small>min</small> 10 <small>s</small></span><span class="c">for its backbone to do the same, ten times as long</span></li>
+      </ul>
 
-      <h3>In llama.cpp</h3>
-      <div class="charts">
-        <figure class="chart wide">
-          <figcaption><b>GGUF builds · WikiText-2 perplexity, 512-token windows</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:8.75">
-            <li class="solid" style="--v:5.76;--i:0"><span class="name">Niwaki v4.0 141B · 61.7 GB</span><span class="track"><span class="bar"></span><span class="val">5.76</span></span></li>
-            <li class="hatch" style="--v:6.88;--i:1"><span class="name">Niwaki v2.4 119B · UD-Q4K · 64.3 GB</span><span class="track"><span class="bar"></span><span class="val">6.88</span></span></li>
-            <li class="hatch" style="--v:7.04;--i:2"><span class="name">Niwaki v2.4 119B · UD-Q3K · 51.0 GB</span><span class="track"><span class="bar"></span><span class="val">7.04</span></span></li>
-            <li class="solid" style="--v:7.16;--i:3"><span class="name">Niwaki v4.0 23GB · 40.2 GB</span><span class="track"><span class="bar"></span><span class="val">7.16</span></span></li>
-            <li class="hatch" style="--v:8.57;--i:4"><span class="name">Niwaki v2.4 102B · UD-Q4K · 55.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.57</span></span></li>
-            <li class="hatch" style="--v:8.75;--i:5"><span class="name">Niwaki v2.4 102B · UD-Q3K · 43.9 GB</span><span class="track"><span class="bar"></span><span class="val">8.75</span></span></li>
-          </ol>
-        </figure>
+      <ul class="get">
+        <li><button type="button" class="ghost" data-open-video="race">Watch the race<small>33 seconds, both reading the same channel</small></button></li>
+      </ul>
+
+      <p class="note">The backbone writes the same table after every line, as function calls, with the whole conversation in its context. One run each, read once, on an M4 Max. Field F1 counts every field of every object in the table after each line against the gold table. A development measurement, as is everything on this page.</p>
+
+      <h3>How it compares</h3>
+      <div class="compare-scroll">
+        <table class="compare">
+          <thead>
+            <tr><th></th><th class="us">Kanji</th><th>A generative model writing the state</th><th>Memory layers</th><th>Trackers built for one task</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Each update</th><td class="us">one read of the new line</td><td>the whole state written out again</td><td>the new text indexed or summarized</td><td>one read of the new turn</td></tr>
+            <tr><th>Time</th><td class="us">about 0.1 to 0.25&nbsp;s a line</td><td>seconds, growing with the state</td><td>a model call to summarize, a search to recall</td><td>fast</td></tr>
+            <tr><th>Values</th><td class="us">read from the text or chosen among the schema's options, each with its words</td><td>written, so they can include what was never said</td><td>passages to search, not a current table</td><td>read, for the slots it was trained on</td></tr>
+            <tr><th>Schema</th><td class="us">any, given at run time</td><td>any, in the prompt</td><td>none</td><td>fixed: a new one means retraining</td></tr>
+            <tr><th>Long streams</th><td class="us">a bounded table, memory flat over a million tokens</td><td>a growing context, or a window that forgets</td><td>a store that keeps growing</td><td>one dialogue at a time</td></tr>
+            <tr><th>Confidence</th><td class="us">a probability on every change</td><td>none per value</td><td>a similarity score per passage</td><td>a score per slot</td></tr>
+          </tbody>
+        </table>
       </div>
-      <p class="note">The v4.0 file stores the same experts as the MLX weights at higher precision, Q3_K and IQ4_NL, which makes it 17&nbsp;GB larger; on identical tokens it reads 9% lower perplexity than they do. On an M4 Max with Metal (llama-bench, in one session with v2.4's UD-Q3K file) it runs at 506 tokens/s on a 512-token prompt, 396 on a 2,048-token prompt and 26 in decode, against 488, 417 and 26 for v2.4. On a Mac it holds 42.0&nbsp;GiB on the GPU at a 2,048-token context, within a 64&nbsp;GB Mac's default GPU limit; its n-gram table stays in CPU memory, read from the file as tokens need it. The 23GB file is the GGUF build of the 19&nbsp;GB model below and holds 21.8&nbsp;GiB on the GPU. Like the v2.4 files, these need the <a href="https://github.com/Neopolita/neopolita-llama.cpp">neopolita-llama.cpp</a> fork: stock llama.cpp cannot represent this model's layout yet.</p>
-
-      <ul class="get">
-        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Qwen3.8-Flash-Next-141B-A6B-v4.0-mlx">MLX weights ↗<small>44.8 GB · Apple silicon, 64 GB</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.8-Flash-Next-141B-A6B-v4.0-gguf">GGUF build ↗<small>61.7 GB · llama.cpp</small></a></li>
-      </ul>
-
-      <h3 id="flash-next-19gb">For 32 GB Macs: <span class="nb">v4.0 · 19 GB</span></h3>
-      <p class="summary">The v4.0 model sized for 32&nbsp;GB Macs: its routed experts are stored as E8 lattice codes at about 2 bits per weight, and recovery training follows. Its 14.4&nbsp;GB n-gram table stays on disk and is read as tokens need it, so the model holds about 19&nbsp;GB in memory although the download is 33.3&nbsp;GB. Against v2.4's 102B, the smallest v2.4 release, it reads lower perplexity and KL divergence, a higher task average and an equal or higher score on every program-state behaviour.</p>
-
-      <ul class="figures">
-        <li><span class="n">19.1 <small>GiB</small></span><span class="c">peak on a 2,048-token prompt, under a 32&nbsp;GB Mac's default GPU limit of 21.3&nbsp;GiB</span></li>
-        <li><span class="n">−17<small>%</small></span><span class="c">WikiText-2 perplexity against v2.4's 102B (6.51 against 7.84)</span></li>
-        <li><span class="n">0.765</span><span class="c">task average, against 0.738 for v2.4's 102B and 0.759 for the unpruned model</span></li>
-        <li><span class="n">92.9<small>%</small></span><span class="c">of 2,000 fresh two-step arithmetic problems, against 98.0% for the unpruned model</span></li>
-      </ul>
-
-      <ul class="get">
-        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Flash-Next-19GB-v4.0-mlx">MLX weights ↗<small>33.3 GB download · Apple silicon, 32 GB</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Flash-Next-23GB-v4.0-gguf">GGUF build ↗<small>40.2 GB · llama.cpp</small></a></li>
-      </ul>
-
-      <h3 id="flash-next-15gb">For 24 GB Macs: <span class="nb">v5.0 · 15 GB</span></h3>
-      <p class="summary">The 19&nbsp;GB model with its routed experts stored as trellis codes at about 1.5 bits per weight instead of E8 lattice codes at about 2: the same experts and everything else, in 11.9&nbsp;GB of expert storage instead of 15.7&nbsp;GB. It holds about 15&nbsp;GB in memory against a 29.5&nbsp;GB download, so a 24&nbsp;GB Mac runs it with prompts up to about 8K tokens. Against the 19&nbsp;GB model it reads 4–6% higher perplexity and a little lower variable tracking; against v2.4's 102B, lower perplexity and KL divergence and a higher task average. Two-step arithmetic matches the 19&nbsp;GB model when it thinks first (60 of 60 word problems, against 58) and falls behind when it answers directly (42 against 50). There is no GGUF build: llama.cpp does not read trellis-coded experts.</p>
-
-      <ul class="figures">
-        <li><span class="n">15.8 <small>GiB</small></span><span class="c">peak on an 8,192-token prompt, under a 24&nbsp;GB Mac's default GPU limit of about 16&nbsp;GiB</span></li>
-        <li><span class="n">−12<small>%</small></span><span class="c">WikiText-2 perplexity against v2.4's 102B (6.90 against 7.84)</span></li>
-        <li><span class="n">0.760</span><span class="c">task average, against 0.738 for v2.4's 102B and 0.759 for the unpruned model</span></li>
-        <li><span class="n">92.9<small>%</small></span><span class="c">of 2,000 fresh two-step arithmetic problems, as the 19&nbsp;GB model</span></li>
-      </ul>
-
-      <ul class="get">
-        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Flash-Next-15GB-v5.0-mlx">MLX weights ↗<small>29.5 GB download · Apple silicon, 24 GB</small></a></li>
-      </ul>
-
-      <h3>Earlier generations</h3>
-      <ul class="releases">
-        <li>
-          <span class="what">v2.4 · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">119B-A5B · 3-bit</span></span>
-          <span class="nums">44.8 GB · perplexity 6.36 · task average 0.762</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-119B-A5B-Niwaki-v2.4-3bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v2.4 · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">102B-A5B · 3-bit</span></span>
-          <span class="nums">37.5 GB, fits a 48 GB Mac · perplexity 7.84 · task average 0.738</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-102B-A5B-Niwaki-v2.4-3bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">First generation · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">113B-A5B · 3-bit</span></span>
-          <span class="nums">42.2 GB · perplexity 7.08 · task average 0.757</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-113B-A5B-Niwaki-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-113B-A5B-Niwaki-3bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">First generation · <span class="nb">Qwen3.8-Flash-Next</span> <span class="nb">99B-A5B · 3-bit</span></span>
-          <span class="nums">36.7 GB, fits a 48 GB Mac · perplexity 7.88 · task average 0.733</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-99B-A5B-Niwaki-3bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.8-Flash-Next-99B-A5B-Niwaki-3bit-gguf">GGUF ↗</a></span>
-        </li>
-      </ul>
     </div>
   </section>
 
-  <!-- ======================= Qwen3.6 v3.0 ======================= -->
-  <section id="qwen36" aria-labelledby="h-q36">
+  <!-- ======================= benchmarks ======================= -->
+  <section id="benchmarks" aria-labelledby="h-bench">
     <div class="wrap">
-      <p class="eyebrow">From Qwen3.6-35B-A3B</p>
-      <h2 id="h-q36"><span class="nb">Qwen3.6</span> <span class="nb">30B · 27B · 24B</span> <span class="sub">Niwaki v3.0 · per-expert precision</span></h2>
-      <p class="summary">Qwen3.6-35B-A3B with each of its 10,240 routed experts stored at its own precision — 4, 3 or 2 bits — or removed, in three sizes that all run in 24&nbsp;GB of unified memory. The 30B holds the 8-bit reference's task average at 3.4× less expert storage: perplexity 3–8% above the reference's, program-state tracking at its level, and ten major languages within 4–21% of it.</p>
-
-      <ul class="figures">
-        <li><span class="n">10.1 <small>GB</small></span><span class="c">of expert storage in the 30B, from 34.2 GB in the 8-bit reference</span></li>
-        <li><span class="n">99.7<small>%</small></span><span class="c">of the reference's task average (0.794 against 0.796)</span></li>
-        <li><span class="n">−12<small>%</small></span><span class="c">WikiText-2 perplexity against v2.3, at 11% fewer expert bytes (6.98 against 7.95)</span></li>
-        <li><span class="n">10 <small>languages</small></span><span class="c">kept within 4–21% of the reference's perplexity, English to Hindi</span></li>
-      </ul>
+      <p class="eyebrow">Benchmarks</p>
+      <h2 id="h-bench">Where it stands, in development</h2>
+      <p class="summary">Measured with the model as it stands: on development sets, and for dialogue on the standard test sets, beside a leading published tracker on each.</p>
 
       <div class="charts">
         <figure class="chart">
-          <figcaption><b>WikiText-2 perplexity</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:9.02">
-            <li class="open" style="--v:6.76;--i:0"><span class="name">Reference, 8-bit · 34.2 GB of experts</span><span class="track"><span class="bar"></span><span class="val">6.76</span></span></li>
-            <li class="solid" style="--v:6.98;--i:1"><span class="name">v3.0 · 30B · 10.1 GB</span><span class="track"><span class="bar"></span><span class="val">6.98</span></span></li>
-            <li class="solid" style="--v:7.20;--i:2"><span class="name">v3.0 · 27B · 8.9 GB</span><span class="track"><span class="bar"></span><span class="val">7.20</span></span></li>
-            <li class="solid" style="--v:7.80;--i:3"><span class="name">v3.0 · 24B · 7.3 GB</span><span class="track"><span class="bar"></span><span class="val">7.80</span></span></li>
-            <li class="open" style="--v:7.66;--i:4"><span class="name">Unpruned, experts at 2-bit, retrained · 10.1 GB</span><span class="track"><span class="bar"></span><span class="val">7.66</span></span></li>
-            <li class="hatch" style="--v:7.95;--i:5"><span class="name">v2.3 · 4-bit · 11.3 GB</span><span class="track"><span class="bar"></span><span class="val">7.95</span></span></li>
-            <li class="hatch" style="--v:9.02;--i:6"><span class="name">v2.3 · 2-bit · 7.3 GB</span><span class="track"><span class="bar"></span><span class="val">9.02</span></span></li>
+          <figcaption><b>Long streams, field F1</b><i>higher is better</i></figcaption>
+          <ol class="bars one" style="--max:1">
+            <li class="solid" style="--v:0.755;--i:0"><span class="name">59 streams of up to 32,000 tokens, each with its own schema</span><span class="track"><span class="bar"></span><span class="val">0.755</span></span></li>
+            <li class="solid" style="--v:0.715;--i:1"><span class="name">the 18 of them on schemas it never trained on</span><span class="track"><span class="bar"></span><span class="val">0.715</span></span></li>
+            <li class="solid" style="--v:0.752;--i:2"><span class="name">a held-back set, read once</span><span class="track"><span class="bar"></span><span class="val">0.752</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
-          <figcaption><b>Task average, five tasks</b><i>higher is better</i></figcaption>
-          <ol class="bars" style="--max:0.796">
-            <li class="open" style="--v:0.796;--i:0"><span class="name">Reference, 8-bit · 34.2 GB of experts</span><span class="track"><span class="bar"></span><span class="val">0.796</span></span></li>
-            <li class="solid" style="--v:0.794;--i:1"><span class="name">v3.0 · 30B · 10.1 GB</span><span class="track"><span class="bar"></span><span class="val">0.794</span></span></li>
-            <li class="solid" style="--v:0.791;--i:2"><span class="name">v3.0 · 27B · 8.9 GB</span><span class="track"><span class="bar"></span><span class="val">0.791</span></span></li>
-            <li class="solid" style="--v:0.785;--i:3"><span class="name">v3.0 · 24B · 7.3 GB</span><span class="track"><span class="bar"></span><span class="val">0.785</span></span></li>
-            <li class="open" style="--v:0.793;--i:4"><span class="name">Unpruned, experts at 2-bit, retrained · 10.1 GB</span><span class="track"><span class="bar"></span><span class="val">0.793</span></span></li>
-            <li class="hatch" style="--v:0.772;--i:5"><span class="name">v2.3 · 4-bit · 11.3 GB</span><span class="track"><span class="bar"></span><span class="val">0.772</span></span></li>
-            <li class="hatch" style="--v:0.760;--i:6"><span class="name">v2.3 · 2-bit · 7.3 GB</span><span class="track"><span class="bar"></span><span class="val">0.760</span></span></li>
+          <figcaption><b>Documents, field F1</b><i>higher is better</i></figcaption>
+          <ol class="bars one" style="--max:1">
+            <li class="solid" style="--v:0.462;--i:0"><span class="name">50 non-fiction texts</span><span class="track"><span class="bar"></span><span class="val">0.462</span></span></li>
+            <li class="solid" style="--v:0.540;--i:1"><span class="name">company filings</span><span class="track"><span class="bar"></span><span class="val">0.540</span></span></li>
+            <li class="solid" style="--v:0.450;--i:2"><span class="name">coding sessions</span><span class="track"><span class="bar"></span><span class="val">0.450</span></span></li>
+            <li class="solid" style="--v:0.369;--i:3"><span class="name">research papers</span><span class="track"><span class="bar"></span><span class="val">0.369</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
-          <figcaption><b>Ten languages, perplexity against the reference</b><i>best to worst · lower is better</i></figcaption>
-          <ol class="bars" style="--max:1.55">
-            <li class="solid range" style="--v:1.04;--v2:1.21;--i:0"><span class="name">v3.0 · 30B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.04–1.21</span></span></li>
-            <li class="solid range" style="--v:1.06;--v2:1.24;--i:1"><span class="name">v3.0 · 27B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.06–1.24</span></span></li>
-            <li class="solid range" style="--v:1.11;--v2:1.34;--i:2"><span class="name">v3.0 · 24B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.11–1.34</span></span></li>
-            <li class="hatch range" style="--v:1.14;--v2:1.23;--i:3"><span class="name">v2.3 · 4-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.14–1.23</span></span></li>
-            <li class="hatch range" style="--v:1.33;--v2:1.55;--i:4"><span class="name">v2.3 · 2-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">1.33–1.55</span></span></li>
+          <figcaption><b>Schema-Guided Dialogue, test, joint goal accuracy,&nbsp;%</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:100">
+            <li class="solid" style="--v:76.8;--i:0"><span class="name">Kanji, not generative</span><span class="track"><span class="bar"></span><span class="val">76.8</span></span></li>
+            <li class="open" style="--v:88.8;--i:1"><span class="name">SDT, a T5-XXL fine-tuned for it, generative</span><span class="track"><span class="bar"></span><span class="val">88.8</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
-          <figcaption><b>Two-step arithmetic, generated answers</b><i>higher is better</i></figcaption>
-          <ol class="bars" style="--max:1">
-            <li class="open range" style="--v:0.63;--v2:0.68;--i:0"><span class="name">Reference, 8-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.63–0.68</span></span></li>
-            <li class="solid range" style="--v:0.53;--v2:0.62;--i:1"><span class="name">v3.0 · 30B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.53–0.62</span></span></li>
-            <li class="solid range" style="--v:0.58;--v2:0.62;--i:2"><span class="name">v3.0 · 27B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.58–0.62</span></span></li>
-            <li class="solid range" style="--v:0.48;--v2:0.57;--i:3"><span class="name">v3.0 · 24B</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.48–0.57</span></span></li>
-            <li class="open range" style="--v:0.53;--v2:0.60;--i:4"><span class="name">Unpruned, experts at 2-bit, retrained</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.53–0.60</span></span></li>
-            <li class="hatch range" style="--v:0.97;--v2:0.98;--i:5"><span class="name">v2.3 · 4-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.97–0.98</span></span></li>
-            <li class="hatch range" style="--v:0.92;--v2:0.93;--i:6"><span class="name">v2.3 · 2-bit</span><span class="track"><span class="bar"></span><span class="whisker"></span><span class="val">0.92–0.93</span></span></li>
+          <figcaption><b>MultiWOZ 2.4, test, joint goal accuracy,&nbsp;%</b><i>higher is better</i></figcaption>
+          <ol class="bars" style="--max:100">
+            <li class="solid" style="--v:61.4;--i:0"><span class="name">Kanji, not generative</span><span class="track"><span class="bar"></span><span class="val">61.4</span></span></li>
+            <li class="open" style="--v:80.1;--i:1"><span class="name">MetaASSIST, a tracker trained for MultiWOZ, not generative</span><span class="track"><span class="bar"></span><span class="val">80.1</span></span></li>
           </ol>
         </figure>
       </div>
 
       <ul class="key" aria-label="Legend">
-        <li><span class="solid"></span>Niwaki v3.0</li>
-        <li><span class="hatch"></span>earlier Niwaki generations</li>
-        <li><span class="open"></span>the unpruned model</li>
+        <li><span class="solid"></span>Kanji</li>
+        <li><span class="open"></span>a leading published tracker trained for that dataset</li>
       </ul>
 
-      <p class="note">Perplexity over WikiText-2's full test set in 2048-token windows; task average over the complete arc_easy, hellaswag, piqa, winogrande and boolq test sets; languages on FLORES-200 devtest (English, Spanish, French, German, Russian, Chinese, Japanese, Korean, Arabic and Hindi), 1.00 meaning the reference's perplexity; arithmetic ranges over two evaluation seeds. The retrained 2-bit row is the unpruned model with its routed experts at 2-bit and the same recovery training, at the 30B's exact bytes. Read it as a split on one family: v3.0 is ahead of v2.3 on everything here except two-step arithmetic in generation, where v2.3's layout stays above the reference — pick v2.3 for exact multi-step arithmetic, v3.0 for everything else. Languages beyond these ten are not protected the same way.</p>
-
-      <h3>In llama.cpp</h3>
-      <div class="charts">
-        <figure class="chart wide">
-          <figcaption><b>GGUF builds · WikiText-2 perplexity, 512-token windows</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:8.39">
-            <li class="solid" style="--v:7.25;--i:0"><span class="name">v3.0 30B · 14.1 GB</span><span class="track"><span class="bar"></span><span class="val">7.25</span></span></li>
-            <li class="solid" style="--v:7.52;--i:1"><span class="name">v3.0 27B · 12.8 GB</span><span class="track"><span class="bar"></span><span class="val">7.52</span></span></li>
-            <li class="solid" style="--v:8.18;--i:2"><span class="name">v3.0 24B · 10.8 GB</span><span class="track"><span class="bar"></span><span class="val">8.18</span></span></li>
-            <li class="open" style="--v:7.39;--i:3"><span class="name">Unpruned · UD-IQ3_S · 13.7 GB</span><span class="track"><span class="bar"></span><span class="val">7.39</span></span></li>
-            <li class="open" style="--v:7.37;--i:4"><span class="name">Unpruned · UD-IQ3_XXS · 13.2 GB</span><span class="track"><span class="bar"></span><span class="val">7.37</span></span></li>
-            <li class="open" style="--v:7.48;--i:5"><span class="name">Unpruned · UD-Q2_K_XL · 12.3 GB</span><span class="track"><span class="bar"></span><span class="val">7.48</span></span></li>
-            <li class="hatch" style="--v:8.31;--i:6"><span class="name">v2.3 · Q4_K_M · 14.0 GB</span><span class="track"><span class="bar"></span><span class="val">8.31</span></span></li>
-            <li class="hatch" style="--v:8.39;--i:7"><span class="name">v2.3 · UD-Q3K · 11.2 GB</span><span class="track"><span class="bar"></span><span class="val">8.39</span></span></li>
-          </ol>
-        </figure>
-      </div>
-      <p class="note">Each GGUF file reads within 0.5% of its MLX model on identical tokens, in English and in each of the ten languages. On an M4 Max with Metal (llama-bench, 512-token prompt, 128 generated tokens) the v3.0 files run at 936–978 tokens/s on the prompt and 63–64 tokens/s in decode, against 82 for v2.3's UD-Q3K build; each v3.0 layer runs its experts in two precision tiers, which costs speed against v2.3's single-precision files. The unpruned model's dynamic quants of similar size decoded at 41–43 tokens/s in an earlier session. The files need the <a href="https://github.com/Neopolita/neopolita-llama.cpp">neopolita-llama.cpp</a> fork at tag v3.0 or later: stock llama.cpp cannot represent per-expert precision yet.</p>
-
-      <ul class="get">
-        <li><a class="primary" href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-30B-A3B-v3.0-mlx">30B · MLX ↗<small>13.6 GB · perplexity 6.98</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-27B-A3B-v3.0-mlx">27B · MLX ↗<small>12.4 GB · perplexity 7.20</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-24B-A3B-v3.0-mlx">24B · MLX ↗<small>10.8 GB · perplexity 7.80</small></a></li>
-      </ul>
-      <ul class="get">
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-30B-A3B-v3.0-gguf">30B · GGUF ↗<small>14.1 GB · llama.cpp</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-27B-A3B-v3.0-gguf">27B · GGUF ↗<small>12.8 GB · llama.cpp</small></a></li>
-        <li><a href="https://huggingface.co/neopolita/Niwaki-Qwen3.6-24B-A3B-v3.0-gguf">24B · GGUF ↗<small>10.8 GB · llama.cpp</small></a></li>
+      <ul class="figures two">
+        <li><span class="n">0.1–0.25 <small>s</small></span><span class="c">to read a line and update the table, on an M4 Max</span></li>
+        <li><span class="n">+0.56 <small>MB</small></span><span class="c">per 100,000 tokens read: memory flat over 1.04 million tokens</span></li>
       </ul>
 
-      <h3>Earlier generations</h3>
-      <ul class="releases">
-        <li>
-          <span class="what">v2.3 · Qwen3.6 23B-A3B · 4-bit</span>
-          <span class="nums">11.3 GB of experts · perplexity 7.95 · task average 0.772</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-4bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v2.3 · Qwen3.6 23B-A3B · 2-bit</span>
-          <span class="nums">7.3 GB of experts · perplexity 9.02 · task average 0.760</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-2bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.3-2bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v2.2 · Qwen3.6 23B-A3B</span>
-          <span class="nums">11.3 GB of experts · perplexity 8.14 · task average 0.770</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.2-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.2-4bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v2.1 · Qwen3.6 23B-A3B</span>
-          <span class="nums">11.3 GB of experts · perplexity 8.62 · task average 0.759</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.1-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-23B-A3B-Niwaki-v2.1-4bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v2 · Qwen3.6 19B-A3B</span>
-          <span class="nums">9.1 GB of experts · perplexity 9.42 · task average 0.742</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-19B-A3B-Niwaki-v2-4bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-19B-A3B-Niwaki-v2-4bit-gguf">GGUF ↗</a></span>
-        </li>
-        <li>
-          <span class="what">v1 · Qwen3.6 27B-A3B</span>
-          <span class="nums">7.5 GB of experts · perplexity 9.89 · task average 0.769</span>
-          <span class="links"><a href="https://huggingface.co/neopolita/Qwen3.6-27B-A3B-Niwaki-2bit-mlx">MLX ↗</a> · <a href="https://huggingface.co/neopolita/Qwen3.6-27B-A3B-Niwaki-2bit-GGUF">GGUF ↗</a></span>
-        </li>
-      </ul>
+      <p class="note">Field F1 compares every field of every object in Kanji's table with a gold table after each line. Joint goal accuracy is the share of dialogue turns in which every slot of the state is right. SDT (Gupta et al., 2022) writes the state out as text, reading the whole dialogue again at every turn; MetaASSIST (Ye et al., 2022) picks each slot's value from a list made for MultiWOZ in advance. Kanji reads each turn once, with any schema.</p>
     </div>
   </section>
 
-  <!-- ======================= paper ======================= -->
-  <section aria-labelledby="h-paper">
+  <!-- ======================= the waiting list ======================= -->
+  <section id="waitlist" aria-labelledby="h-waitlist">
     <div class="wrap">
-      <p class="eyebrow">Technical paper</p>
-      <h2 id="h-paper">A paper with the full method and measurements is coming soon.</h2>
-      <p class="summary">Until then, every number on this page comes from the model cards, which carry their evaluation protocols and the full tables. <a href="paper/">About the paper</a></p>
+      <p class="eyebrow">Early access</p>
+      <h2 id="h-waitlist">Kanji isn't released yet</h2>
+      <p class="summary">Join the waiting list to hear first when it is, and to try it on your own streams.</p>
+      <ul class="get big">
+        <li><button type="button">Join the waiting list</button></li>
+      </ul>
     </div>
   </section>
 </main>
 
+<!-- the demos' player: one video at a time over the page dimmed, an arrow on either side to the previous and next demo (in the
+     carousel's order, round from the last to the first); a click anywhere outside the video, or Escape, closes it; under a video
+     made from someone else's footage or text, a credit linking to the original -->
+<dialog class="player" id="player" aria-label="Demo videos">
+  <p class="title" aria-live="polite"></p>
+  <p class="hint">Click outside the video to close</p>
+  <button type="button" class="step prev" aria-label="Previous video">&larr;</button>
+  <video controls playsinline preload="none"></video>
+  <button type="button" class="step next" aria-label="Next video">&rarr;</button>
+  <p class="source" hidden><span class="what">Original video</span>: <a class="original" target="_blank" rel="noopener"></a><span class="by"></span><a class="licence" target="_blank" rel="noopener license" hidden></a></p>
+</dialog>
+
 <footer>
   <div class="wrap">
-    <p>Base models by the <a href="https://huggingface.co/Qwen">Qwen team</a>; MLX conversions of the references by mlx-community. Pruning, recovery training and builds by the Niwaki project.</p>
-    <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="https://github.com/Neopolita/neopolita-llama.cpp">llama.cpp fork</a> · <a href="paper/">Paper</a></p>
-    <p class="made">Pruned and tended in Seville, Spain and Valença, Portugal.</p>
+    <p>“System 1” is the psychologists' name for fast, automatic thinking, after Daniel Kahneman's <i>Thinking, Fast and Slow</i>; Kanji is not TypeSafe's System One. The numbers on this page are development measurements, but for SGD and MultiWOZ, read once on their standard test sets.</p>
+    <div class="links">
+      <p><a href="https://huggingface.co/neopolita">Hugging Face</a> · <a href="niwaki/">Niwaki models</a> · <a href="paper/">Paper</a></p>
+      <p class="social"><a href="https://x.com/NiwakiAI">X</a> · <a href="https://www.instagram.com/niwakiai">Instagram</a> · <a href="mailto:niwakiai@gmail.com">niwakiai@gmail.com</a></p>
+    </div>
+    <p class="made">Trained in Seville, Spain.</p>
   </div>
 </footer>
+
+<script>
+  // a carousel: the arrows move one tile along, are turned off at either end, and the count says which tiles are in view
+  document.querySelectorAll(".carousel").forEach((carousel) => {
+    const strip = carousel.querySelector(".reels"), tiles = [...strip.querySelectorAll(".reel")];
+    const prev = carousel.querySelector(".prev"), next = carousel.querySelector(".next"), count = carousel.querySelector(".count");
+    const step = () => tiles[0].getBoundingClientRect().width + parseFloat(getComputedStyle(strip).columnGap || "0");
+    const update = () => {
+      const first = Math.round(strip.scrollLeft / step()), shown = Math.max(1, Math.round((strip.clientWidth + 1) / step()));
+      prev.disabled = strip.scrollLeft <= 2;
+      next.disabled = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 2;
+      const last = Math.min(tiles.length, first + shown);
+      count.textContent = last - first > 1 ? `${first + 1}–${last} of ${tiles.length}` : `${first + 1} of ${tiles.length}`;
+    };
+    prev.addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
+    next.addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
+    strip.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  });
+  // the player: a tile (data-video) or another button naming one (data-open-video) opens it at that demo; its arrows go to the
+  // previous and next demo in the carousel's order, round from the last to the first; closing it pauses the video and lets go of
+  // its file, so that no demo keeps loading once it is closed
+  const player = document.getElementById("player");
+  if (player) {
+    const video = player.querySelector("video"), title = player.querySelector(".title");
+    const tiles = [...document.querySelectorAll(".reels [data-video]")];
+    const demos = tiles.map((b) => ({
+      name: b.dataset.video, src: b.dataset.src, poster: b.querySelector("img").getAttribute("src"),
+      title: b.closest(".reel").querySelector("figcaption b").textContent.replace(/\.$/, ""),
+      source: b.dataset.source, sourceWhat: b.dataset.sourceWhat, sourceTitle: b.dataset.sourceTitle, sourceBy: b.dataset.sourceBy,
+      licence: b.dataset.sourceLicence, licenceUrl: b.dataset.sourceLicenceUrl,
+    }));
+    const source = player.querySelector(".source"), what = source.querySelector(".what"), link = source.querySelector(".original");
+    const by = source.querySelector(".by"), licence = source.querySelector(".licence");
+    let at = 0;
+    const show = (i) => {
+      at = (i + demos.length) % demos.length;
+      const demo = demos[at];
+      video.poster = demo.poster;
+      video.src = demo.src;
+      title.textContent = `${demo.title} · ${at + 1} of ${demos.length}`;
+      source.hidden = !demo.source;   // a credit for a video made from someone else's footage or text, under it
+      if (demo.source) {
+        what.textContent = demo.sourceWhat || "Original video";
+        link.href = demo.source;
+        link.textContent = `“${demo.sourceTitle}”`;
+        by.textContent = demo.sourceBy || "";
+        licence.hidden = !demo.licence;   // a licence that asks for its own link, as CC BY does
+        if (demo.licence) { licence.href = demo.licenceUrl; licence.textContent = demo.licence; }
+      } else link.removeAttribute("href");
+      video.play().catch(() => {});
+    };
+    const open = (name) => {
+      player.showModal();
+      show(Math.max(0, demos.findIndex((demo) => demo.name === name)));
+    };
+    tiles.forEach((b) => b.addEventListener("click", () => open(b.dataset.video)));
+    document.querySelectorAll("[data-open-video]").forEach((b) => b.addEventListener("click", () => open(b.dataset.openVideo)));
+    player.querySelector(".prev").addEventListener("click", () => show(at - 1));
+    player.querySelector(".next").addEventListener("click", () => show(at + 1));
+    player.addEventListener("click", (event) => { if (event.target === player) player.close(); });
+    player.addEventListener("close", () => { video.pause(); video.removeAttribute("src"); video.load(); });
+    [link, licence].forEach((a) => a.addEventListener("click", () => video.pause()));   // they open in a new tab; this one waits
+  }
+</script>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8cd674c9e00d4cffa8a037381ee5b2b9"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

@@ -1,6 +1,41 @@
 /* Niwaki — a hand-tinted engraving. Warm paper ground (the plates' own paper; their web copies are re-toned to it
    exactly), the engraving's ink for everything that carries meaning, and three pale washes on the chart bars. */
 
+/* The two typefaces, served from the site itself: EB Garamond (© 2017 the EB Garamond Project Authors) and Cormorant
+   Garamond (© 2015 the Cormorant Project Authors), each under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt). The files and
+   rules are those Google Fonts served for these styles on 24 November 2026, Latin and extended Latin, which hold every character
+   the pages use in these faces; a page asks no other site for a font. */
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-italic-latin-ext.woff2") format("woff2");  /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-italic-latin.woff2") format("woff2");  /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-italic-latin-ext.woff2") format("woff2");  /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-italic-latin.woff2") format("woff2");  /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'EB Garamond'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/eb-garamond-italic-latin-ext.woff2") format("woff2");  /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'EB Garamond'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/eb-garamond-italic-latin.woff2") format("woff2");  /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/eb-garamond-latin-ext.woff2") format("woff2");  /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/eb-garamond-latin.woff2") format("woff2");  /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/eb-garamond-latin-ext.woff2") format("woff2");  /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/eb-garamond-latin.woff2") format("woff2");  /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
 :root {
   color-scheme: light;
   --paper: #F7EEE3;
@@ -66,6 +101,16 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .nav li a:hover, .nav li a[aria-current="page"] { border-bottom-color: var(--ink); }
 .nav li.soon a { color: var(--ink-dim); }   /* not ready yet */
+/* X, Instagram and email: icons at the bar's end, with their names in the footer; the icons in ink, underlined on hover as the
+   bar's words are */
+.nav ul { margin-left: auto; }   /* the pages' names and the icons both at the bar's right end */
+.nav .social { display: flex; align-items: center; gap: 0.85rem; position: relative; top: 0.32rem; }   /* level with the small caps */
+.nav .social a { display: block; line-height: 0; text-decoration: none; padding-bottom: 0.2rem; border-bottom: 1px solid transparent; }
+.nav .social a:hover { border-bottom-color: var(--ink); }
+.nav .social svg { width: 0.95rem; height: 0.95rem; }
+.nav .social a:first-child svg { width: 0.86rem; height: 0.86rem; }   /* X's mark is solid: smaller, to weigh as the outlines do */
+footer .links { display: grid; gap: 0.4rem; align-content: start; }   /* the site's links, then X, Instagram and email */
+footer .social a { white-space: nowrap; }
 
 /* ---------- a full-width plate (the Saikei page); its file is re-toned to the page's paper, the edges fade ---------- */
 .plate { margin: 0 auto; max-width: 75rem; }
@@ -260,6 +305,8 @@ footer .made { flex-basis: 100%; max-width: none; margin-top: 0.4rem; font-famil
   section { scroll-margin-top: 5rem; }
   .nav li a { font-size: 0.98rem; letter-spacing: 0.07em; }
   .nav li.ext { display: none; }            /* the bar stays one line; the link is in the footer too */
+  .nav .social { order: 1; margin-left: auto; top: 0; }   /* on the logo's line, at its right end */
+  .nav ul { order: 2; flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -270,7 +317,7 @@ footer .made { flex-basis: 100%; max-width: none; margin-top: 0.4rem; font-famil
 @media print {
   .bars .bar { animation: none; }
   .top { position: static; }
-  .nav ul, .get { display: none; }
+  .nav ul, .nav .social, .get { display: none; }
 }
 
 /* ---------- a 2:1 plate (Saikei, Origami, Nihonga, Dojo) beside the lead, laid out like the Niwaki tree ---------- */
