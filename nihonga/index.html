@@ -18,11 +18,12 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../style.css">
   <style>
-    .usage { background: #FFFDF8; border: 1px solid var(--rule); padding: 1rem 1.2rem; overflow-x: auto; font-size: .86rem; line-height: 1.5; margin: 1rem 0 1.4rem; }
+    .usage { background: color-mix(in srgb, var(--ink) 5%, var(--paper)); border: 1px solid var(--rule); border-radius: 2px; padding: 1rem 1.2rem; overflow-x: auto; font-size: .86rem; line-height: 1.5; margin: 1rem 0 1.4rem; }
     .usage code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); }
-    figure.plate { margin: 1.6rem 0; }
-    figure.plate img { width: 100%; height: auto; border: 1px solid var(--rule); background: var(--paper); }
-    figure.plate figcaption { font-size: .92rem; color: var(--ink-soft); margin-top: .5rem; }
+    figure.fig { margin: 1.6rem 0; }
+    figure.fig img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: var(--paper); }
+    .tree.plate-art img { -webkit-mask-image: none; mask-image: none; }   /* this page's images keep their edges: no fade */
+    figure.fig figcaption { font-size: .92rem; color: var(--ink-soft); margin-top: .5rem; }
   </style>
 </head>
 <body>
@@ -102,7 +103,7 @@
       <p class="note">Spelling: four seeds each of a storefront sign, a shop-name sign, a poster tagline and a handwritten Chinese note, read at full resolution; the same prompts and seeds for every row. On 25 general prompts, 2 Nihonga images miss content that the 40-step pruned model draws (a laptop lighting a face; four friends drawn as five). Speed: batch 1, BF16, text encoder and VAE included; peak memory 39.3 GB against 39.6 GB, because the unchanged 17.5 GB text encoder dominates. Nearly all of the speed comes from the 10-step schedule; removing two blocks saves about 4% per step. Text to image only: editing, reference images and transparency were not trained or tested.</p>
 
       <h3>Architecture</h3>
-      <figure class="plate">
+      <figure class="fig">
         <a href="architecture-v1-combined.svg"><img loading="lazy" src="architecture-v1-combined.svg" width="1120" height="1640" alt="Nihonga v1 in one diagram: the 32 slots of the Qwen-Image-2.1 transformer, with slots 5 and 20 linked to a detailed drawing of the bridge (an 8-head attention branch with its own prompt cache, then a conditioned MLP); below, the fused Lightning LoRA and the 10-step schedule."></a>
       </figure>
 
@@ -112,12 +113,12 @@
         <div><dt>10-step schedule</dt><dd>Points 0, 1, 3, 5, 10, 15, 20, 25, 30 and 35 of the stock 40-step schedule, then the end. One big first jump from noise merged figures, dropped small objects and broke patterns; three small steps there fixed them.</dd></div>
       </dl>
 
-      <figure class="plate">
+      <figure class="fig">
         <a href="lightning-lora.svg"><img loading="lazy" src="lightning-lora.svg" width="1100" height="1240" alt="The Lightning LoRA in three panels: a frozen 4096 by 4096 matrix W plus a rank-32 pair B times A; one LoRA step trained to land where five recorded steps land, with letter tokens weighted ten times; fusing W prime equals W plus B times A, the same shape as W."></a>
         <figcaption>The Lightning LoRA: what a LoRA is, how ours learned to take one step for five, and how it was fused into the weights.</figcaption>
       </figure>
 
-      <figure class="plate">
+      <figure class="fig">
         <a href="images/final-results.jpg"><img loading="lazy" src="images/final-results.jpg" width="2540" height="1570" alt="Eight prompts, each as Qwen-Image-2.1 at 40 steps, the LightX2V Lightning LoRA at 4 steps (which writes The Rusty Acchor) and Nihonga v1.0 at 10 steps: The Rusty Anchor shop sign, a Happy Birthday Emma script sign, handwritten Chinese, a Golden River poster with the tagline Live in Berlin, a portrait, a peacock feather, a model tank and melting clocks."></a>
         <figcaption>Qwen-Image-2.1 at 40 steps (6.89 s), the published LightX2V Lightning LoRA at 4 steps (0.87 s), and Nihonga v1.0 at 10 steps (1.75 s); same prompt and seed in each row. Note the Rusty Anchor sign.</figcaption>
       </figure>
