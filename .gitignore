@@ -1,1 +1,4 @@
 *.DS_Store
+
+# the waiting list's Worker: its own private repository, kept out of the public site
+waitlist-worker/

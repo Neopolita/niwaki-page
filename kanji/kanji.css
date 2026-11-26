@@ -133,6 +133,80 @@ h2 .sub.byos { color: var(--ink); font-weight: 500; }
   .reels { grid-auto-columns: 86%; gap: 1rem; }   /* one tile at a time, the next one's edge in view */
 }
 
+/* ---------- where it fits: use cases in a ruled grid, three across (one on a phone), each with the demos that show it, which open
+   the player as "Watch the race" does ---------- */
+.uses { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* rules between the cards only: none above the first row or under the last (three across here, one on a phone) */
+@media (min-width: 46.0625rem) {
+  .uses li:nth-child(3n + 1):nth-last-child(-n + 3), .uses li:nth-child(3n + 1):nth-last-child(-n + 3) ~ li { border-bottom: 0; }
+}
+.uses li { padding: 1.05rem 1.25rem 1.15rem 0; border-bottom: 1px solid var(--rule); }
+.uses li:not(:nth-child(3n + 1)) { border-left: 1px solid var(--rule); padding-left: 1.25rem; }
+.uses b { display: block; font-weight: 500; color: var(--ink); }
+/* each use case's icon, to the left of its title, its text hanging under the title: ink lines as fine as the text's, one part
+   washed in a tint of the chart bars (pine, ochre, mist), as the site's engravings are hand-tinted */
+.uses li { display: grid; grid-template-columns: 1.45rem minmax(0, 1fr); column-gap: 0.65rem; }
+.uses li > .ic { grid-column: 1; grid-row: 1; align-self: start; margin-top: calc((1.55em - 1.45rem) / 2); }   /* on the title's first line */
+.uses li > :not(.ic) { grid-column: 2; }
+/* a row's cards share its two row lines (a subgrid): the title and its line in the first, "Watch" or "See" in the second, so
+   that a row's links start level however long the text above them */
+.uses li { grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; }
+.uses li > .what { grid-row: 1; }
+.uses li > .watch { grid-row: 2; }
+.uses .ic { width: 1.45rem; height: 1.45rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); }
+.uses .ic .pine { fill: var(--tint-release); }
+.uses .ic .ochre { fill: var(--tint-earlier); }
+.uses .ic .mist { fill: var(--tint-unpruned); }
+.uses .ic .ink { fill: currentColor; stroke: none; }
+.uses p { margin: 0.3rem 0 0; font-size: 1.02rem; line-height: 1.45; color: var(--ink-soft); text-wrap: pretty; }
+.uses p.watch { margin-top: 0.55rem; font-size: 0.95rem; }
+.uses .watch button {
+  font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap;
+  text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em;
+}
+.uses .watch button:hover { text-decoration-thickness: 2px; }
+.uses .watch .nw { white-space: nowrap; }   /* a link and the dot after it stay on one line */
+.uses .watch a { color: var(--ink); }
+@media (max-width: 46rem) {
+  .uses { grid-template-columns: minmax(0, 1fr); }
+  .uses li, .uses li:not(:nth-child(3n + 1)) { border-left: 0; padding: 0.95rem 0 1rem; }
+  .uses li:last-child { border-bottom: 0; }
+}
+
+/* ---------- the waiting list's form, in a dialog over the page dimmed: the site's paper, labels in small caps as "What it gives you"
+   names its facts, fields on a lighter paper with the hairline, the waiting list's own button to send ---------- */
+.signup { padding: 0; border: 1px solid var(--rule); border-radius: 3px; background: var(--paper); color: var(--ink);
+  width: min(30rem, calc(100vw - 2rem)); max-width: none; box-shadow: 0 18px 60px rgb(35 31 26 / 0.25); }
+.signup::backdrop { background: rgb(20 17 14 / 0.55); }
+.signup .panel { position: relative; padding: 2rem 2rem 1.6rem; }
+.signup h2 { font-size: 2rem; padding-right: 2.25rem; }
+.signup .intro { margin: 0.55rem 0 0.4rem; color: var(--ink-soft); text-wrap: pretty; }
+.signup label { display: block; margin-top: 0.9rem; }
+.signup label span { display: block; font-variant-caps: all-small-caps; letter-spacing: 0.09em; font-size: 1.02rem; color: var(--ink-soft); }
+.signup label i { font-variant-caps: normal; letter-spacing: 0; font-size: 0.92rem; color: var(--ink-dim); margin-left: 0.25rem; }
+.signup input[type=email], .signup input[type=text] { display: block; width: 100%; margin-top: 0.2rem; font: inherit; font-size: 1.1rem; color: var(--ink);
+  background: color-mix(in srgb, #fff 55%, var(--paper)); border: 1px solid var(--rule); border-radius: 2px; padding: 0.5rem 0.65rem; }
+.signup input:focus { outline: 2px solid var(--ink); outline-offset: 1px; border-color: var(--ink); }
+.signup .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.signup .send { display: block; width: 100%; margin-top: 1.4rem; font: inherit; font-size: 1.2rem; line-height: 1.2; cursor: pointer;
+  padding: 0.75rem 1rem 0.8rem; border: 0; border-radius: 2px; background: var(--ink); color: var(--paper); box-shadow: inset 0 0 0 1px var(--ink); }
+.signup .send:hover:not(:disabled) { background: transparent; color: var(--ink); }
+.signup .send:disabled { opacity: 0.6; cursor: default; }
+.signup .status { min-height: 1.45em; margin: 0.7rem 0 0; font-size: 0.98rem; color: var(--ink-soft); }
+/* consent, unticked until the person ticks it, and the notice's first layer under the button */
+.signup label.consent { display: flex; gap: 0.6rem; align-items: flex-start; margin-top: 1.1rem; cursor: pointer; }
+.signup label.consent input { flex: none; width: 1.05rem; height: 1.05rem; margin: 0.28rem 0 0; accent-color: var(--ink); }
+.signup label.consent span { font-variant-caps: normal; letter-spacing: 0; font-size: 1rem; line-height: 1.45; color: var(--ink); }
+.signup .privacy { margin: 0.35rem 0 0; font-size: 0.88rem; line-height: 1.45; color: var(--ink-soft); text-wrap: pretty; }
+.signup .close { position: absolute; top: 0.85rem; right: 0.85rem; width: 2.3rem; height: 2.3rem; display: grid; place-items: center;
+  padding: 0; border: 0; border-radius: 50%; background: none; font: inherit; font-size: 1.6rem; line-height: 1; color: var(--ink-soft); cursor: pointer; }
+.signup .close:hover { color: var(--ink); background: rgb(35 31 26 / 0.06); }
+.signup .done p { margin: 0.6rem 0 0.4rem; color: var(--ink-soft); }
+@media (max-width: 46rem) {
+  .signup .panel { padding: 1.6rem 1.25rem 1.3rem; }
+  .signup h2 { font-size: 1.75rem; }
+}
+
 @media print {
   .get button { display: none; }
 }
