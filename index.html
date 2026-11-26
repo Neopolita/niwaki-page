@@ -14,9 +14,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@NiwakiAI">
   <meta name="theme-color" content="#F7EEE3">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png?v=2">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=2">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="kanji/kanji.css">
   <!-- for search engines: the site's name, and the accounts that are its own -->
@@ -423,12 +423,20 @@
     }));
     const source = player.querySelector(".source"), what = source.querySelector(".what"), link = source.querySelector(".original");
     const by = source.querySelector(".by"), licence = source.querySelector(".licence");
-    let at = 0;
+    // on a phone held upright (the page's 46rem breakpoint) each demo plays in its portrait version, <name>-portrait.mp4 beside
+    // the landscape file, with its own poster; the carousel's tiles keep their landscape frames
+    const upright = window.matchMedia("(max-width: 46rem) and (orientation: portrait)");
+    const version = (demo) => upright.matches
+      ? { src: demo.src.replace(/\.mp4$/, "-portrait.mp4"), poster: demo.poster.replace(/\.jpg$/, "-portrait.jpg") }
+      : { src: demo.src, poster: demo.poster };
+    let at = 0, shown = "";   // the demo the player holds, and which of its two versions
     const show = (i) => {
       at = (i + demos.length) % demos.length;
-      const demo = demos[at];
-      video.poster = demo.poster;
-      video.src = demo.src;
+      const demo = demos[at], file = version(demo);
+      shown = upright.matches ? "portrait" : "landscape";
+      player.classList.toggle("portrait", upright.matches);
+      video.poster = file.poster;
+      video.src = file.src;
       title.textContent = `${demo.title} · ${at + 1} of ${demos.length}`;
       source.hidden = !demo.source;   // a credit for a video made from someone else's footage or text, under it
       if (demo.source) {
@@ -452,6 +460,28 @@
     player.addEventListener("click", (event) => { if (event.target === player) player.close(); });
     player.addEventListener("close", () => { video.pause(); video.removeAttribute("src"); video.load(); });
     [link, licence].forEach((a) => a.addEventListener("click", () => video.pause()));   // they open in a new tab; this one waits
+    // a phone turned while a demo is open: the other version of the same demo, from the moment it had reached (both versions run
+    // the same timeline), playing on if it was playing. Never while the video fills the screen: going full screen widens the page
+    // (a desktop's whole screen, a phone's turning for the video), which is no turn of the phone, and the browser can say so before it
+    // says the video is full screen; so the version is settled a moment after any change, and again on leaving full screen
+    const fullscreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement || video.webkitDisplayingFullscreen);
+    const settle = () => {
+      const want = upright.matches ? "portrait" : "landscape";
+      if (!player.open || fullscreen() || want === shown) return;
+      const reached = video.currentTime, playing = !video.paused, file = version(demos[at]);
+      shown = want;
+      player.classList.toggle("portrait", upright.matches);
+      video.poster = file.poster;
+      video.src = file.src;
+      video.addEventListener("loadedmetadata", () => { video.currentTime = reached; }, { once: true });
+      if (playing) video.play().catch(() => {});
+    };
+    let settling = 0;
+    const later = () => { clearTimeout(settling); settling = setTimeout(settle, 400); };
+    upright.addEventListener("change", later);
+    document.addEventListener("fullscreenchange", later);
+    document.addEventListener("webkitfullscreenchange", later);
+    video.addEventListener("webkitendfullscreen", later);   // an iPhone's own full-screen player, left
     // a link that names a demo after its # (niwakiai.com/#race, by the tiles' data-video names) opens it: on arrival, and when
     // the address's # changes. The page never writes the address itself, since Cloudflare's analytics counts each change as a
     // page view

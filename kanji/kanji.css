@@ -94,6 +94,10 @@ h2 .sub.byos { color: var(--ink); font-weight: 500; }
   .player .hint { top: auto; bottom: -1.9rem; }
   .player .source { top: calc(100% + 2.4rem); }   /* under the hint */
 }
+/* a phone held upright plays a demo's portrait version (the script's `upright`): as tall as the screen allows, with room left above
+   it for the title and below it for the hint and a credit; dvh where the browser has it, so that its own bars are counted */
+.player.portrait { width: min(94vw, calc((100vh - 12rem) * 9 / 16)); width: min(94vw, calc((100dvh - 12rem) * 9 / 16)); }
+.player.portrait video { max-height: calc(100vh - 12rem); max-height: calc(100dvh - 12rem); }
 
 /* ---------- the demos, to come ---------- */
 /* a horizontal carousel: three tiles in view, the rest a scroll away (arrows, a swipe or a tab), each tile snapping to the start */
