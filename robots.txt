@@ -1,0 +1,5 @@
+# niwakiai.com: every page may be read; the sitemap lists them
+User-agent: *
+Allow: /
+
+Sitemap: https://niwakiai.com/sitemap.xml

@@ -2,3 +2,6 @@
 
 # the waiting list's Worker: its own private repository, kept out of the public site
 waitlist-worker/
+
+# a local preview server (python3 serve.py): never published
+serve.py

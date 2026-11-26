@@ -44,6 +44,20 @@ h2 .sub.byos { color: var(--ink); font-weight: 500; }
 .bars.one li.solid .name { font-weight: 400; color: var(--ink-soft); }
 .bars.one li.solid:hover .name { color: var(--ink); }
 
+/* ---------- benchmarks: on the documents' chart, a tick where the two independent gold tables of the same documents agree with each
+   other, scored as Kanji is. It sits on the bars' own scale: --h over --max of the track less the 7.5ch kept for a value, in the
+   bar's own font (so the tick sets no font size of its own; its number does) */
+.bars li.ref .track { position: relative; }
+.bars .agree {
+  position: absolute; top: 50%; left: calc(var(--h) / var(--max) * (100% - 7.5ch));
+  height: 1.5rem; transform: translateY(-50%);
+  display: flex; align-items: center; padding-left: 0.35rem;
+  border-left: 1.5px solid var(--ink); pointer-events: none;
+}
+.bars .agree .n { font-size: 0.86rem; color: var(--ink-soft); font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+.key span.agree { height: 1.1rem; box-shadow: none; border-radius: 0; background: linear-gradient(var(--ink), var(--ink)) center / 1.5px 100% no-repeat; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* read aloud, not shown */
+
 /* ---------- a video in a popup: everything around it dimmed; a click outside it, or Escape, closes it ---------- */
 .player { padding: 0; border: 0; background: transparent; width: min(calc(100vw - 9rem), 1280px, calc(82vh * 16 / 9)); max-width: none; max-height: 92vh; overflow: visible; }
 .player::backdrop { background: rgb(20 17 14 / 0.84); }

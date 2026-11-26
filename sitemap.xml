@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- the site's pages at their canonical addresses; a new page goes here too -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://niwakiai.com/</loc></url>
+  <url><loc>https://niwakiai.com/niwaki/</loc></url>
+  <url><loc>https://niwakiai.com/saikei/</loc></url>
+  <url><loc>https://niwakiai.com/origami/</loc></url>
+  <url><loc>https://niwakiai.com/nihonga/</loc></url>
+  <url><loc>https://niwakiai.com/dojo/</loc></url>
+  <url><loc>https://niwakiai.com/paper/</loc></url>
+  <url><loc>https://niwakiai.com/privacy/</loc></url>
+</urlset>
