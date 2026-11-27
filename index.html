@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kanji · Niwaki</title>
-  <meta name="description" content="Kanji is a System 1 state model. It reads a conversation, a document or a broadcast once, as it arrives, and keeps a table of what it says up to date: every change with its probability and the words it came from, and no text generated.">
+  <meta name="description" content="Kanji is a System 1 state model. It reads a conversation, a document or a broadcast's transcript once, as it arrives, and keeps a table of what it says up to date: every change with its probability and the words it came from, and no text generated.">
   <link rel="canonical" href="https://niwakiai.com/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Kanji · Niwaki">
-  <meta property="og:description" content="A System 1 state model: one read of each line, a table kept current, every value pointing back to its words, and no text generated. Against its own generative backbone writing the same table: more accurate, in a tenth of the time.">
+  <meta property="og:description" content="A System 1 state model: one read of each line, a table kept current, every value pointing back to its words, and no text generated. Against its own generative backbone writing the same table: as accurate as its best set-up, in a twelfth of the time.">
   <meta property="og:url" content="https://niwakiai.com/">
   <meta property="og:image" content="https://niwakiai.com/assets/og-kanji.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -67,7 +67,7 @@
   <div class="wrap hero">
     <div class="lead">
       <p>Kanji, a New Kind of Model</p>
-      <p>Kanji reads a conversation, a document or a broadcast once, as it arrives, and keeps a table of what matters in it up to date: who and what is in it, and every value as it changes. It writes no text of its own.</p>
+      <p>Kanji reads a conversation, a document or a broadcast's transcript once, as it arrives, and keeps a table of what matters in it up to date: who and what is in it, and every value as it changes. It writes no text of its own.</p>
       <ul class="get">
         <li><button type="button">Join the waiting list</button></li>
       </ul>
@@ -85,20 +85,20 @@
     <div class="wrap">
       <p class="eyebrow">Demos</p>
       <h2 id="h-demos"><span class="nb">Watch it read</span> <span class="sub byos">bring your own schema</span></h2>
-      <p class="summary">Kanji reading as it happens, each time with a schema written for the stream: the types and fields it should keep.</p>
+      <p class="summary">Kanji reading as it happens, each time with a schema written for the stream: the types and fields it should keep. The incident channel, the org chart, the cabin weekend and the tabletop game are conversations written for these demos; the others are public material, credited under each video.</p>
       <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Demo videos">
       <div class="reels">
         <figure class="reel">
-          <button type="button" class="frame play" data-video="haul" data-src="kanji/haul-counts.mp4" aria-label="Play The long haul, 1 minute 51 seconds">
+          <button type="button" class="frame play" data-video="haul" data-src="kanji/haul-counts.mp4" data-source="https://huggingface.co/datasets/alea-institute/kl3m-data-edgar-10-k" data-source-what="Original reports" data-source-title="KL3M Data: EDGAR 10-K" data-source-by=", ALEA Institute, under " data-source-licence="CC BY 4.0" data-source-licence-url="https://creativecommons.org/licenses/by/4.0/" aria-label="Play The long haul, 1 minute 51 seconds">
             <img src="kanji/haul-counts.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">1:51</span>
           </button>
-          <figcaption><b>The long haul.</b> Thirteen companies' annual reports read back to back: 1.3 million tokens, with its memory and its time flat.</figcaption>
+          <figcaption><b>The long haul.</b> Thirteen companies' annual reports read back to back: 1.3 million tokens, its time flat and its memory steady once it has met the longest paragraphs.</figcaption>
         </figure>
         <figure class="reel">
           <button type="button" class="frame play" data-video="race" data-src="kanji/race-duel.mp4" aria-label="Play The race, 33 seconds">
             <img src="kanji/race-duel.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">0:33</span>
           </button>
-          <figcaption><b>The race.</b> A team's incident channel, 148 lines, read by Kanji and by its generative backbone.</figcaption>
+          <figcaption><b>The race.</b> An incident channel written for the demo, 148 lines, read by Kanji and by its generative backbone.</figcaption>
         </figure>
         <figure class="reel">
           <button type="button" class="frame play" data-video="radio" data-src="kanji/radio-drive.mp4" data-source="https://www.youtube.com/watch?v=HZlAgm08jBo&amp;t=1140s" data-source-title="Broncos Radio Broadcast of the Rams-Broncos Ending | 2026 NFL" data-source-by=", on YouTube" aria-label="Play A radio call, 1 minute 29 seconds">
@@ -131,7 +131,7 @@
           <figcaption><b>The market close.</b> A financial news show at the close: the indices, the record highs and an earnings report, with their numbers.</figcaption>
         </figure>
         <figure class="reel">
-          <button type="button" class="frame play" data-video="coding" data-src="kanji/coding-session.mp4" aria-label="Play A coding agent's session, 2 minutes 36 seconds">
+          <button type="button" class="frame play" data-video="coding" data-src="kanji/coding-session.mp4" data-source="https://huggingface.co/datasets/nebius/SWE-rebench-openhands-trajectories" data-source-what="Original session" data-source-title="SWE-rebench OpenHands trajectories" data-source-by=", Nebius, under " data-source-licence="CC BY 4.0" data-source-licence-url="https://creativecommons.org/licenses/by/4.0/" aria-label="Play A coding agent's session, 2 minutes 36 seconds">
             <img src="kanji/coding-session.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:36</span>
           </button>
           <figcaption><b>A coding agent's session.</b> An agent fixing a library's Spanish numbers, step by step: the issue, the files it reads and writes, the commands it runs.</figcaption>
@@ -149,7 +149,7 @@
           <figcaption><b>A research paper.</b> Mixtral of Experts, read paragraph by paragraph: each model in its tables, with its scores.</figcaption>
         </figure>
         <figure class="reel">
-          <button type="button" class="frame play" data-video="filing" data-src="kanji/nvidia-filing.mp4" aria-label="Play A company's annual report, 2 minutes 50 seconds">
+          <button type="button" class="frame play" data-video="filing" data-src="kanji/nvidia-filing.mp4" data-source="https://huggingface.co/datasets/alea-institute/kl3m-data-edgar-10-k" data-source-what="Original report" data-source-title="KL3M Data: EDGAR 10-K" data-source-by=", ALEA Institute, under " data-source-licence="CC BY 4.0" data-source-licence-url="https://creativecommons.org/licenses/by/4.0/" aria-label="Play A company's annual report, 2 minutes 50 seconds">
             <img src="kanji/nvidia-filing.jpg" width="1280" height="720" alt="" loading="lazy"><span class="len">2:50</span>
           </button>
           <figcaption><b>A company's annual report.</b> NVIDIA's 10-K for fiscal 2023: its segments and financial metrics, and how each changed.</figcaption>
@@ -189,13 +189,13 @@
     <div class="wrap">
       <p class="eyebrow">A new kind of model</p>
       <h2 id="h-what"><span class="nb">A System 1 State Model</span> <span class="sub">state from a stream</span></h2>
-      <p class="summary">Psychologists call the fast, automatic way of thinking System 1: reading a face, a sentence or a scoreboard at a glance. Language models today work the slow way: they write out every answer a token at a time, and to keep track of something they write it all out again. Kanji is a System 1 model. It reads each line once and its table follows: new people, things and events are added, values change, and what has ended is retired. Each change comes with a probability and points back to the words it came from.</p>
+      <p class="summary">Psychologists call the fast, automatic way of thinking System 1: reading a face, a sentence or a scoreboard at a glance. Language models today work the slow way: they write out every answer a token at a time, and the usual way to keep track of something with one is to have it write it all out again. Kanji is a System 1 model. It reads each line once and its table follows: new people, things and events are added, values change, and what has ended is retired. Each change comes with a probability and points back to the words it came from.</p>
 
       <ul class="figures">
         <li><span class="n">0</span><span class="c">tokens generated: every value is read from the text or chosen among your schema's options, never written</span></li>
         <li><span class="n">157 <small>ms</small></span><span class="c">to read a line and update the table, on the mean, on an M4 Max; 72&nbsp;ms the median</span></li>
         <li><span class="n">1M <small>tokens</small></span><span class="c">read with memory flat: it carries the table, not the transcript</span></li>
-        <li><span class="n">Any</span><span class="c">schema: the types and fields you care about, given at run time</span></li>
+        <li><span class="n">Your</span><span class="c">schema: the types and fields you care about, given at run time</span></li>
       </ul>
 
       <h3>What it gives you</h3>
@@ -214,22 +214,24 @@
     <div class="wrap">
       <p class="eyebrow">Against the generative alternative</p>
       <h2 id="h-writing">Reading against writing</h2>
-      <p class="summary">The usual way to keep a state with a language model is to have it write the state out: after each message, the whole table again. Every update then costs seconds, grows with the state, and can carry values nobody said. We gave Kanji and its own backbone, the generative model it is built on, the same 148 lines of a team's incident channel, on the same machine, scored by the same count.</p>
+      <p class="summary">The usual way to keep a state with a language model is to have it write the state out: after each message, the whole table again. Every update then costs seconds, grows with the state, and can carry values nobody said. We gave Kanji and its own backbone, the generative model it is built on, the same 148 lines of an incident channel written for the demo, on the same machine, scored by the same count.</p>
 
       <div class="charts">
         <figure class="chart">
           <figcaption><b>Field F1 against the channel's gold table</b><i>higher is better</i></figcaption>
           <ol class="bars" style="--max:0.6">
             <li class="solid" style="--v:0.582;--i:0"><span class="name">Kanji</span><span class="track"><span class="bar"></span><span class="val">0.582</span></span></li>
-            <li class="open" style="--v:0.335;--i:1"><span class="name">Its backbone, writing the table</span><span class="track"><span class="bar"></span><span class="val">0.335</span></span></li>
+            <li class="open" style="--v:0.583;--i:1"><span class="name">Its backbone, a sliding window</span><span class="track"><span class="bar"></span><span class="val">0.583</span></span></li>
+            <li class="open" style="--v:0.335;--i:2"><span class="name">Its backbone, the whole conversation</span><span class="track"><span class="bar"></span><span class="val">0.335</span></span></li>
           </ol>
         </figure>
 
         <figure class="chart">
           <figcaption><b>Time to update after each line, mean, ms</b><i>lower is better</i></figcaption>
-          <ol class="bars" style="--max:1692">
+          <ol class="bars" style="--max:1868">
             <li class="solid" style="--v:157;--i:0"><span class="name">Kanji</span><span class="track"><span class="bar"></span><span class="val">157</span></span></li>
-            <li class="open" style="--v:1692;--i:1"><span class="name">Its backbone, writing the table</span><span class="track"><span class="bar"></span><span class="val">1,692</span></span></li>
+            <li class="open" style="--v:1868;--i:1"><span class="name">Its backbone, a sliding window</span><span class="track"><span class="bar"></span><span class="val">1,868</span></span></li>
+            <li class="open" style="--v:1692;--i:2"><span class="name">Its backbone, the whole conversation</span><span class="track"><span class="bar"></span><span class="val">1,692</span></span></li>
           </ol>
         </figure>
       </div>
@@ -241,14 +243,14 @@
 
       <ul class="figures two">
         <li><span class="n">23 <small>s</small></span><span class="c">for Kanji to read all 148 lines, handed to it at once</span></li>
-        <li><span class="n">4 <small>min</small> 10 <small>s</small></span><span class="c">for its backbone to do the same, ten times as long</span></li>
+        <li><span class="n">4 <small>min</small> 10 <small>s</small></span><span class="c">for its backbone to do the same with the whole conversation, ten times as long</span></li>
       </ul>
 
       <ul class="get">
         <li><button type="button" class="ghost" data-open-video="race">Watch the race<small>33 seconds, both reading the same channel</small></button></li>
       </ul>
 
-      <p class="note">The backbone writes the same table after every line, as function calls, with the whole conversation in its context. One run each, read once, on an M4 Max. Field F1 counts every field of every object in the table after each line against the gold table. A development measurement, as is everything on this page.</p>
+      <p class="note">The backbone writes the same table after every line: as function calls with the whole conversation in its context, or as JSON with a sliding window over the conversation. One run each, read once, on an M4 Max; the race's video shows the whole-conversation run. Field F1 counts every field of every object in the table after each line against the gold table. A development measurement, as is everything on this page.</p>
 
       <h3>How it compares</h3>
       <div class="compare-scroll">
@@ -258,10 +260,10 @@
           </thead>
           <tbody>
             <tr><th>Each update</th><td class="us">one read of the new line</td><td>the whole state written out again</td><td>the new text indexed or summarized</td><td>one read of the new turn</td></tr>
-            <tr><th>Time</th><td class="us">about 0.1 to 0.25&nbsp;s a line</td><td>seconds, growing with the state</td><td>a model call to summarize, a search to recall</td><td>fast</td></tr>
-            <tr><th>Values</th><td class="us">read from the text or chosen among the schema's options, each with its words</td><td>written, so they can include what was never said</td><td>passages to search, not a current table</td><td>read, for the slots it was trained on</td></tr>
-            <tr><th>Schema</th><td class="us">any, given at run time</td><td>any, in the prompt</td><td>none</td><td>fixed: a new one means retraining</td></tr>
-            <tr><th>Long streams</th><td class="us">a bounded table, memory flat over a million tokens</td><td>a growing context, or a window that forgets</td><td>a store that keeps growing</td><td>one dialogue at a time</td></tr>
+            <tr><th>Time</th><td class="us">about 0.1 to 0.25&nbsp;s a chat line, longer for a long paragraph</td><td>seconds, growing with the state</td><td>a model call to summarize, a search to recall</td><td>fast</td></tr>
+            <tr><th>Values</th><td class="us">read from the text or chosen among the schema's options, each with its words</td><td>written, so they can include what was never said</td><td>passages or facts, found by search</td><td>read, for the slots it was trained on</td></tr>
+            <tr><th>Schema</th><td class="us">yours, given at run time</td><td>any, in the prompt</td><td>none</td><td>fixed: a new one means retraining</td></tr>
+            <tr><th>Long streams</th><td class="us">a bounded table, memory flat over a million tokens</td><td>a growing context, or a window that forgets</td><td>a store that grows with the stream</td><td>one dialogue at a time</td></tr>
             <tr><th>Confidence</th><td class="us">a probability on every change</td><td>none per value</td><td>a similarity score per passage</td><td>a score per slot</td></tr>
           </tbody>
         </table>
@@ -320,11 +322,11 @@
       </ul>
 
       <ul class="figures two">
-        <li><span class="n">0.1–0.25 <small>s</small></span><span class="c">to read a line and update the table, on an M4 Max</span></li>
+        <li><span class="n">0.1–0.25 <small>s</small></span><span class="c">to read a chat line and update the table, on an M4 Max; a long paragraph takes longer</span></li>
         <li><span class="n">+0.56 <small>MB</small></span><span class="c">per 100,000 tokens read: memory flat over 1.04 million tokens</span></li>
       </ul>
 
-      <p class="note">Field F1 compares every field of every object in Kanji's table with a gold table after each line. Each document has two independent gold tables: Kanji's number is the mean of its scores against the two, and the tick marks how far the two agree with each other, scored the same way. Joint goal accuracy is the share of dialogue turns in which every slot of the state is right. SDT (Gupta et al., 2022) writes the state out as text, prompted with a hand-written example dialogue per service and reading the whole dialogue again at every turn; MetaASSIST (Ye et al., 2022) picks each slot's value from a list made for MultiWOZ in advance, trains on its corrected validation set, and reports the best of three variants. Kanji reads each turn once, with any schema.</p>
+      <p class="note">Field F1 compares every field of every object in Kanji's table with a gold table after each line. Each document has two independent gold tables: Kanji's number is the mean of its scores against the two, and the tick marks how far the two agree with each other, scored the same way. Joint goal accuracy is the share of dialogue turns in which every slot of the state is right. SDT (Gupta et al., 2022) writes the state out as text, prompted with a hand-written example dialogue per service and reading the whole dialogue again at every turn; MetaASSIST (Ye et al., 2022) picks each slot's value from a list made for MultiWOZ in advance, trains on its corrected validation set, and reports the best of three variants. Kanji reads each turn once, with the schema it is given at run time.</p>
     </div>
   </section>
 
@@ -333,7 +335,7 @@
     <div class="wrap">
       <p class="eyebrow">Early access</p>
       <h2 id="h-waitlist">Kanji isn't released yet</h2>
-      <p class="summary">Join the waiting list to hear first when it is, and to try it on your own streams.</p>
+      <p class="summary">Join the waiting list to hear when it is, and to try it on your own streams.</p>
       <ul class="get big">
         <li><button type="button">Join the waiting list</button></li>
       </ul>
